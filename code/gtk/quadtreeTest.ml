@@ -1,3 +1,6 @@
+open GMain
+open GdkKeysyms
+
 let _ = GMain.init ()
 
 (* Fenêtre principale (non redimensionnable). *)
@@ -5,7 +8,7 @@ let window = GWindow.window
  ~width:900
  ~height:700
  ~resizable:false
- ~title:"Tuto SdZ Exemple 2" ()
+ ~title:"Manipulation d'image" ()
 
 (* Conteneur principal, pour pouvoir insérer plusieurs widgets. En effet, les
 * fenêtres (GtkWindow) ne peuvent contenir qu'un seul enfant. *)
@@ -38,10 +41,19 @@ let bbox = GPack.button_box `HORIZONTAL
 
 let help_message () = print_endline "Cliquez sur \"Quitter\" pour quitter"
 
+(* Menu bar *)
+let menubar = GMenu.menu_bar ~packing:vbox#pack ()
+let factory = new GMenu.factory menubar ()
+let accel_group = factory#accel_group ()
+let file_menu = factory#add_submenu "Fichier" ()
+let factory_fileMen = new GMenu.factory file_menu ~accel_group ()
+factory_fileMen#add_item "Sauvegarder" ~key:_S;
+factory_fileMen#add_item "Quitter" ~key:_Q ~callback: Main.quit;
+
 (* Un bouton pour obtenir de l'aide. *)
 let help =
  let button = GButton.button
-   ~stock:`HELP
+   ~stock:`FILE
    ~packing:bbox#add () in
  button#connect#clicked ~callback:help_message;
  button
