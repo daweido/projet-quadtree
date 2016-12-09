@@ -1,0 +1,19 @@
+\select@language {french}
+~\hfill \textbf {Page}\par 
+\contentsline {section}{\numberline {}Introduction}{2}
+\contentsline {section}{\numberline {1}\IeC {\'E}tude du projet}{2}
+\contentsline {section}{\numberline {2}LablGTK2}{2}
+\contentsline {section}{\numberline {3}Arbre Quadtree}{2}
+\contentsline {section}{\numberline {4}Fonction I/O}{2}
+\contentsline {subsection}{\numberline {4.1}Chargement}{2}
+\contentsline {subsection}{\numberline {4.2}Enregistrement}{2}
+\contentsline {section}{\numberline {5}Fonctions de manipulation}{3}
+\contentsline {subsection}{\numberline {5.1}Op\IeC {\'e}rations Simples}{3}
+\contentsline {subsubsection}{\numberline {5.1.1}Rotation de 90$^{\circ }$}{3}
+\contentsline {subsubsection}{\numberline {5.1.2}Miroir}{3}
+\contentsline {subsubsection}{\numberline {5.1.3}Inversion}{3}
+\contentsline {subsection}{\numberline {5.2}Op\IeC {\'e}rations Avanc\IeC {\'e}es}{3}
+\contentsline {subsubsection}{\numberline {5.2.1}Compression}{3}
+\contentsline {subsubsection}{\numberline {5.2.2}Segmentation}{3}
+\contentsline {section}{\numberline {6}Graphiques}{3}
+\contentsline {section}{\numberline {}Conclusion}{3}

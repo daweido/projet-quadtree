@@ -2,23 +2,6 @@
 open GMain
 open GdkKeysyms
 
-
-module Aux =
-struct
-	let load file =
-		let ich = open_in file in
-		let len = in_channel_length ich in
-		let buf = Buffer.create len in
-		Buffer.add_channel buf ich len;
-		close_in ich;
-		print_endline (Buffer.contents buf)(*Fonction de chargement*)
-
-	let save file =
-		let och = open_out file in
-		output_string och ("lol"); (*Fonction de Sauvegarde*)
-		close_out och
-end
-
 let _ = GMain.init ()
 
 (*Definition de la fenetre*)
@@ -89,46 +72,82 @@ let _ =
 	ignore (abo#connect#clicked (fun () -> ignore (about_button#run ()); ignore (about_button#misc#hide ())));
 	qui#connect#clicked Main.quit;;
 
-(*Titre*)
-let titre = GMisc.label ~markup: "<span font_desc=\"Tahoma 35\">PPMShop - Manipulation d'image de format PPM</span>" ~packing:vbox#add ()
+
+
 
 
 (*Bouttons*)
 (*Conteneur de Bouttons*)
 let bbox = GPack.button_box `VERTICAL
-	~spacing:150
+	~spacing:25
 	~layout:`SPREAD
 	~border_width:5
 	~child_width: 250
 	~child_height: 50
 	~packing:(vbox#pack ~expand:false) ()
 
-(* GtkFileChooserDialog - Boîte de dialogue d'ouverture et d'enregistrement. *)
-let action_button stock event action =
-	let dlg = GWindow.file_chooser_dialog
-		~action:`OPEN
-		~parent:window
-		~position:`CENTER_ON_PARENT
-		~destroy_with_parent:true () in
-	dlg#add_button_stock `CANCEL `CANCEL;
-	dlg#add_select_button_stock stock event;
-	let btn = GButton.button ~stock ~packing:bbox#add () in
-	ignore (GMisc.image ~stock ~packing:btn#set_image ());
-	ignore (btn#connect#clicked (fun () ->
-	if dlg#run () = `OPEN then Gaux.may action dlg#filename;
-	dlg#misc#hide ()));
- 	btn
+(*Boutton Rotation*)
+let rotBut = GButton.button
+			~label: "Rotation 90°"
+			~packing:bbox#add ();;
+rotBut
 
-(*Boutton Ouvrir*)
-let load = action_button `OPEN `OPEN (Aux.load);;
+(*Boutton Miroir*)
+let mirBut = GButton.button
+			~label: "Miroir"
+			~packing:bbox#add ();;
+mirBut;
+ignore (mirBut#connect#clicked (fun () -> ignore (bbox#misc#hide ())))
 
-(*Boutton Quitter*)
-let quit =
-	let button = GButton.button
-				~stock:`QUIT
-				~packing:bbox#add () in
-	ignore (button#connect#clicked ~callback:GMain.quit);
-	button
+(*Boutton Inversion*)
+let invBut = GButton.button
+			~label: "Inversion"
+			~packing:bbox#add ();;
+invBut
+
+(*Boutton Compression*)
+let comBut = GButton.button
+			~label: "Compression"
+			~packing:bbox#add ();;
+comBut
+
+(*Boutton Segmentation*)
+let segBut = GButton.button
+			~label: "Segmentation"
+			~packing:bbox#add ();;
+segBut
+
+let bboxb = GPack.button_box `HORIZONTAL
+	~layout:`END
+	~border_width:10
+	~child_width: 250
+	~child_height: 50
+	~packing:(vbox#pack ~expand:false) ()
+
+let bboxc = GPack.button_box `HORIZONTAL
+	~layout:`EDGE
+	~border_width:10
+	~child_width: 250
+	~child_height: 50
+	~packing:(vbox#pack ~expand:false) ()
+
+let retBut = GButton.button
+			~stock:`HOME
+			~label:"Retour"
+			~packing:bboxc#add ();;
+retBut
+
+let saveBut = GButton.button
+			~stock:`SAVE_AS
+			~packing:bboxb#add ();;
+saveBut
+
+let xtBut = GButton.button
+			~stock:`QUIT
+			~packing:bboxc#add ();;
+ignore (xtBut#connect#clicked ~callback:GMain.quit);
+xtBut
+
 
 (*Affichage de fenetre*)
 let _ =

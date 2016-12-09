@@ -1,0 +1,103 @@
+%pdflatex main.tex
+\documentclass[12pt]{article}
+\usepackage{natbib}
+\usepackage[francais]{babel}
+\usepackage{natbib}
+\usepackage{url}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{float}
+\graphicspath{{images/}}
+\usepackage{amsthm}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{xfrac}
+\usepackage{esvect}
+\usepackage{vmargin}
+\usepackage{gensymb}
+\setmarginsrb{3 cm}{2.5 cm}{3 cm}{2.5 cm}{1 cm}{1.5 cm}{1 cm}{1.5 cm}
+
+\title{Projet Quadtree}								% Title
+\author{Groupe 2}								% Author
+\date{\today}											% Date
+
+\makeatletter
+\let\thetitle\@title
+\let\theauthor\@author
+\let\thedate\@date
+\makeatother
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\theauthor}
+\lhead{\thetitle}
+\cfoot{\thepage}
+\newtheorem*{rappel}{Rappel}
+\newtheorem*{nota}{N.B}
+\newtheorem*{req}{Remarque}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{titlepage}
+	\centering
+    \vspace*{0.5 cm}
+    \includegraphics[scale = 0.75 ]{logo1.png}\\[1.0 cm]	% University Logo
+    \textsc{\LARGE EISTI}\\[2.0 cm]			% University Name
+    \rule{\linewidth}{0.2 mm} \\[0.5 cm]
+    { \huge \bfseries \thetitle}\\
+    \rule{\linewidth}{0.2 mm} \\[1.5 cm]
+	\textsc{\Large Algorithmique et programmation fonctionnelle}\\[0.5 cm]	% Course Code
+	\textsc{\large CPI1 C2 - Groupe 2}\\[0.5 cm]		% Course Name
+	
+	\begin{minipage}{0.4\textwidth}
+	\centering
+		\begin{center} \large
+		Amine TAGHROUT\\
+		David RIGAUX \\
+		Mehdi DALAA 
+			\end{center}
+			\end{minipage}~
+			\begin{minipage}{0.4\textwidth}
+	\end{minipage}\\[0.8 cm]
+	{\large \thedate}\\[1 cm]
+	\vfill
+	
+\end{titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\tableofcontents
+\addtocontents{toc}{~\hfill\textbf{Page}\par}
+\pagebreak
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Introduction}
+\addcontentsline{toc}{section}{\protect\numberline{}Introduction}
+\section{Étude du projet}
+Expliquer le but du projet comment on a procédé pour la résolution du projet
+\section{LablGTK2}
+Explication de la librairie graphique LablGTK2
+\section{Arbre Quadtree}
+Qu'est ce qu'un arbre Quadtree et comment on l'a créé
+\section{Fonction I/O}
+Explication qu'on doit charger et enregistrer des images
+\subsection{Chargement}
+Comment on a procédé pour le chargement
+\subsection{Enregistrement}
+Comment on a procédé pour l'enregistrement
+\section{Fonctions de manipulation}
+\subsection{Opérations Simples}
+\subsubsection{Rotation de 90$^{\circ}$}
+\subsubsection{Miroir}
+\subsubsection{Inversion}
+\subsection{Opérations Avancées}
+\subsubsection{Compression}
+\subsubsection{Segmentation}
+\section{Graphiques}
+Explication sur comment on a créé le GUI
+\section*{Conclusion}
+\addcontentsline{toc}{section}{\protect\numberline{}Conclusion}
+\end{document}
