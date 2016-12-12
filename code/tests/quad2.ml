@@ -107,6 +107,7 @@ let returnB = GButton.button
 	~label: "Retour"
 	~packing:bboxtwo#add()
 
+(*
 (*Tableau avec informations sur image*)
 let tableInfo = GPack.table
 	~rows:3 ~columns:2
@@ -137,10 +138,83 @@ let moyFichInfo = GMisc.label
 ignore (tableInfo#attach ~left:1 ~top:0 (nomFichInfo#coerce));
 ignore (tableInfo#attach ~left:1 ~top:1 (dimFichInfo#coerce));
 ignore (tableInfo#attach ~left:1 ~top:2 (moyFichInfo#coerce));;
-
+*)
 (*Creation du widget à mettre dans le TAB Home du notebook*)
+let labelHome = GMisc.label
+					~text:"Home" ()
+
+let vboxHome = GPack.vbox
+				~packing:hboxtwo#add ()
+
+let tableHome = GPack.table
+				~rows:2
+				~columns:12
+				~row_spacings:10
+				~col_spacings:10
+				~packing:vboxHome#add ()
+(*Table Titles*)
+let titlePPM = GMisc.label ~markup:"<b>PPM</b>" ();;
+let rot = GMisc.label ~markup:"<b>Rotation</b>" ~justify:`LEFT ();;
+let rotG = GMisc.label ~text:"Rotation Gauche" ~justify:`LEFT ();;
+let rotD = GMisc.label ~text:"Rotation Droite" ~justify:`LEFT ();;
+let mir = GMisc.label ~markup:"<b>Miroir</b>" ~justify:`LEFT ();;
+let mirHB = GMisc.label ~text:"Miroir Haut/Bas" ~justify:`LEFT ();;
+let mirGD = GMisc.label ~text:"Miroir Gauche/Droite" ~justify:`LEFT ();;
+let inv = GMisc.label ~text:"Inversion" ~justify:`LEFT ();;
+let com = GMisc.label ~text:"Compression" ~justify:`LEFT ();;
+let seg = GMisc.label ~text:"Segmentation" ~justify:`LEFT ();;
+let sav = GMisc.label ~text:"Sauvegarde" ~justify:`LEFT ();;
+
+(*Table Texts*)
+let textInt = GMisc.label
+~text:"Quadtree est un programme qui permet de charger des images en format .ppm et d'appliquer plusieurs opérations sur ces
+dernières. En ce qui concerne les opérations on trouve : les opérations simples : Rotation, Mirroir et Inversion de couleurs;
+les opérations avancées : Compression et Ségmentation. De plus, quadtree permet de sauvgarder les changements apportés à
+l'image."
+~justify:`CENTER ();;
+let textRG = GMisc.label
+~text: "Cette opération consiste à effectuer une rotaion de 90 degrés sur l'image vers la gauche." ~justify:`CENTER ();;
+let textRD = GMisc.label
+~text: " Cette opération consiste à effectuer une rotaion de 90 degrés sur l'image vers la droite." ~justify:`CENTER ();;
+let textMHB = GMisc.label
+~text: "Cette opération consiste à découper l'image en deux parties symetriques par rapport à un
+axe de symétrie horizontale." ~justify:`CENTER ();;
+let textMDG = GMisc.label
+~text: "Cette opération consiste à découper l'image en deux parties symetriques par rapport à
+un axe de symétrie verticale." ~justify:`CENTER ();;
+let textI = GMisc.label
+~text: "Cette opération consiste à effectuer une inversion des couleurs de l'image." ~justify:`CENTER ();;
+let textC = GMisc.label
+~text: "Cette opération consiste à effectuer une compression de l'image." ~justify:`CENTER ();;
+let textS = GMisc.label
+~text: "Cette opération consiste à effectuer une segmentation de l'image." ~justify:`CENTER ();;
+let textSAV = GMisc.label
+~text: "Cette opération consiste à effectuer un enregistrement-sous de l'image." ~justify:`CENTER ();;
 
 
+
+
+(*Title and Text addition*)
+ignore (tableHome#attach ~left:0 ~right:2 ~top:0 (titlePPM#coerce));
+ignore (tableHome#attach ~left:0 ~right:2 ~top:1 (textInt#coerce));
+ignore (tableHome#attach ~left:0 ~top:2 (rot#coerce));
+ignore (tableHome#attach ~left:0 ~top:3 (rotG#coerce));
+ignore (tableHome#attach ~left:1 ~top:3 (textRG#coerce));
+ignore (tableHome#attach ~left:0 ~top:4 (rotD#coerce));
+ignore (tableHome#attach ~left:1 ~top:4 (textRD#coerce));
+ignore (tableHome#attach ~left:0 ~top:5 (mir#coerce));
+ignore (tableHome#attach ~left:0 ~top:6 (mirHB#coerce));
+ignore (tableHome#attach ~left:1 ~top:6 (textMHB#coerce));
+ignore (tableHome#attach ~left:0 ~top:7 (mirGD#coerce));
+ignore (tableHome#attach ~left:1 ~top:7 (textMDG#coerce));
+ignore (tableHome#attach ~left:0 ~top:8 (inv#coerce));
+ignore (tableHome#attach ~left:1 ~top:8 (textI#coerce));
+ignore (tableHome#attach ~left:0 ~top:9 (com#coerce));
+ignore (tableHome#attach ~left:1 ~top:9 (textC#coerce));
+ignore (tableHome#attach ~left:0 ~top:10 (seg#coerce));
+ignore (tableHome#attach ~left:1 ~top:10 (textS#coerce));
+ignore (tableHome#attach ~left:0 ~top:11 (sav#coerce));
+ignore (tableHome#attach ~left:1 ~top:11 (textSAV#coerce))
 
 (*
 (*Creation du widget à mettre dans le TAB Simple du notebook*)
