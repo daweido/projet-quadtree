@@ -72,16 +72,158 @@ let _ =
 	ignore (abo#connect#clicked (fun () -> ignore (about_button#run ()); ignore (about_button#misc#hide ())));
 	qui#connect#clicked Main.quit;;
 
-let notebook = GPack.notebook ~packing:vbox#add ()
-
 let quit =
 	let button = GButton.button
 				~stock:`QUIT () in
 	ignore (button#connect#clicked ~callback:GMain.quit);
 	button;;
 
-let button = GButton.button ~label:"Page 1"
-  ~packing: ignore (notebook#append_page quit) ()
+(*DEBUT DE DEUXIEME INTERFACE*)
+
+(*Définition des conteneurs*)
+(*+ Grands conteneur*)
+let hboxtwo = GPack.hbox
+	~spacing:10
+	~packing: vbox#add ()
+
+let bboxtwo = GPack.button_box `HORIZONTAL
+	~spacing:150
+	~layout:`EDGE
+	~border_width:5
+	~child_width: 250
+	~child_height: 50
+	~packing:(vbox#pack ~expand:false) ()
+
+(*Sous conteneurs*)
+(*let notebook = GPack.notebook ~packing:hboxtwo#add ()
+
+let vboxtwo = GPack.vbox
+	~spacing:10
+	~packing:hboxtwo#add ()*)
+
+(*bouton retour*)
+let returnB = GButton.button
+	~label: "Retour" ()
+
+(*Tableau avec informations sur image*)
+let tableInfo = GPack.table
+	~rows:3 ~columns:2
+	~homogeneous:true
+	~packing:hboxtwo#add ();;
+(*Label du tableau Info*)
+let nomInfo = GMisc.label
+						~text:"Nom de l'image :" ();;
+let dimInfo = GMisc.label
+						~text:"Dimensions de l'image :" ();;
+let moyInfo = GMisc.label
+						~text:"Moyenne des couleurs :" ();;
+
+(*Ajout dans noms dans tableau info*)
+ignore (tableInfo#attach ~left:0 ~top:0 (nomInfo#coerce));
+ignore (tableInfo#attach ~left:0 ~top:1 (dimInfo#coerce));
+ignore (tableInfo#attach ~left:0 ~top:2 (moyInfo#coerce));
+
+(*Info Fichier*)
+let nomFichInfo = GMisc.label
+						~text:"test.ppm" ();;
+let dimFichInfo = GMisc.label
+						~text:"800*800" ();;
+let moyFichInfo = GMisc.label
+						~text:"175" ();;
+
+(*Ajout infos dans tableau*)
+ignore (tableInfo#attach ~left:1 ~top:0 (nomFichInfo#coerce));
+ignore (tableInfo#attach ~left:1 ~top:1 (dimFichInfo#coerce));
+ignore (tableInfo#attach ~left:1 ~top:2 (moyFichInfo#coerce));
+
+
+(*Creation du widget à mettre dans le TAB Simple du notebook*)
+let labelSimple = GMisc.label
+					~text:("Opérations Simple") ()
+
+let hboxSimple = GPack.hbox
+	~spacing:10
+	~packing:hboxtwo#add ()
+
+let tableSimple = GPack.table
+	~rows:3
+	~columns:2
+	~row_spacings:10
+	~col_spacings:5
+	~homogeneous:true
+	~packing:hboxSimple#add ()
+
+(*Noms opérations Simple*)
+let rotSimple = GMisc.label
+						~text:"Rotation" ();;
+let miroirSimple = GMisc.label
+						~text:"Miroir" ();;
+let invSimple = GMisc.label
+						~text:"Inversion" ();;
+
+
+(*Ajout dans tableSimple des noms d'oréprations*)
+ignore (tableSimple#attach ~left:0 ~top:0 (rotSimple#coerce));
+ignore (tableSimple#attach ~left:0 ~top:1 (miroirSimple#coerce));
+ignore (tableSimple#attach ~left:0 ~top:2 (invSimple#coerce))
+
+(*Bouton Arrows*)
+(*Ajouter callback ici*)
+let create_arrow_button ~kind ~shadow () =
+	let button = GButton.button () in
+	let arrow = GMisc.arrow ~kind ~shadow ~packing:button#add () in
+	button
+
+(*ROTATION*)
+let tableRot = GPack.table
+	~rows:1
+	~columns:2
+	~homogeneous:true ();;
+
+ignore (tableSimple#attach ~left:1 ~top:0 (tableRot#coerce))
+(*leftRot*)
+let leftRot = create_arrow_button ~kind:`LEFT ~shadow:`ETCHED_IN ();;
+ignore (tableRot#attach ~left:0 ~top:0 (leftRot#coerce))
+
+(*rightRot*)
+let rightRot = create_arrow_button ~kind:`RIGHT ~shadow:`ETCHED_OUT ();;
+ignore (tableRot#attach ~left:1 ~top:0 (rightRot#coerce))
+
+
+(*MIROIR*)
+let tableMir = GPack.table
+	~rows:3
+	~columns:3
+	~homogeneous:true ();;
+
+ignore (tableSimple#attach ~left:1 ~top:1 (tableMir#coerce))
+(*upMir*)
+let upMir = create_arrow_button ~kind:`UP ~shadow:`IN ();;
+ignore (tableMir#attach ~left:1 ~top:0 (upMir#coerce))
+
+(*rightMir*)
+let rightMir = create_arrow_button ~kind:`RIGHT ~shadow:`ETCHED_OUT ();;
+ignore (tableMir#attach ~left:2 ~top:1 (rightMir#coerce))
+
+(*downMir*)
+let downMir = create_arrow_button ~kind:`DOWN ~shadow:`OUT ();;
+ignore (tableMir#attach ~left:1 ~top:2 (downMir#coerce))
+
+(*leftMir*)
+let leftMir = create_arrow_button ~kind:`LEFT ~shadow:`ETCHED_IN ();;
+ignore (tableMir#attach ~left:0 ~top:1 (leftMir#coerce))
+
+(*INVERSION*)
+let tableInv = GPack.table
+	~rows:1
+	~columns:1
+	~homogeneous:true ();;
+ignore (tableSimple#attach ~left:2 ~top:2 (tableInv#coerce))
+
+let invBUT = GButton.button
+					~label: "Inverser" ();;
+ignore (tableInv#attach ~left:0 ~top:0  (invBUT#coerce))
+
 
 (*Affichage de fenetre*)
 let _ =
