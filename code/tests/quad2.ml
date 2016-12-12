@@ -87,23 +87,25 @@ let hboxtwo = GPack.hbox
 	~packing: vbox#add ()
 
 let bboxtwo = GPack.button_box `HORIZONTAL
-	~spacing:150
-	~layout:`EDGE
+	~layout:`START
 	~border_width:5
 	~child_width: 250
 	~child_height: 50
 	~packing:(vbox#pack ~expand:false) ()
 
 (*Sous conteneurs*)
-(*let notebook = GPack.notebook ~packing:hboxtwo#add ()
-
+(*
+(*NOTEBOOK*)
+let notebook = GPack.notebook ~packing:hboxtwo#add ()
+(*VBOX DROITE INFO*)
 let vboxtwo = GPack.vbox
 	~spacing:10
 	~packing:hboxtwo#add ()*)
 
 (*bouton retour*)
 let returnB = GButton.button
-	~label: "Retour" ()
+	~label: "Retour"
+	~packing:bboxtwo#add()
 
 (*Tableau avec informations sur image*)
 let tableInfo = GPack.table
@@ -121,7 +123,7 @@ let moyInfo = GMisc.label
 (*Ajout dans noms dans tableau info*)
 ignore (tableInfo#attach ~left:0 ~top:0 (nomInfo#coerce));
 ignore (tableInfo#attach ~left:0 ~top:1 (dimInfo#coerce));
-ignore (tableInfo#attach ~left:0 ~top:2 (moyInfo#coerce));
+ignore (tableInfo#attach ~left:0 ~top:2 (moyInfo#coerce))
 
 (*Info Fichier*)
 let nomFichInfo = GMisc.label
@@ -134,9 +136,13 @@ let moyFichInfo = GMisc.label
 (*Ajout infos dans tableau*)
 ignore (tableInfo#attach ~left:1 ~top:0 (nomFichInfo#coerce));
 ignore (tableInfo#attach ~left:1 ~top:1 (dimFichInfo#coerce));
-ignore (tableInfo#attach ~left:1 ~top:2 (moyFichInfo#coerce));
+ignore (tableInfo#attach ~left:1 ~top:2 (moyFichInfo#coerce));;
+
+(*Creation du widget à mettre dans le TAB Home du notebook*)
 
 
+
+(*
 (*Creation du widget à mettre dans le TAB Simple du notebook*)
 let labelSimple = GMisc.label
 					~text:("Opérations Simple") ()
@@ -223,6 +229,67 @@ ignore (tableSimple#attach ~left:2 ~top:2 (tableInv#coerce))
 let invBUT = GButton.button
 					~label: "Inverser" ();;
 ignore (tableInv#attach ~left:0 ~top:0  (invBUT#coerce))
+*)
+(*
+(*Creation du widget à mettre dans le TAB Avancées du notebook*)
+let labelAdvanced = GMisc.label
+					~text:("Opérations Avancées") ()
+
+let hboxAdvanced = GPack.hbox
+	~spacing:10
+	~packing:hboxtwo#add ()
+
+let tableAdvanced = GPack.table
+	~rows:2
+	~columns:2
+	~row_spacings:10
+	~col_spacings:5
+	~homogeneous:true
+	~packing:hboxAdvanced#add ()
+
+(*Noms opérations Avancées*)
+let comprAdv = GMisc.label ~text:"Compression" ()
+let segmAdv = GMisc.label ~text:"Semgentation" ();;
+
+(*Ajout dans tableAdvanced des noms d'oréprations*)
+ignore (tableAdvanced#attach ~left:0 ~top:0 (comprAdv#coerce));
+ignore (tableAdvanced#attach ~left:0 ~top:1 (segmAdv#coerce));;
+
+(*COMPRESSION*)
+let compAdvB = GButton.button ~label: "Compresser" ();;
+ignore (tableAdvanced#attach ~left:1 ~top:1  (compAdvB#coerce));;
+
+(*SEGMENTATION*)
+let segAdvB = GButton.button ~label: "Segmenter" ();;
+ignore (tableAdvanced#attach ~left:1 ~top:0  (segAdvB#coerce))
+*)
+
+(*
+(*Creation du widget à mettre dans le TAB Sauvegarder du notebook*)
+let labelSave = GMisc.label
+					~text:("Opérations Avancées") ()
+
+let hboxSave = GPack.hbox
+	~spacing:10
+	~packing:hboxtwo#add ()
+
+let tableSave = GPack.table
+	~rows:1
+	~columns:1
+	~row_spacings:10
+	~col_spacings:5
+	~homogeneous:true
+	~packing:hboxSave#add ()
+
+(*Nom opération Sauvegarde*)
+let nameSave = GMisc.label ~text:"Enregistrement" ();;
+(*Ajout dans tableSave du nom d'enregistrement*)
+ignore (tableSave#attach ~left:0 ~top:0 (nameSave#coerce))
+
+(*Enregistrement*)
+let saveBut= GButton.button ~label: "Sauvegarder" ();;
+ignore (tableSave#attach ~left:1 ~top:0  (saveBut#coerce))
+*)
 
 
 (*Affichage de fenetre*)
