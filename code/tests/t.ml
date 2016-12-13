@@ -20,7 +20,7 @@ let fir = GMisc.label ~text:"Home" ()
 
 let vboxtwo = GPack.vbox
 	~spacing:10
-	~packing:(notebook#append_page ~tab_label:fir#coerce) ()
+	~packing:(ignore (notebook#append_page ~tab_label:fir#coerce)) ()
 
 let _ =
 	ignore (window#event#connect#delete confirm);
