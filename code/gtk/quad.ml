@@ -1,4 +1,9 @@
+(*Compilation interface toute seule*)
 (*ocamlfind ocamlc -g -package lablgtk2 -linkpkg quad.ml -o quadtree*)
+
+
+(*Compilation Interface+Fichier externe*)
+(*ocamlfind ocamlc -g -package lablgtk2 -linkpkg str.cma v2.ml quad.ml -o quadtree*)
 open GMain
 open GdkKeysyms
 
@@ -71,8 +76,18 @@ let _ =
 	let qui = GButton.tool_button ~label: "Quitter" ~stock: `QUIT ~packing () in
 	ignore (abo#connect#clicked (fun () -> ignore (about_button#run ()); ignore (about_button#misc#hide ())));
 	qui#connect#clicked Main.quit;;
+
 (*CONFIRMATION PAGE*)
-let titreConf = GMisc.label ~markup: "<span font_desc=\"Tahoma 35\">Veuillez confirmer le choix de votre fichier : test.ppm ?</span>" ~show: false ~packing:vbox#add ()
+let alignConfirmation = GBin.alignment
+	~xalign:0.5
+	~yalign:0.5
+	~xscale:0.0
+	~yscale:0.0
+	~show: false
+	~packing:vbox#add()
+
+let vboxConfirm = GPack.vbox ~spacing:100 ~packing: alignConfirmation#add ()
+let titreConf = GMisc.label ~markup: "<span font_desc=\"Tahoma 20\">Veuillez confirmer le choix de votre fichier : test.ppm ?</span>" ~packing:vboxConfirm#add ()
 
 (*BouttonsConf*)
 (*Conteneur de BouttonsConf*)
@@ -82,8 +97,7 @@ let bboxConf = GPack.button_box `HORIZONTAL
 	~border_width:5
 	~child_width: 250
 	~child_height: 50
-	~show: false
-	~packing:(vbox#pack ~expand:false) ()
+	~packing:(vboxConfirm#add) ()
 
 let conf = GButton.button
 		~label: "Confirmer"
@@ -142,10 +156,10 @@ let action_button stock event action =
 	ignore (GMisc.image ~stock ~packing:btn#set_image ());
 	ignore (btn#connect#clicked (fun () ->
 	if dlg#run () = `OPEN then Gaux.may action dlg#filename;
-	dlg#misc#hide ();bbox#misc#hide ();titre#misc#hide ();bboxConf#misc#show ();titreConf#misc#show ()));
+	dlg#misc#hide ();bbox#misc#hide ();titre#misc#hide ();alignConfirmation#misc#show ()));
  	btn;;
 (*BOUTON ANNULER SUR DEUXIEME PAGE*)
-ignore (confAn#connect#clicked (fun () -> ignore (bboxConf#misc#hide ()); ignore (titreConf#misc#hide ()); ignore (titre#misc#show ()); ignore (bbox#misc#show ())));;
+ignore (confAn#connect#clicked (fun () -> ignore (alignConfirmation#misc#show ()); ignore (titre#misc#show ()); ignore (bbox#misc#show ())));;
 
 (*DEBUT DE TROISIEME INTERFACE*)
 let ignore_apply f obj = ignore (f obj)
@@ -175,7 +189,7 @@ let notebook = GPack.notebook
 			~packing:hboxtwo#add ();;
 
 (*BOUTON CONFIMER SUR DEUXIEME PAGE*)
-ignore (conf#connect#clicked (fun () -> ignore (bboxConf#misc#hide ()); ignore (titreConf#misc#hide ()); ignore (hboxtwo#misc#show ()); ignore (bboxtwo#misc#show ());ignore (notebook#goto_page 0)));;
+ignore (conf#connect#clicked (fun () -> ignore (alignConfirmation#misc#hide ()); ignore (hboxtwo#misc#show ()); ignore (bboxtwo#misc#show ());ignore (notebook#goto_page 0)));;
 
 (*bouton retour*)
 let returnB = GButton.button
@@ -190,26 +204,33 @@ let labelHome = GMisc.label
 					~text:"Home" ()
 
 let vboxHome = GPack.vbox
-				~packing:hboxtwo#add ()
+				~packing:(ignore_apply (notebook#append_page ~tab_label:labelHome#coerce)) ()
+(* Create a centering alignment object *)
+let alignHome = GBin.alignment
+			~xalign:0.5
+			~yalign:0.1
+			~xscale:0.0
+			~yscale:0.0
+			~packing:vboxHome#add ()
 
 let tableHome = GPack.table
 				~rows:2
 				~columns:12
 				~border_width:3
 				~row_spacings:15
-				~packing:(ignore_apply (notebook#append_page ~tab_label:labelHome#coerce)) ()
+				~packing:alignHome#add ()
 (*Table Titles*)
-let titlePPM = GMisc.label ~markup:"<b>PPM</b>" ();;
-let rot = GMisc.label ~markup:"<b>Rotation</b>" ~justify:`LEFT ();;
-let rotG = GMisc.label ~text:"Rotation Gauche" ~justify:`LEFT ();;
-let rotD = GMisc.label ~text:"Rotation Droite" ~justify:`LEFT ();;
-let mir = GMisc.label ~markup:"<b>Miroir</b>" ~justify:`LEFT ();;
-let mirHB = GMisc.label ~text:"Miroir Haut/Bas" ~justify:`LEFT ();;
-let mirGD = GMisc.label ~text:"Miroir Gauche/Droite" ~justify:`LEFT ();;
-let inv = GMisc.label ~text:"Inversion" ~justify:`LEFT ();;
-let com = GMisc.label ~text:"Compression" ~justify:`LEFT ();;
-let seg = GMisc.label ~text:"Segmentation" ~justify:`LEFT ();;
-let sav = GMisc.label ~text:"Sauvegarde" ~justify:`LEFT ();;
+let titlePPM = GMisc.label ~markup:"<span font_desc=\"Tahoma 25\"><b>PPMShop</b></span>" ();;
+let rot = GMisc.label ~markup:"<span font_desc=\"Tahoma 18\"><b>Rotation</b></span>" ~justify:`LEFT ();;
+let rotG = GMisc.label ~markup:"<big>Rotation Gauche</big>" ~justify:`LEFT ();;
+let rotD = GMisc.label ~markup:"<big>Rotation Droite</big>" ~justify:`LEFT ();;
+let mir = GMisc.label ~markup:"<span font_desc=\"Tahoma 18\"><b>Miroir</b></span>" ~justify:`LEFT ();;
+let mirHB = GMisc.label ~markup:"<big>Miroir Haut/Bas</big>" ~justify:`LEFT ();;
+let mirGD = GMisc.label ~markup:"<big>Miroir Gauche/Droite</big>" ~justify:`LEFT ();;
+let inv = GMisc.label ~markup:"<big>Inversion</big>" ~justify:`LEFT ();;
+let com = GMisc.label ~markup:"<big>Compression</big>" ~justify:`LEFT ();;
+let seg = GMisc.label ~markup:"<big>Segmentation</big>" ~justify:`LEFT ();;
+let sav = GMisc.label ~markup:"<big>Sauvegarde</big>" ~justify:`LEFT ();;
 
 (*Table Texts*)
 let textInt = GMisc.label
@@ -266,36 +287,48 @@ ignore (tableHome#attach ~left:1 ~top:11 (textSAV#coerce))
 let labelInfo = GMisc.label
 					~text:("Infos Fichier") ()
 
+let hboxInfo = GPack.hbox
+				~packing:(ignore_apply (notebook#append_page ~tab_label:labelInfo#coerce)) ()
+
+let alignInfo = GBin.alignment
+		~xalign:0.5
+		~yalign:0.1
+		~xscale:0.0
+		~yscale:0.0
+		~packing:hboxInfo#add ()
+
 let tableInfo = GPack.table
-	~rows:3
+	~rows:4
 	~columns:2
-	~packing: (ignore_apply (notebook#append_page ~tab_label:labelInfo#coerce)) ();;
+	~row_spacings:20
+	~col_spacings:15
+	~homogeneous:true
+	~packing: alignInfo#add ()
 
 (*Label du tableau Info*)
-let nomInfo = GMisc.label
-						~text:"Nom de l'image :" ();;
-let dimInfo = GMisc.label
-						~text:"Dimensions de l'image :" ();;
-let moyInfo = GMisc.label
-						~text:"Moyenne des couleurs :" ();;
+let titreInfo = GMisc.label ~markup: "<span font_desc=\"Tahoma 25\"><b>Informations du fichier</b></span>" ();;
+let nomInfo = GMisc.label ~markup: "<b><big>Nom de l'image :</big></b>" ();;
+let dimInfo = GMisc.label ~markup: "<b><big>Dimensions de l'image :</big></b>" ();;
+let moyInfo = GMisc.label ~markup: "<b><big>Moyenne des couleurs :</big></b>" ();;
 
 (*Ajout dans noms dans tableau info*)
-ignore (tableInfo#attach ~left:0 ~top:0 (nomInfo#coerce));
-ignore (tableInfo#attach ~left:0 ~top:1 (dimInfo#coerce));
-ignore (tableInfo#attach ~left:0 ~top:2 (moyInfo#coerce))
+ignore (tableInfo#attach ~left:0 ~right:2 ~top:0 (titreInfo#coerce));
+ignore (tableInfo#attach ~left:0 ~top:1 (nomInfo#coerce));
+ignore (tableInfo#attach ~left:0 ~top:2 (dimInfo#coerce));
+ignore (tableInfo#attach ~left:0 ~top:3 (moyInfo#coerce))
 
 (*Info Fichier*)
 let nomFichInfo = GMisc.label
-						~text:"test.ppm" ();;
+						~markup:"<big>test.ppm</big>" ();;
 let dimFichInfo = GMisc.label
-						~text:"800*800" ();;
+						~markup:"<big>800*800</big>" ();;
 let moyFichInfo = GMisc.label
-						~text:"175" ();;
+						~markup:"<big>175</big>" ();;
 
 (*Ajout infos dans tableau*)
-ignore (tableInfo#attach ~left:1 ~top:0 (nomFichInfo#coerce));
-ignore (tableInfo#attach ~left:1 ~top:1 (dimFichInfo#coerce));
-ignore (tableInfo#attach ~left:1 ~top:2 (moyFichInfo#coerce));;
+ignore (tableInfo#attach ~left:1 ~top:1 (nomFichInfo#coerce));
+ignore (tableInfo#attach ~left:1 ~top:2 (dimFichInfo#coerce));
+ignore (tableInfo#attach ~left:1 ~top:3 (moyFichInfo#coerce));;
 
 (*Creation du widget à mettre dans le TAB Simple du notebook*)
 let labelSimple = GMisc.label
@@ -305,143 +338,279 @@ let hboxSimple = GPack.hbox
 	~spacing:10
 	~packing:(ignore_apply (notebook#append_page ~tab_label:labelSimple#coerce)) ()
 
+let alignSimple = GBin.alignment
+		~xalign:0.5
+		~yalign:0.1
+		~xscale:0.0
+		~yscale:0.0
+		~packing:hboxSimple#add ()
+
 let tableSimple = GPack.table
-	~rows:3
+	~rows:4
 	~columns:2
 	~row_spacings:10
-	~col_spacings:5
+	~col_spacings:50
 	~homogeneous:true
-	~packing:hboxSimple#add ()
+	~packing:alignSimple#add ()
 
 (*Noms opérations Simple*)
-let rotSimple = GMisc.label
-						~text:"Rotation" ();;
-let miroirSimple = GMisc.label
-						~text:"Miroir" ();;
-let invSimple = GMisc.label
-						~text:"Inversion" ();;
+let titreSimple = GMisc.label ~markup: "<span font_desc=\"Tahoma 25\"><b>Opérations Simples</b></span>" ()
+let rotSimple = GMisc.label ~markup:"<span font_desc=\"Tahoma 20\">Rotation</span>" ()
+let miroirSimple = GMisc.label ~markup:"<span font_desc=\"Tahoma 20\">Miroir</span>" ()
+let invSimple = GMisc.label ~markup:"<span font_desc=\"Tahoma 20\">Inversion</span>" ();;
 
 
 (*Ajout dans tableSimple des noms d'oréprations*)
-ignore (tableSimple#attach ~left:0 ~top:0 (rotSimple#coerce));
-ignore (tableSimple#attach ~left:0 ~top:1 (miroirSimple#coerce));
-ignore (tableSimple#attach ~left:0 ~top:2 (invSimple#coerce))
+ignore (tableSimple#attach ~left:0 ~right:2 ~top:0 (titreSimple#coerce));
+ignore (tableSimple#attach ~left:0 ~top:1 (rotSimple#coerce));
+ignore (tableSimple#attach ~left:0 ~top:2 (miroirSimple#coerce));
+ignore (tableSimple#attach ~left:0 ~top:3 (invSimple#coerce))
 
 (*Bouton Arrows*)
 (*Ajouter callback ici*)
-let create_arrow_button ~kind ~shadow () =
-	let button = GButton.button () in
+let create_arrow_button ~kind ~shadow ~packing () =
+	let button = GButton.button ~packing () in
 	let arrow = GMisc.arrow ~kind ~shadow ~packing:button#add () in
 	button
 
 (*ROTATION*)
+let alignTableRot = GBin.alignment
+	~xalign:0.5
+	~yalign:0.5
+	~xscale:0.0
+	~yscale:0.0 ();;
+
+ignore (tableSimple#attach ~left:1 ~top:1 (alignTableRot#coerce))
 let tableRot = GPack.table
 	~rows:1
 	~columns:2
-	~homogeneous:true ();;
+	~homogeneous:true
+	~packing: alignTableRot#add ()
 
-ignore (tableSimple#attach ~left:1 ~top:0 (tableRot#coerce))
 (*leftRot*)
-let leftRot = create_arrow_button ~kind:`LEFT ~shadow:`ETCHED_IN ();;
-ignore (tableRot#attach ~left:0 ~top:0 (leftRot#coerce))
+let bboxleftRot = GPack.button_box `HORIZONTAL
+		~border_width:3
+		~child_width: 25
+		~child_height:25 ();;
+
+ignore (tableRot#attach ~left:0 ~top:0 (bboxleftRot#coerce))
+
+let leftRot = create_arrow_button ~kind:`LEFT ~shadow:`ETCHED_IN ~packing:bboxleftRot#add ()
 
 (*rightRot*)
-let rightRot = create_arrow_button ~kind:`RIGHT ~shadow:`ETCHED_OUT ();;
-ignore (tableRot#attach ~left:1 ~top:0 (rightRot#coerce))
+let bboxrightRot = GPack.button_box `HORIZONTAL
+		~border_width:2
+		~child_width: 25
+		~child_height:25 ();;
 
+ignore (tableRot#attach ~left:1 ~top:0 (bboxrightRot#coerce))
+
+let rightRot = create_arrow_button ~kind:`RIGHT ~shadow:`ETCHED_OUT ~packing:bboxrightRot#add ()
 
 (*MIROIR*)
+let alignTableMiroir = GBin.alignment
+	~xalign:0.5
+	~yalign:0.5
+	~xscale:0.0
+	~yscale:0.0 ();;
+
+ignore (tableSimple#attach ~left:1 ~top:2 (alignTableMiroir#coerce))
+
 let tableMir = GPack.table
 	~rows:3
 	~columns:3
-	~homogeneous:true ();;
+	~homogeneous:true
+	~packing:alignTableMiroir#add ();;
 
-ignore (tableSimple#attach ~left:1 ~top:1 (tableMir#coerce))
 (*upMir*)
-let upMir = create_arrow_button ~kind:`UP ~shadow:`IN ();;
-ignore (tableMir#attach ~left:1 ~top:0 (upMir#coerce))
+let bboxMiroirUp = GPack.button_box `HORIZONTAL
+		~child_width:25
+		~child_height:25 ();;
+
+ignore (tableMir#attach ~left:1 ~top:0 (bboxMiroirUp#coerce))
+
+let upMir = create_arrow_button ~kind:`UP ~shadow:`IN ~packing:bboxMiroirUp#add ();;
 
 (*rightMir*)
-let rightMir = create_arrow_button ~kind:`RIGHT ~shadow:`ETCHED_OUT ();;
-ignore (tableMir#attach ~left:2 ~top:1 (rightMir#coerce))
+let bboxMiroirRight = GPack.button_box `HORIZONTAL
+		~child_width:25
+		~child_height:25 ();;
+
+ignore (tableMir#attach ~left:2 ~top:1 (bboxMiroirRight#coerce))
+
+let rightMir = create_arrow_button ~kind:`RIGHT ~shadow:`ETCHED_OUT ~packing:bboxMiroirRight#add ();;
 
 (*downMir*)
-let downMir = create_arrow_button ~kind:`DOWN ~shadow:`OUT ();;
-ignore (tableMir#attach ~left:1 ~top:2 (downMir#coerce))
+let bboxMiroirDown = GPack.button_box `HORIZONTAL
+		~child_width:25
+		~child_height:25 ();;
+
+ignore (tableMir#attach ~left:1 ~top:2 (bboxMiroirDown#coerce))
+
+let downMir = create_arrow_button ~kind:`DOWN ~shadow:`OUT ~packing:bboxMiroirDown#add ();;
 
 (*leftMir*)
-let leftMir = create_arrow_button ~kind:`LEFT ~shadow:`ETCHED_IN ();;
-ignore (tableMir#attach ~left:0 ~top:1 (leftMir#coerce))
+let bboxMiroirLeft = GPack.button_box `HORIZONTAL
+		~child_width:25
+		~child_height:25 ();;
+
+ignore (tableMir#attach ~left:0 ~top:1 (bboxMiroirLeft#coerce))
+
+let leftMir = create_arrow_button ~kind:`LEFT ~shadow:`ETCHED_IN ~packing:bboxMiroirLeft#add ();;
+
 
 (*INVERSION*)
+let alignTableInversion = GBin.alignment
+	~xalign:0.5
+	~yalign:0.5
+	~xscale:0.0
+	~yscale:0.0 ();;
+
+ignore (tableSimple#attach ~left:1 ~top:3 (alignTableInversion#coerce))
+
 let tableInv = GPack.table
 	~rows:1
 	~columns:1
-	~homogeneous:true ();;
-ignore (tableSimple#attach ~left:2 ~top:2 (tableInv#coerce))
+	~homogeneous:true
+	~packing:alignTableInversion#add ()
 
-let invBUT = GButton.button
-					~label: "Inverser" ();;
-ignore (tableInv#attach ~left:0 ~top:0  (invBUT#coerce))
+let bboxInversion = GPack.button_box `HORIZONTAL
+		~child_width:200
+		~child_height:50 ();;
+
+ignore (tableInv#attach ~left:0 ~top:0 (bboxInversion#coerce))
+
+let invBUT = GButton.button ~label: "Inverser" ~packing:bboxInversion#add ();;
 
 (*Creation du widget à mettre dans le TAB Avancées du notebook*)
-let labelAdvanced = GMisc.label
-					~text:("Opérations Avancées") ()
+let labelAdvanced = GMisc.label ~text:("Opérations Avancées") ()
 
 let hboxAdvanced = GPack.hbox
 	~spacing:10
 	~packing:(ignore_apply (notebook#append_page ~tab_label:labelAdvanced#coerce)) ()
 
+let alignAdvanced = GBin.alignment
+			~xalign:0.5
+			~yalign:0.1
+			~xscale:0.0
+			~yscale:0.0
+			~packing:hboxAdvanced#add ()
+
 let tableAdvanced = GPack.table
-	~rows:2
+	~rows:3
 	~columns:2
-	~row_spacings:10
-	~col_spacings:5
+	~row_spacings:35
+	~col_spacings:50
 	~homogeneous:true
-	~packing:hboxAdvanced#add ()
+	~packing:alignAdvanced#add ()
 
 (*Noms opérations Avancées*)
-let comprAdv = GMisc.label ~text:"Compression" ()
-let segmAdv = GMisc.label ~text:"Segmentation" ();;
+let titreAdvanced = GMisc.label ~markup: "<span font_desc=\"Tahoma 25\"><b>Opérations Avancées</b></span>" ()
+let comprAdv = GMisc.label ~markup:"<span font_desc=\"Tahoma 20\">Compression</span>" ()
+let segmAdv = GMisc.label ~markup:"<span font_desc=\"Tahoma 20\">Segmentation</span>" ();;
 
 (*Ajout dans tableAdvanced des noms d'oréprations*)
-ignore (tableAdvanced#attach ~left:0 ~top:0 (comprAdv#coerce));
-ignore (tableAdvanced#attach ~left:0 ~top:1 (segmAdv#coerce));;
+ignore (tableAdvanced#attach ~left:0 ~right:2 ~top:0 (titreAdvanced#coerce));
+ignore (tableAdvanced#attach ~left:0 ~top:1 (comprAdv#coerce));
+ignore (tableAdvanced#attach ~left:0 ~top:2 (segmAdv#coerce))
 
 (*COMPRESSION*)
-let compAdvB = GButton.button ~label: "Compresser" ();;
-ignore (tableAdvanced#attach ~left:1 ~top:0  (compAdvB#coerce));;
+let alignTableCompression = GBin.alignment
+	~xalign:0.5
+	~yalign:0.5
+	~xscale:0.0
+	~yscale:0.0 ();;
+
+ignore (tableAdvanced#attach ~left:1 ~top:1 (alignTableCompression#coerce))
+
+let tableCompression = GPack.table
+	~rows:1
+	~columns:1
+	~homogeneous:true
+	~packing:alignTableCompression#add ()
+
+let bboxCompression = GPack.button_box `HORIZONTAL
+		~child_width:250
+		~child_height:50 ();;
+
+ignore (tableCompression#attach ~left:0 ~top:0  (bboxCompression#coerce));;
+
+let advancedCompressionButton = GButton.button ~label: "Compresser" ~packing:bboxCompression#add ();;
 
 (*SEGMENTATION*)
-let segAdvB = GButton.button ~label: "Segmenter" ();;
-ignore (tableAdvanced#attach ~left:1 ~top:1  (segAdvB#coerce))
+let alignTableSegmentation = GBin.alignment
+	~xalign:0.5
+	~yalign:0.5
+	~xscale:0.0
+	~yscale:0.0 ();;
+
+ignore (tableAdvanced#attach ~left:1 ~top:2 (alignTableSegmentation#coerce))
+
+let tableSegmentation = GPack.table
+	~rows:1
+	~columns:1
+	~homogeneous:true
+	~packing:alignTableSegmentation#add ()
+
+let bboxSegmentation = GPack.button_box `HORIZONTAL
+		~child_width:250
+		~child_height:50 ();;
+
+ignore (tableSegmentation#attach ~left:0 ~top:0  (bboxSegmentation#coerce));;
+
+let advancedSegmentationButton = GButton.button ~label: "Segmenter"  ~packing:bboxSegmentation#add ();;
 
 
 
 (*Creation du widget à mettre dans le TAB Sauvegarder du notebook*)
-let labelSave = GMisc.label
-					~text:("Sauvegarde") ()
+let labelSave = GMisc.label ~text:("Sauvegarde") ()
 
 let hboxSave = GPack.hbox
 	~spacing:10
 	~packing:(ignore_apply (notebook#append_page ~tab_label:labelSave#coerce)) ()
 
+(* Create a centering alignment object *)
+let alignTabSave = GBin.alignment
+		~xalign:0.5
+		~yalign:0.1
+		~xscale:0.0
+		~yscale:0.0
+		~packing:hboxSave#add ()
+
+let tableTabSave = GPack.table
+	~rows:2
+	~columns:1
+	~row_spacings:50
+	~homogeneous:true
+	~packing:alignTabSave#add ()
+
+(*Nom opération Sauvegarde*)
+let nameSave = GMisc.label ~markup:"<span font_desc=\"Tahoma 25\"><b>Enregistrement</b></span>" ();;
+(*Ajout dans tableSave du nom d'enregistrement*)
+ignore (tableTabSave#attach ~left:0  ~top:0 (nameSave#coerce))
+
+(*Enregistrement*)
+let alignTableSave = GBin.alignment
+	~xalign:0.5
+	~yalign:0.5
+	~xscale:0.0
+	~yscale:0.0 ();;
+
+ignore (tableTabSave#attach ~left:0 ~top:1 (alignTableSave#coerce))
+
 let tableSave = GPack.table
 	~rows:1
 	~columns:1
-	~row_spacings:10
-	~col_spacings:5
 	~homogeneous:true
-	~packing:hboxSave#add ()
+	~packing:alignTableSave#add ()
 
-(*Nom opération Sauvegarde*)
-let nameSave = GMisc.label ~text:"Enregistrement" ();;
-(*Ajout dans tableSave du nom d'enregistrement*)
-ignore (tableSave#attach ~left:0 ~top:0 (nameSave#coerce))
+let savebbox = GPack.button_box `VERTICAL
+	~child_width: 250
+	~child_height:50 ();;
 
-(*Enregistrement*)
-let saveBut= GButton.button ~label: "Sauvegarder" ();;
-ignore (tableSave#attach ~left:1 ~top:0  (saveBut#coerce))
+ignore (tableSave#attach ~left:0 ~top:0  (savebbox#coerce))
+
+let saveBut= GButton.button ~label: "Sauvegarder" ~packing:savebbox#add ();;
 
 
 (*Boutton Ouvrir*)
