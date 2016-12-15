@@ -69,13 +69,12 @@ let toolbar = GButton.toolbar
 	~style:`BOTH
 	~packing:(vbox#pack ~expand:false) ()
 
-let _ =
-	let packing = toolbar#insert in
-	let abo = GButton.tool_button ~label: "À Propos" ~stock: `ABOUT ~packing () in
-	ignore (GButton.separator_tool_item ~packing ());
-	let qui = GButton.tool_button ~label: "Quitter" ~stock: `QUIT ~packing () in
-	ignore (abo#connect#clicked (fun () -> ignore (about_button#run ()); ignore (about_button#misc#hide ())));
-	qui#connect#clicked Main.quit;;
+
+let abo = GButton.tool_button ~label: "À Propos" ~stock: `ABOUT ~packing:toolbar#insert ();;
+ignore (GButton.separator_tool_item ~packing:toolbar#insert ());;
+let qui = GButton.tool_button ~label: "Quitter" ~stock: `QUIT ~packing:toolbar#insert ();;
+ignore (abo#connect#clicked (fun () -> ignore (about_button#run ()); ignore (about_button#misc#hide ())));;
+qui#connect#clicked Main.quit;;
 
 (*CONFIRMATION PAGE*)
 let alignConfirmation = GBin.alignment
@@ -134,7 +133,8 @@ struct
 		let buf = Buffer.create len in
 		Buffer.add_channel buf ich len;
 		close_in ich;
-		print_endline (Buffer.contents buf)
+		print_endline (Buffer.contents buf);
+		print_endline (Filename.current_dir_name)
 		(*Fonction de chargement*)
 
 	let save file =
@@ -612,7 +612,15 @@ ignore (tableSave#attach ~left:0 ~top:0  (savebbox#coerce))
 
 let saveBut= GButton.button ~label: "Sauvegarder" ~packing:savebbox#add ();;
 
+let viewOneToggle = GButton.toggle_tool_button
+	~label:"View 1"
+	~packing:toolbar#insert ()
 
+let viewTwoToggle = GButton.toggle_tool_button
+	~label:"View 2"
+	~packing:toolbar#insert ();;
+
+viewOneToggle#set_active true;;
 (*Boutton Ouvrir*)
 let load = action_button `OPEN `OPEN (Aux.load);;
 

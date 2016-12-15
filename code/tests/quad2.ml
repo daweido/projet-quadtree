@@ -4,6 +4,8 @@ open GdkKeysyms
 
 let _ = GMain.init ()
 
+let _ = Sys.chdir ("/Users/davidrigaux/Documents/GIT/projet_quadtree/code/tests")
+
 (*Definition de la fenetre*)
 let window = GWindow.window
 	~width:900
@@ -102,7 +104,7 @@ let leftToolbarSecondView = GButton.toolbar
 (*Tableau avec informations sur image*)
 let alignInfo = GBin.alignment
 		~xalign:0.5
-		~yalign:0.1
+		~yalign:0.0
 		~xscale:0.0
 		~yscale:0.0 ();;
 
@@ -113,6 +115,7 @@ let tableInfo = GPack.table
 	~columns:2
 	~row_spacings:5
 	~col_spacings:1
+	~border_width:2
 	~homogeneous:true
 	~packing: alignInfo#add ()
 
@@ -140,7 +143,7 @@ ignore (tableInfo#attach ~left:1 ~top:3 (moyFichInfo#coerce));;
 (*ViewImage*)
 let aligneImageView = GBin.alignment
 	~xalign:0.5
-	~yalign:0.1
+	~yalign:0.5
 	~xscale:0.0
 	~yscale:0.0
 	~packing:hboxSecondView#add ()
@@ -153,7 +156,7 @@ let tableImageView = GPack.table
 let viewImageAfficheSecond = GMisc.image
 	~file: "test.ppm" ();;
 
-ignore (tableImageView#attach ~left:0  ~top:0 (viewImageAfficheSecond#coerce))
+ignore (tableImageView#attach ~left:0  ~top:0 (viewImageAfficheSecond#coerce));;
 
 (*RightToolbar*)
 let rightToolbarSecondView = GButton.toolbar
@@ -161,9 +164,206 @@ let rightToolbarSecondView = GButton.toolbar
 	~style:`BOTH
 	~packing:(hboxSecondView#pack ~expand:false) ()
 
+let tableRightToolbar = GPack.table
+	~rows:6
+	~columns:1
+	~row_spacings:55
+	~border_width:5 ();;
+
+ignore (rightToolbarSecondView#insert_widget ~tooltip:"Right Toolbar" (tableRightToolbar#coerce))
+
+
+let create_arrow_button ~kind ~shadow ~packing () =
+	let button = GButton.button ~packing () in
+	let arrow = GMisc.arrow ~kind ~shadow ~packing:button#add () in
+	button
+
+let alignTableRotToolbar = GBin.alignment
+	~xalign:0.5
+	~yalign:0.5
+	~xscale:0.0
+	~yscale:0.0 ();;
+
+ignore (tableRightToolbar#attach ~left:0 ~top:0 (alignTableRotToolbar#coerce));;
+
+let tableRot = GPack.table
+	~rows:2
+	~columns:2
+	~homogeneous:true
+	~packing: alignTableRotToolbar#add ()
+
 let toolbarNameRotation = GMisc.label ~markup: "<b>Rotation</b>" ();;
 
-rightToolbarSecondView#insert_widget ~tooltip:"Rotation" toolbarNameRotation#coerce;;
+ignore (tableRot#attach ~left:0 ~right:2 ~top:0 (toolbarNameRotation#coerce));;
+
+(*leftRot*)
+let bboxleftRot = GPack.button_box `HORIZONTAL
+		~border_width:2
+		~child_width: 25
+		~child_height:25 ();;
+
+ignore (tableRot#attach ~left:0 ~top:1 (bboxleftRot#coerce));;
+
+let leftRot = create_arrow_button ~kind:`LEFT ~shadow:`ETCHED_IN ~packing:bboxleftRot#add ()
+
+(*rightRot*)
+let bboxrightRot = GPack.button_box `HORIZONTAL
+		~border_width:2
+		~child_width: 25
+		~child_height:25 ();;
+
+ignore (tableRot#attach ~left:1 ~top:1 (bboxrightRot#coerce));;
+
+let rightRot = create_arrow_button ~kind:`RIGHT ~shadow:`ETCHED_OUT ~packing:bboxrightRot#add ()
+
+
+(*MiroirToolbar*)
+let alignTableMiroir = GBin.alignment
+	~xalign:0.5
+	~yalign:0.5
+	~xscale:0.0
+	~yscale:0.0 ();;
+
+ignore (tableRightToolbar#attach ~left:0 ~top:1 (alignTableMiroir#coerce));;
+
+let tableMir = GPack.table
+	~rows:4
+	~columns:3
+	~homogeneous:true
+	~packing:alignTableMiroir#add ();;
+
+let toolbarNameMiroir = GMisc.label ~markup: "<b>Miroir</b>" ();;
+ignore (tableMir#attach ~left:0 ~right:3 ~top:0 (toolbarNameMiroir#coerce));;
+
+(*upMir*)
+let bboxMiroirUp = GPack.button_box `HORIZONTAL
+		~child_width:25
+		~child_height:25 ();;
+
+ignore (tableMir#attach ~left:1 ~top:1 (bboxMiroirUp#coerce));;
+
+let upMir = create_arrow_button ~kind:`UP ~shadow:`IN ~packing:bboxMiroirUp#add ();;
+
+(*rightMir*)
+let bboxMiroirRight = GPack.button_box `HORIZONTAL
+		~child_width:25
+		~child_height:25 ();;
+
+ignore (tableMir#attach ~left:2 ~top:2 (bboxMiroirRight#coerce));;
+
+let rightMir = create_arrow_button ~kind:`RIGHT ~shadow:`ETCHED_OUT ~packing:bboxMiroirRight#add ();;
+
+(*downMir*)
+let bboxMiroirDown = GPack.button_box `HORIZONTAL
+		~child_width:25
+		~child_height:25 ();;
+
+ignore (tableMir#attach ~left:1 ~top:3 (bboxMiroirDown#coerce));;
+
+let downMir = create_arrow_button ~kind:`DOWN ~shadow:`OUT ~packing:bboxMiroirDown#add ();;
+
+(*leftMir*)
+let bboxMiroirLeft = GPack.button_box `HORIZONTAL
+		~child_width:25
+		~child_height:25 ();;
+
+ignore (tableMir#attach ~left:0 ~top:2 (bboxMiroirLeft#coerce));;
+
+let leftMir = create_arrow_button ~kind:`LEFT ~shadow:`ETCHED_IN ~packing:bboxMiroirLeft#add ();;
+
+(*INVERSIONTOOLBAR*)
+let alignTableInversion = GBin.alignment
+	~xalign:0.5
+	~yalign:0.5
+	~xscale:0.0
+	~yscale:0.0 ();;
+
+ignore (tableRightToolbar#attach ~left:0 ~top:2 (alignTableInversion#coerce))
+
+let tableInv = GPack.table
+	~rows:1
+	~columns:1
+	~homogeneous:true
+	~packing:alignTableInversion#add ()
+
+let bboxInversion = GPack.button_box `HORIZONTAL
+		~child_width:90
+		~child_height:25 ();;
+
+ignore (tableInv#attach ~left:0 ~top:0 (bboxInversion#coerce));;
+
+let invBUT = GButton.button ~label: "Inverser" ~packing:bboxInversion#add ();;
+
+(*Creation du widget à mettre dans le TAB Avancées du notebook*)
+(*COMPRESSION*)
+let alignTableCompression = GBin.alignment
+	~xalign:0.5
+	~yalign:0.5
+	~xscale:0.0
+	~yscale:0.0 ();;
+
+ignore (tableRightToolbar#attach ~left:0 ~top:3 (alignTableCompression#coerce))
+
+let tableCompression = GPack.table
+	~rows:1
+	~columns:1
+	~homogeneous:true
+	~packing:alignTableCompression#add ()
+
+let bboxCompression = GPack.button_box `HORIZONTAL
+		~child_width:90
+		~child_height:25 ();;
+
+ignore (tableCompression#attach ~left:0 ~top:0  (bboxCompression#coerce));;
+
+let advancedCompressionButton = GButton.button ~label: "Compresser" ~packing:bboxCompression#add ();;
+
+(*SEGMENTATION*)
+let alignTableSegmentation = GBin.alignment
+	~xalign:0.5
+	~yalign:0.5
+	~xscale:0.0
+	~yscale:0.0 ();;
+
+ignore (tableRightToolbar#attach ~left:0 ~top:4 (alignTableSegmentation#coerce))
+
+let tableSegmentation = GPack.table
+	~rows:1
+	~columns:1
+	~homogeneous:true
+	~packing:alignTableSegmentation#add ()
+
+let bboxSegmentation = GPack.button_box `HORIZONTAL
+		~child_width:90
+		~child_height:25 ();;
+
+ignore (tableSegmentation#attach ~left:0 ~top:0  (bboxSegmentation#coerce));;
+
+let advancedSegmentationButton = GButton.button ~label: "Segmenter"  ~packing:bboxSegmentation#add ();;
+
+(*Enregistrement*)
+let alignTableSave = GBin.alignment
+	~xalign:0.5
+	~yalign:0.5
+	~xscale:0.0
+	~yscale:0.0 ();;
+
+ignore (tableRightToolbar#attach ~left:0 ~top:5 (alignTableSave#coerce))
+
+let tableSave = GPack.table
+	~rows:1
+	~columns:1
+	~homogeneous:true
+	~packing:alignTableSave#add ()
+
+let savebbox = GPack.button_box `VERTICAL
+	~child_width: 90
+	~child_height:25 ();;
+
+ignore (tableSave#attach ~left:0 ~top:0  (savebbox#coerce))
+
+let saveBut= GButton.button ~label: "Sauvegarder" ~packing:savebbox#add ();;
+
 
 
 (*Affichage de fenetre*)
