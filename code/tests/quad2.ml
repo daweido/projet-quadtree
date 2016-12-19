@@ -102,29 +102,46 @@ let leftToolbarSecondView = GButton.toolbar
 	~packing:(hboxSecondView#pack ~expand:false) ()
 
 (*Tableau avec informations sur image*)
-let alignInfo = GBin.alignment
-		~xalign:0.5
-		~yalign:0.0
-		~xscale:0.0
-		~yscale:0.0 ();;
+let tableLeftToolbar = GPack.table
+	~rows:2
+	~columns:1
+	~row_spacings:20 ();;
 
-leftToolbarSecondView#insert_widget ~tooltip:"Info" alignInfo#coerce;;
+leftToolbarSecondView#insert_widget ~tooltip:"Info" tableLeftToolbar#coerce;;
+
+let titreInfo = GMisc.label ~markup: "<b>Informations</b>" ();;
+ignore (tableLeftToolbar#attach ~left:0 ~top:0 (titreInfo#coerce))
+
+
+let buttonBoxLeftToolbar = GPack.button_box `VERTICAL
+	~layout:`SPREAD
+	~border_width:3
+	~child_width: 90
+	~child_height: 25 ();;
+
+ignore (tableLeftToolbar#attach ~left:0  ~top:1 (buttonBoxLeftToolbar#coerce));;
+
+let aboutLeftToolbarButton = GButton.button
+	~label: "About"
+	~packing:buttonBoxLeftToolbar#add ()
 
 let tableInfo = GPack.table
-	~rows:3
+	~rows:4
 	~columns:2
 	~row_spacings:5
 	~col_spacings:1
 	~border_width:2
-	~homogeneous:true
-	~packing: alignInfo#add ()
+	~homogeneous:true ();;
 
+ignore (tableLeftToolbar#attach ~left:0  ~top:2 (tableInfo#coerce));;
 (*Label du tableau Info*)
+let titreFichierInfo = GMisc.label ~markup: "<b>Image</b>" ();;
 let nomInfo = GMisc.label ~markup: "<b>Nom :</b>" ();;
 let dimInfo = GMisc.label ~markup: "<b>Dimensions :</b>" ();;
 let moyInfo = GMisc.label ~markup: "<b>Moyenne :</b>" ();;
 
 (*Ajout dans noms dans tableau info*)
+ignore (tableInfo#attach ~left:0 ~right:2 ~top:0 (titreFichierInfo#coerce));
 ignore (tableInfo#attach ~left:0 ~top:1 (nomInfo#coerce));
 ignore (tableInfo#attach ~left:0 ~top:2 (dimInfo#coerce));
 ignore (tableInfo#attach ~left:0 ~top:3 (moyInfo#coerce))
