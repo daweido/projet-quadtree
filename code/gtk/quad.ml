@@ -12,6 +12,9 @@ let _ = GMain.init ()
 (*FONCTIONS DE BASES*)
 let viewImageAfficheFirst = GMisc.image ();;
 let viewImageAfficheSecond = GMisc.image ();;
+let notebookInfoName = GMisc.label ();;
+let nomFichInfo = GMisc.label ();;
+
 
 
 
@@ -25,8 +28,11 @@ struct
 		Sys.chdir (Filename.dirname file);
 		viewImageAfficheFirst#set_file file;
 		viewImageAfficheSecond#set_file file;
+		notebookInfoName#set_label (Filename.basename file); (*FileName*)
+		nomFichInfo#set_label (Filename.basename file); (*FileName*)
 		close_in ich;
 		print_endline (Buffer.contents buf)
+
 		(*Fonction de chargement*)
 
 	let save file =
@@ -145,7 +151,7 @@ let notebookHBoxInfo = GPack.hbox
 
 let notebookAlignInfo = GBin.alignment
 	~xalign:0.5
-	~yalign:0.1
+	~yalign:0.2
 	~xscale:0.0
 	~yscale:0.0
 	~packing:notebookHBoxInfo#add ()
@@ -227,25 +233,17 @@ let notebookTableMirorAlign = GBin.alignment
 	~yscale:0.0 ();;
 
 let notebookTableMiror = GPack.table
-	~rows:3
-	~columns:3
+	~rows:1
+	~columns:2
 	~homogeneous:true
 	~packing:notebookTableMirorAlign#add ();;
 
-let notebookButtonBoxMirorUp = GPack.button_box `HORIZONTAL
+let notebookButtonBoxMirorUpDown = GPack.button_box `HORIZONTAL
 	~child_width:25
-	~child_height:25 ();;
+	~child_height:75 ();;
 
-let notebookButtonBoxMirorRight = GPack.button_box `HORIZONTAL
-	~child_width:25
-	~child_height:25 ();;
-
-let notebookButtonBoxMirorDown = GPack.button_box `HORIZONTAL
-	~child_width:25
-	~child_height:25 ();;
-
-let notebookButtonBoxMirorLeft = GPack.button_box `HORIZONTAL
-	~child_width:25
+let notebookButtonBoxMirorRightLeft = GPack.button_box `HORIZONTAL
+	~child_width: 75
 	~child_height:25 ();;
 
 let notebookTableInversionAlign = GBin.alignment
@@ -405,7 +403,7 @@ let rightToolbarSecondView = GButton.toolbar
 let tableRightToolbarSecondView = GPack.table
 	~rows:6
 	~columns:1
-	~row_spacings:55
+	~row_spacings:50
 	~border_width:5 ();;
 
 let alignTableRotToolbarSecondView = GBin.alignment
@@ -437,28 +435,35 @@ let alignTableMiroirSecondView = GBin.alignment
 	~yscale:0.0 ();;
 
 let tableMirSecondView = GPack.table
-	~rows:4
-	~columns:3
-	~homogeneous:true
+	~rows:3
+	~columns:1
+	~row_spacings:10
 	~packing:alignTableMiroirSecondView#add ();;
 
-let bboxMiroirUpSecondView = GPack.button_box `HORIZONTAL
+
+let alignbboxMiroirUpDownSecondView = GBin.alignment
+	~xalign:0.5
+	~yalign:0.5
+	~xscale:0.0
+	~yscale:0.0 ();;
+
+let bboxMiroirUpDownSecondView = GPack.button_box `HORIZONTAL
 	~child_width:25
-	~child_height:25 ();;
+	~child_height:70
+	~packing:alignbboxMiroirUpDownSecondView#add ();;
 
 
-let bboxMiroirRightSecondView = GPack.button_box `HORIZONTAL
-	~child_width:25
-	~child_height:25 ();;
+let alignbboxMiroirRightLeftSecondView = GBin.alignment
+	~xalign:0.5
+	~yalign:0.5
+	~xscale:0.0
+	~yscale:0.0 ();;
 
+let bboxMiroirRightLeftSecondView = GPack.button_box `HORIZONTAL
+	~child_width:90
+	~child_height:25
+	~packing:alignbboxMiroirRightLeftSecondView#add ();;
 
-let bboxMiroirDownSecondView = GPack.button_box `HORIZONTAL
-	~child_width:25
-	~child_height:25 ();;
-
-let bboxMiroirLeftSecondView = GPack.button_box `HORIZONTAL
-	~child_width:25
-	~child_height:25 ();;
 
 let alignTableInversionSecondView = GBin.alignment
 	~xalign:0.5
@@ -601,10 +606,8 @@ let create_arrow_button ~kind ~shadow ~packing () =
 
 let notebookArrowLeftRot = create_arrow_button ~kind:`LEFT ~shadow:`ETCHED_IN ~packing:notebookButtonBoxLeftRot#add ()
 let notebookArrowRightRot = create_arrow_button ~kind:`RIGHT ~shadow:`ETCHED_OUT ~packing:notebookButtonBoxRightRot#add ()
-let notebookArrowMirorUp = create_arrow_button ~kind:`UP ~shadow:`IN ~packing:notebookButtonBoxMirorUp#add ();;
-let notebookArrowMirorRight = create_arrow_button ~kind:`RIGHT ~shadow:`ETCHED_OUT ~packing:notebookButtonBoxMirorRight#add ();;
-let notebookArrowMirorDown = create_arrow_button ~kind:`DOWN ~shadow:`OUT ~packing:notebookButtonBoxMirorDown#add ();;
-let notebookArrowMirorLeft = create_arrow_button ~kind:`LEFT ~shadow:`ETCHED_IN ~packing:notebookButtonBoxMirorLeft#add ();;
+let notebookArrowMirorUpDown = GButton.button ~packing:notebookButtonBoxMirorUpDown#add ()
+let notebookArrowMirorRightLeft = GButton.button ~packing:notebookButtonBoxMirorRightLeft#add ()
 let notebookButtonInversion = GButton.button ~label: "Inverser" ~packing:notebookButtonBoxInversion#add ();;
 let notebookButtonCompression = GButton.button ~label: "Compresser" ~packing:notebookButtonBoxCompression#add ();;
 let notebookButtonSegmentation = GButton.button ~label: "Segmenter"  ~packing:notebookButtonBoxSegmentation#add ();;
@@ -616,10 +619,8 @@ let aboutLeftToolbarButton = GButton.button
 
 let leftRot = create_arrow_button ~kind:`LEFT ~shadow:`ETCHED_IN ~packing:bboxLeftRotSecondView#add ()
 let rightRot = create_arrow_button ~kind:`RIGHT ~shadow:`ETCHED_OUT ~packing:bboxRightRotSecondView#add ()
-let upMir = create_arrow_button ~kind:`UP ~shadow:`IN ~packing:bboxMiroirUpSecondView#add ();;
-let rightMir = create_arrow_button ~kind:`RIGHT ~shadow:`ETCHED_OUT ~packing:bboxMiroirRightSecondView#add ();;
-let downMir = create_arrow_button ~kind:`DOWN ~shadow:`OUT ~packing:bboxMiroirDownSecondView#add ();;
-let leftMir = create_arrow_button ~kind:`LEFT ~shadow:`ETCHED_IN ~packing:bboxMiroirLeftSecondView#add ();;
+let upDownMir = GButton.button ~packing:bboxMiroirUpDownSecondView#add ();;
+let righLefttMir = GButton.button ~packing:bboxMiroirRightLeftSecondView#add ();;
 let invBUT = GButton.button ~label: "Inverser" ~packing:bboxInversionSecondView#add ();;
 let advancedCompressionButton = GButton.button ~label: "Compresser" ~packing:bboxCompressionSecondView#add ();;
 let advancedSegmentationButton = GButton.button ~label: "Segmenter"  ~packing:bboxSegmentationSecondView#add ();;
@@ -699,13 +700,12 @@ let notebookHomeTitleSegmentation = GMisc.label ~markup:"<big>Segmentation</big>
 let notebookHomeTitleSave = GMisc.label ~markup:"<big>Sauvegarde</big>" ~justify:`LEFT ();;
 
 (*Label du tableau Info*)
-let notebookInfoTitle = GMisc.label ~markup: "<span font_desc=\"Tahoma 15\"><b>Informations du fichier</b></span>" ();;
-let notebookInfoName = GMisc.label ~markup: "<b>Nom de l'image :</b>" ();;
+let notebookInfoTitle = GMisc.label ~markup: "<span font_desc=\"Tahoma 25\"><b>Informations du fichier</b></span>" ();;
+let notebookInfoNameLabel = GMisc.label ~markup: "<b><big>Nom de l'image :</big></b>" ();;
 let notebookInfoDimensions = GMisc.label ~markup: "<b>Dimensions de l'image :</b>" ();;
 let notebookInfoMean = GMisc.label ~markup: "<b>Moyenne des couleurs :</b>" ();;
 
 (*Info Fichier*)
-let notebookInfoNameTest = GMisc.label ~markup:"test.ppm" ();;
 let notebookInfoDimensionsTest = GMisc.label ~markup:"800*800" ();;
 let notebookInfoMeanTest = GMisc.label ~markup:"175" ();;
 
@@ -741,6 +741,7 @@ let toolbarNameMiroir = GMisc.label ~markup: "<b>Miroir</b>" ();;
 (*ACTIONS & FUNCTIONS*)
 (*ABOUT WINDOW*)
 ignore (topToolbarAbout#connect#clicked (fun () -> ignore (about_button#run ()); ignore (about_button#misc#hide ())));;
+
 topToolbarQuit#connect#clicked Main.quit;;
 
 ignore (topToolbarTable#attach ~left:0 ~top:0 (topToolbarRadioView1#coerce));
@@ -772,11 +773,11 @@ ignore (notebookTableHome#attach ~left:0 ~top:11 (notebookHomeTitleSave#coerce))
 ignore (notebookTableHome#attach ~left:1 ~top:11 (notebookHomeTextSave#coerce));
 (*Ajout dans noms dans tableau info*)
 ignore (notebookTableInfo#attach ~left:0 ~right:2 ~top:0 (notebookInfoTitle#coerce));
-ignore (notebookTableInfo#attach ~left:0 ~top:1 (notebookInfoName#coerce));
+ignore (notebookTableInfo#attach ~left:0 ~top:1 (notebookInfoNameLabel#coerce));
 ignore (notebookTableInfo#attach ~left:0 ~top:2 (notebookInfoDimensions#coerce));
 ignore (notebookTableInfo#attach ~left:0 ~top:3 (notebookInfoMean#coerce));
 (*Ajout infos dans tableau*)
-ignore (notebookTableInfo#attach ~left:1 ~top:1 (notebookInfoNameTest#coerce));
+ignore (notebookTableInfo#attach ~left:1 ~top:1 (notebookInfoName#coerce));
 ignore (notebookTableInfo#attach ~left:1 ~top:2 (notebookInfoDimensionsTest#coerce));
 ignore (notebookTableInfo#attach ~left:1 ~top:3 (notebookInfoMeanTest#coerce));;
 
@@ -792,10 +793,8 @@ ignore (notebookTableSimple#attach ~left:1 ~top:1 (notebookTableRotAlign#coerce)
 ignore (notebookTableRot#attach ~left:0 ~top:0 (notebookButtonBoxLeftRot#coerce));
 ignore (notebookTableRot#attach ~left:1 ~top:0 (notebookButtonBoxRightRot#coerce));
 ignore (notebookTableSimple#attach ~left:1 ~top:2 (notebookTableMirorAlign#coerce));
-ignore (notebookTableMiror#attach ~left:1 ~top:0 (notebookButtonBoxMirorUp#coerce));
-ignore (notebookTableMiror#attach ~left:2 ~top:1 (notebookButtonBoxMirorRight#coerce));
-ignore (notebookTableMiror#attach ~left:1 ~top:2 (notebookButtonBoxMirorDown#coerce));
-ignore (notebookTableMiror#attach ~left:0 ~top:1 (notebookButtonBoxMirorLeft#coerce));
+ignore (notebookTableMiror#attach ~left:0 ~top:0 (notebookButtonBoxMirorUpDown#coerce));
+ignore (notebookTableMiror#attach ~left:1 ~top:0 (notebookButtonBoxMirorRightLeft#coerce));
 ignore (notebookTableSimple#attach ~left:1 ~top:3 (notebookTableInversionAlign#coerce));
 ignore (notebookTableInversion#attach ~left:0 ~top:0 (notebookButtonBoxInversion#coerce));
 (*Ajout dans tableAdvanced des noms d'oréprations*)
@@ -830,11 +829,9 @@ ignore (tableRotSecondView#attach ~left:0 ~right:2 ~top:0 (toolbarNameRotation#c
 ignore (tableRotSecondView#attach ~left:0 ~top:1 (bboxLeftRotSecondView#coerce));;
 ignore (tableRotSecondView#attach ~left:1 ~top:1 (bboxRightRotSecondView#coerce));;
 ignore (tableRightToolbarSecondView#attach ~left:0 ~top:1 (alignTableMiroirSecondView#coerce));;
-ignore (tableMirSecondView#attach ~left:0 ~right:3 ~top:0 (toolbarNameMiroir#coerce));;
-ignore (tableMirSecondView#attach ~left:1 ~top:1 (bboxMiroirUpSecondView#coerce));;
-ignore (tableMirSecondView#attach ~left:2 ~top:2 (bboxMiroirRightSecondView#coerce));;
-ignore (tableMirSecondView#attach ~left:1 ~top:3 (bboxMiroirDownSecondView#coerce));;
-ignore (tableMirSecondView#attach ~left:0 ~top:2 (bboxMiroirLeftSecondView#coerce));;
+ignore (tableMirSecondView#attach ~left:0 ~right:2 ~top:0 (toolbarNameMiroir#coerce));;
+ignore (tableMirSecondView#attach ~left:0 ~top:1 (alignbboxMiroirUpDownSecondView#coerce));;
+ignore (tableMirSecondView#attach ~left:0 ~top:2 (alignbboxMiroirRightLeftSecondView#coerce));;
 ignore (tableRightToolbarSecondView#attach ~left:0 ~top:2 (alignTableInversionSecondView#coerce));
 ignore (tableInvSecondView#attach ~left:0 ~top:0 (bboxInversionSecondView#coerce));;
 ignore (tableRightToolbarSecondView#attach ~left:0 ~top:3 (alignTableCompressionSecondView#coerce));
