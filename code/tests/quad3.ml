@@ -604,7 +604,8 @@ let advancedSegmentationButton = GButton.button ~label: "Segmenter"  ~packing:bb
 let saveBut= GButton.button ~label: "Sauvegarder" ~packing:savebbox#add ();;
 
 
-
+let viewImageAfficheFirst filename = GMisc.image ~file: filename ();;
+let viewImageAfficheSecond filename = GMisc.image ~file: filename ();;
 (*LOAD*)
 let action_buttonLoad =
 	let dlgLoad = GWindow.file_chooser_dialog
@@ -617,7 +618,7 @@ let action_buttonLoad =
 	let btn = GButton.button ~stock:`OPEN ~packing:firstPageButtonBox#add () in
 	 GMisc.image ~stock:`OPEN ~packing:btn#set_image ();
 	btn#connect#clicked (fun () -> if dlgLoad#run () = `OPEN then Gaux.may (Aux.load) dlgLoad#filename;
-	dlgLoad#misc#hide ();firstPageButtonBox#misc#hide ();firstPageTitle#misc#hide ();alignConfirmation#misc#show ());
+	dlgLoad#misc#hide ();firstPageButtonBox#misc#hide ();firstPageTitle#misc#hide ();alignConfirmation#misc#show ();viewImageAfficheSecond dlgLoad#filename);
 	btn
 
 let firstPageQuitButton = GButton.button
@@ -787,7 +788,7 @@ ignore (notebookTableSave#attach ~left:0 ~top:1 (notebookTableAlignSave#coerce))
 ignore (firstPageQuitButton#connect#clicked ~callback:GMain.quit);;
 
 (*View2*)
-let viewImageAfficheSecond = GMisc.image ~file: "test.ppm" ();;
+
 
 leftToolbarSecondView#insert_widget ~tooltip:"Info" tableLeftToolbar#coerce;;
 ignore (tableLeftToolbar#attach ~left:0 ~top:0 (titreInfo#coerce));

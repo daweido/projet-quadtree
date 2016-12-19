@@ -10,6 +10,11 @@ open GdkKeysyms
 let _ = GMain.init ()
 
 (*FONCTIONS DE BASES*)
+let viewImageAfficheFirst = GMisc.image ();;
+let viewImageAfficheSecond = GMisc.image ();;
+
+
+
 module Aux =
 struct
 	let load file =
@@ -17,6 +22,9 @@ struct
 		let len = in_channel_length ich in
 		let buf = Buffer.create len in
 		Buffer.add_channel buf ich len;
+		Sys.chdir (Filename.dirname file);
+		viewImageAfficheFirst#set_file file;
+		viewImageAfficheSecond#set_file file;
 		close_in ich;
 		print_endline (Buffer.contents buf)
 		(*Fonction de chargement*)
@@ -151,6 +159,24 @@ let notebookTableInfo = GPack.table
 	~packing: notebookAlignInfo#add ()
 
 (*3rd Tab*)
+let notebookTabImageViewLabel = GMisc.label ~text:("Image View") ()
+
+let notebookHBoxImageView = GPack.hbox
+	~packing:(ignore_apply (notebook#append_page ~tab_label:notebookTabImageViewLabel#coerce)) ()
+
+let notebookAlignImageView = GBin.alignment
+	~xalign:0.5
+	~yalign:0.5
+	~xscale:0.0
+	~yscale:0.0
+	~packing:notebookHBoxImageView#add ()
+
+let notebookTableImageView = GPack.table
+	~rows:1
+	~columns:1
+	~packing: notebookAlignImageView#add ()
+
+(*4th Tab*)
 let notebookTabSimpleLabel = GMisc.label ~text:("Opérations Simple") ()
 
 let notebookHBoxSimple = GPack.hbox
@@ -238,7 +264,7 @@ let notebookButtonBoxInversion = GPack.button_box `HORIZONTAL
 	~child_width:200
 	~child_height:50 ();;
 
-(*4th Tab*)
+(*5th Tab*)
 let notebookTabAdvancedLabel = GMisc.label ~text:("Opérations Avancées") ()
 
 let notebookHBoxAdvanced = GPack.hbox
@@ -292,7 +318,7 @@ let notebookButtonBoxSegmentation = GPack.button_box `HORIZONTAL
 	~child_width:250
 	~child_height:50 ();;
 
-(*5th Tab*)
+(*6th Tab*)
 let notebookTabSaveLabel = GMisc.label ~text:("Sauvegarde") ()
 
 let notebookHBoxSave = GPack.hbox
@@ -336,18 +362,18 @@ let leftToolbarSecondView = GButton.toolbar
 	~style:`BOTH
 	~packing:(thirdPageHBoxView2#pack ~expand:false) ()
 
-let tableLeftToolbar = GPack.table
+let tableLeftToolbarSecondView = GPack.table
 	~rows:2
 	~columns:1
 	~row_spacings:20 ();;
 
-let buttonBoxLeftToolbar = GPack.button_box `VERTICAL
+let buttonBoxLeftToolbarSecondView = GPack.button_box `VERTICAL
 	~layout:`SPREAD
 	~border_width:3
 	~child_width: 90
 	~child_height: 25 ();;
 
-let tableInfo = GPack.table
+let tableInfoSecondView = GPack.table
 	~rows:4
 	~columns:2
 	~row_spacings:5
@@ -357,17 +383,17 @@ let tableInfo = GPack.table
 
 
 (*ViewImage*)
-let aligneImageView = GBin.alignment
+let alignImageViewSecondView = GBin.alignment
 	~xalign:0.5
 	~yalign:0.5
 	~xscale:0.0
 	~yscale:0.0
 	~packing:thirdPageHBoxView2#add ()
 
-let tableImageView = GPack.table
+let tableImageViewSecondView = GPack.table
 	~rows:1
 	~columns:1
-	~packing: aligneImageView#add ()
+	~packing: alignImageViewSecondView#add ()
 
 
 (*RightToolbar*)
@@ -376,126 +402,126 @@ let rightToolbarSecondView = GButton.toolbar
 	~style:`BOTH
 	~packing:(thirdPageHBoxView2#pack ~expand:false) ()
 
-let tableRightToolbar = GPack.table
+let tableRightToolbarSecondView = GPack.table
 	~rows:6
 	~columns:1
 	~row_spacings:55
 	~border_width:5 ();;
 
-let alignTableRotToolbar = GBin.alignment
+let alignTableRotToolbarSecondView = GBin.alignment
 	~xalign:0.5
 	~yalign:0.5
 	~xscale:0.0
 	~yscale:0.0 ();;
 
-let tableRot = GPack.table
+let tableRotSecondView = GPack.table
 	~rows:2
 	~columns:2
 	~homogeneous:true
-	~packing: alignTableRotToolbar#add ()
+	~packing: alignTableRotToolbarSecondView#add ()
 
-let bboxleftRot = GPack.button_box `HORIZONTAL
+let bboxLeftRotSecondView = GPack.button_box `HORIZONTAL
 	~border_width:2
 	~child_width: 25
 	~child_height:25 ();;
 
-let bboxrightRot = GPack.button_box `HORIZONTAL
+let bboxRightRotSecondView = GPack.button_box `HORIZONTAL
 	~border_width:2
 	~child_width: 25
 	~child_height:25 ();;
 
-let alignTableMiroir = GBin.alignment
+let alignTableMiroirSecondView = GBin.alignment
 	~xalign:0.5
 	~yalign:0.5
 	~xscale:0.0
 	~yscale:0.0 ();;
 
-let tableMir = GPack.table
+let tableMirSecondView = GPack.table
 	~rows:4
 	~columns:3
 	~homogeneous:true
-	~packing:alignTableMiroir#add ();;
+	~packing:alignTableMiroirSecondView#add ();;
 
-let bboxMiroirUp = GPack.button_box `HORIZONTAL
+let bboxMiroirUpSecondView = GPack.button_box `HORIZONTAL
 	~child_width:25
 	~child_height:25 ();;
 
 
-let bboxMiroirRight = GPack.button_box `HORIZONTAL
+let bboxMiroirRightSecondView = GPack.button_box `HORIZONTAL
 	~child_width:25
 	~child_height:25 ();;
 
 
-let bboxMiroirDown = GPack.button_box `HORIZONTAL
+let bboxMiroirDownSecondView = GPack.button_box `HORIZONTAL
 	~child_width:25
 	~child_height:25 ();;
 
-let bboxMiroirLeft = GPack.button_box `HORIZONTAL
+let bboxMiroirLeftSecondView = GPack.button_box `HORIZONTAL
 	~child_width:25
 	~child_height:25 ();;
 
-let alignTableInversion = GBin.alignment
+let alignTableInversionSecondView = GBin.alignment
 	~xalign:0.5
 	~yalign:0.5
 	~xscale:0.0
 	~yscale:0.0 ();;
 
-let tableInv = GPack.table
+let tableInvSecondView = GPack.table
 	~rows:1
 	~columns:1
 	~homogeneous:true
-	~packing:alignTableInversion#add ()
+	~packing:alignTableInversionSecondView#add ()
 
-let bboxInversion = GPack.button_box `HORIZONTAL
+let bboxInversionSecondView = GPack.button_box `HORIZONTAL
 		~child_width:90
 		~child_height:25 ();;
 
-let alignTableCompression = GBin.alignment
+let alignTableCompressionSecondView = GBin.alignment
 	~xalign:0.5
 	~yalign:0.5
 	~xscale:0.0
 	~yscale:0.0 ();;
 
-let tableCompression = GPack.table
+let tableCompressionSecondView = GPack.table
 	~rows:1
 	~columns:1
 	~homogeneous:true
-	~packing:alignTableCompression#add ()
+	~packing:alignTableCompressionSecondView#add ()
 
-let bboxCompression = GPack.button_box `HORIZONTAL
+let bboxCompressionSecondView = GPack.button_box `HORIZONTAL
 		~child_width:90
 		~child_height:25 ();;
 
 
-let alignTableSegmentation = GBin.alignment
+let alignTableSegmentationSecondView = GBin.alignment
 	~xalign:0.5
 	~yalign:0.5
 	~xscale:0.0
 	~yscale:0.0 ();;
 
-let tableSegmentation = GPack.table
+let tableSegmentationSecondView = GPack.table
 	~rows:1
 	~columns:1
 	~homogeneous:true
-	~packing:alignTableSegmentation#add ()
+	~packing:alignTableSegmentationSecondView#add ()
 
-let bboxSegmentation = GPack.button_box `HORIZONTAL
+let bboxSegmentationSecondView = GPack.button_box `HORIZONTAL
 		~child_width:90
 		~child_height:25 ();;
 
-let alignTableSave = GBin.alignment
+let alignTableSaveSecondView = GBin.alignment
 	~xalign:0.5
 	~yalign:0.5
 	~xscale:0.0
 	~yscale:0.0 ();;
 
-let tableSave = GPack.table
+let tableSaveSecondView = GPack.table
 	~rows:1
 	~columns:1
 	~homogeneous:true
-	~packing:alignTableSave#add ()
+	~packing:alignTableSaveSecondView#add ()
 
-let savebbox = GPack.button_box `VERTICAL
+let savebboxSecondView = GPack.button_box `VERTICAL
 	~child_width: 90
 	~child_height:25 ();;
 
@@ -585,24 +611,19 @@ let notebookButtonSegmentation = GButton.button ~label: "Segmenter"  ~packing:no
 (*View2*)
 let aboutLeftToolbarButton = GButton.button
 	~label: "About"
-	~packing:buttonBoxLeftToolbar#add ()
+	~packing:buttonBoxLeftToolbarSecondView#add ()
 
-let rightToolbarSecondView = GButton.toolbar
-	~orientation: `VERTICAL
-	~style:`BOTH
-	~packing:(thirdPageHBoxView2#pack ~expand:false) ()
 
-let leftRot = create_arrow_button ~kind:`LEFT ~shadow:`ETCHED_IN ~packing:bboxleftRot#add ()
-let rightRot = create_arrow_button ~kind:`RIGHT ~shadow:`ETCHED_OUT ~packing:bboxrightRot#add ()
-let upMir = create_arrow_button ~kind:`UP ~shadow:`IN ~packing:bboxMiroirUp#add ();;
-let rightMir = create_arrow_button ~kind:`RIGHT ~shadow:`ETCHED_OUT ~packing:bboxMiroirRight#add ();;
-let downMir = create_arrow_button ~kind:`DOWN ~shadow:`OUT ~packing:bboxMiroirDown#add ();;
-let leftMir = create_arrow_button ~kind:`LEFT ~shadow:`ETCHED_IN ~packing:bboxMiroirLeft#add ();;
-let invBUT = GButton.button ~label: "Inverser" ~packing:bboxInversion#add ();;
-let advancedCompressionButton = GButton.button ~label: "Compresser" ~packing:bboxCompression#add ();;
-let advancedSegmentationButton = GButton.button ~label: "Segmenter"  ~packing:bboxSegmentation#add ();;
-let saveBut= GButton.button ~label: "Sauvegarder" ~packing:savebbox#add ();;
-
+let leftRot = create_arrow_button ~kind:`LEFT ~shadow:`ETCHED_IN ~packing:bboxLeftRotSecondView#add ()
+let rightRot = create_arrow_button ~kind:`RIGHT ~shadow:`ETCHED_OUT ~packing:bboxRightRotSecondView#add ()
+let upMir = create_arrow_button ~kind:`UP ~shadow:`IN ~packing:bboxMiroirUpSecondView#add ();;
+let rightMir = create_arrow_button ~kind:`RIGHT ~shadow:`ETCHED_OUT ~packing:bboxMiroirRightSecondView#add ();;
+let downMir = create_arrow_button ~kind:`DOWN ~shadow:`OUT ~packing:bboxMiroirDownSecondView#add ();;
+let leftMir = create_arrow_button ~kind:`LEFT ~shadow:`ETCHED_IN ~packing:bboxMiroirLeftSecondView#add ();;
+let invBUT = GButton.button ~label: "Inverser" ~packing:bboxInversionSecondView#add ();;
+let advancedCompressionButton = GButton.button ~label: "Compresser" ~packing:bboxCompressionSecondView#add ();;
+let advancedSegmentationButton = GButton.button ~label: "Segmenter"  ~packing:bboxSegmentationSecondView#add ();;
+let saveBut= GButton.button ~label: "Sauvegarder" ~packing:savebboxSecondView#add ();;
 
 
 (*LOAD*)
@@ -662,6 +683,7 @@ let notebookHomeTextSegmentation = GMisc.label
 ~text: "Cette opération consiste à effectuer une segmentation de l'image." ~justify:`CENTER ();;
 let notebookHomeTextSave = GMisc.label
 ~text: "Cette opération consiste à effectuer un enregistrement-sous de l'image." ~justify:`CENTER ();;
+
 (*View1*)
 (*Notebook*)
 let notebookHomeTitle = GMisc.label ~markup:"<span font_desc=\"Tahoma 25\"><b>PPMShop</b></span>" ();;
@@ -677,15 +699,15 @@ let notebookHomeTitleSegmentation = GMisc.label ~markup:"<big>Segmentation</big>
 let notebookHomeTitleSave = GMisc.label ~markup:"<big>Sauvegarde</big>" ~justify:`LEFT ();;
 
 (*Label du tableau Info*)
-let notebookInfoTitle = GMisc.label ~markup: "<span font_desc=\"Tahoma 25\"><b>Informations du fichier</b></span>" ();;
-let notebookInfoName = GMisc.label ~markup: "<b><big>Nom de l'image :</big></b>" ();;
-let notebookInfoDimensions = GMisc.label ~markup: "<b><big>Dimensions de l'image :</big></b>" ();;
-let notebookInfoMean = GMisc.label ~markup: "<b><big>Moyenne des couleurs :</big></b>" ();;
+let notebookInfoTitle = GMisc.label ~markup: "<span font_desc=\"Tahoma 15\"><b>Informations du fichier</b></span>" ();;
+let notebookInfoName = GMisc.label ~markup: "<b>Nom de l'image :</b>" ();;
+let notebookInfoDimensions = GMisc.label ~markup: "<b>Dimensions de l'image :</b>" ();;
+let notebookInfoMean = GMisc.label ~markup: "<b>Moyenne des couleurs :</b>" ();;
 
 (*Info Fichier*)
-let notebookInfoNameTest = GMisc.label ~markup:"<big>test.ppm</big>" ();;
-let notebookInfoDimensionsTest = GMisc.label ~markup:"<big>800*800</big>" ();;
-let notebookInfoMeanTest = GMisc.label ~markup:"<big>175</big>" ();;
+let notebookInfoNameTest = GMisc.label ~markup:"test.ppm" ();;
+let notebookInfoDimensionsTest = GMisc.label ~markup:"800*800" ();;
+let notebookInfoMeanTest = GMisc.label ~markup:"175" ();;
 
 (*Creation du widget à mettre dans le TAB Simple du notebook*)
 
@@ -758,6 +780,9 @@ ignore (notebookTableInfo#attach ~left:1 ~top:1 (notebookInfoNameTest#coerce));
 ignore (notebookTableInfo#attach ~left:1 ~top:2 (notebookInfoDimensionsTest#coerce));
 ignore (notebookTableInfo#attach ~left:1 ~top:3 (notebookInfoMeanTest#coerce));;
 
+(*4th TAB - IMAGE VIEW*)
+ignore (notebookTableImageView#attach ~left:0 ~top:0 (viewImageAfficheFirst#coerce));;
+
 (*Ajout dans tableSimple des noms d'oréprations*)
 ignore (notebookTableSimple#attach ~left:0 ~right:2 ~top:0 (notebookSimpleTitle#coerce));
 ignore (notebookTableSimple#attach ~left:0 ~top:1 (notebookSimpleRotation#coerce));
@@ -787,44 +812,37 @@ ignore (notebookTableSave#attach ~left:0 ~top:1 (notebookTableAlignSave#coerce))
 ignore (firstPageQuitButton#connect#clicked ~callback:GMain.quit);;
 
 (*View2*)
-let viewImageAfficheSecond = GMisc.image ~file: "test.ppm" ();;
-
-leftToolbarSecondView#insert_widget ~tooltip:"Info" tableLeftToolbar#coerce;;
-ignore (tableLeftToolbar#attach ~left:0 ~top:0 (titreInfo#coerce));
-ignore (tableLeftToolbar#attach ~left:0  ~top:1 (buttonBoxLeftToolbar#coerce));;
-ignore (tableLeftToolbar#attach ~left:0  ~top:2 (tableInfo#coerce));;
-ignore (tableInfo#attach ~left:0 ~right:2 ~top:0 (titreFichierInfo#coerce));
-ignore (tableInfo#attach ~left:0 ~top:1 (nomInfo#coerce));
-ignore (tableInfo#attach ~left:0 ~top:2 (dimInfo#coerce));
-ignore (tableInfo#attach ~left:0 ~top:3 (moyInfo#coerce));
-ignore (tableInfo#attach ~left:1 ~top:1 (nomFichInfo#coerce));
-ignore (tableInfo#attach ~left:1 ~top:2 (dimFichInfo#coerce));
-ignore (tableInfo#attach ~left:1 ~top:3 (moyFichInfo#coerce));;
-ignore (tableImageView#attach ~left:0  ~top:0 (viewImageAfficheSecond#coerce));;
-ignore (rightToolbarSecondView#insert_widget ~tooltip:"Right Toolbar" (tableRightToolbar#coerce));
-ignore (tableRightToolbar#attach ~left:0 ~top:0 (alignTableRotToolbar#coerce));;
-ignore (tableRot#attach ~left:0 ~right:2 ~top:0 (toolbarNameRotation#coerce));;
-ignore (tableRot#attach ~left:0 ~top:1 (bboxleftRot#coerce));;
-ignore (tableRot#attach ~left:1 ~top:1 (bboxrightRot#coerce));;
-ignore (tableRightToolbar#attach ~left:0 ~top:1 (alignTableMiroir#coerce));;
-ignore (tableMir#attach ~left:0 ~right:3 ~top:0 (toolbarNameMiroir#coerce));;
-ignore (tableMir#attach ~left:1 ~top:1 (bboxMiroirUp#coerce));;
-ignore (tableMir#attach ~left:2 ~top:2 (bboxMiroirRight#coerce));;
-ignore (tableMir#attach ~left:1 ~top:3 (bboxMiroirDown#coerce));;
-ignore (tableMir#attach ~left:0 ~top:2 (bboxMiroirLeft#coerce));;
-ignore (tableRightToolbar#attach ~left:0 ~top:2 (alignTableInversion#coerce));
-ignore (tableInv#attach ~left:0 ~top:0 (bboxInversion#coerce));;
-ignore (tableRightToolbar#attach ~left:0 ~top:3 (alignTableCompression#coerce));
-ignore (tableCompression#attach ~left:0 ~top:0  (bboxCompression#coerce));;
-ignore (tableRightToolbar#attach ~left:0 ~top:4 (alignTableSegmentation#coerce));
-ignore (tableSegmentation#attach ~left:0 ~top:0  (bboxSegmentation#coerce));;
-ignore (tableRightToolbar#attach ~left:0 ~top:5 (alignTableSave#coerce));
-ignore (tableSave#attach ~left:0 ~top:0  (savebbox#coerce));
-
-
-
-
-
+ignore (tableImageViewSecondView#attach ~left:0  ~top:0 (viewImageAfficheSecond#coerce));;
+leftToolbarSecondView#insert_widget ~tooltip:"Info" tableLeftToolbarSecondView#coerce;;
+ignore (tableLeftToolbarSecondView#attach ~left:0 ~top:0 (titreInfo#coerce));
+ignore (tableLeftToolbarSecondView#attach ~left:0  ~top:1 (buttonBoxLeftToolbarSecondView#coerce));;
+ignore (tableLeftToolbarSecondView#attach ~left:0  ~top:2 (tableInfoSecondView#coerce));;
+ignore (tableInfoSecondView#attach ~left:0 ~right:2 ~top:0 (titreFichierInfo#coerce));
+ignore (tableInfoSecondView#attach ~left:0 ~top:1 (nomInfo#coerce));
+ignore (tableInfoSecondView#attach ~left:0 ~top:2 (dimInfo#coerce));
+ignore (tableInfoSecondView#attach ~left:0 ~top:3 (moyInfo#coerce));
+ignore (tableInfoSecondView#attach ~left:1 ~top:1 (nomFichInfo#coerce));
+ignore (tableInfoSecondView#attach ~left:1 ~top:2 (dimFichInfo#coerce));
+ignore (tableInfoSecondView#attach ~left:1 ~top:3 (moyFichInfo#coerce));;
+ignore (rightToolbarSecondView#insert_widget ~tooltip:"Right Toolbar" (tableRightToolbarSecondView#coerce));
+ignore (tableRightToolbarSecondView#attach ~left:0 ~top:0 (alignTableRotToolbarSecondView#coerce));;
+ignore (tableRotSecondView#attach ~left:0 ~right:2 ~top:0 (toolbarNameRotation#coerce));;
+ignore (tableRotSecondView#attach ~left:0 ~top:1 (bboxLeftRotSecondView#coerce));;
+ignore (tableRotSecondView#attach ~left:1 ~top:1 (bboxRightRotSecondView#coerce));;
+ignore (tableRightToolbarSecondView#attach ~left:0 ~top:1 (alignTableMiroirSecondView#coerce));;
+ignore (tableMirSecondView#attach ~left:0 ~right:3 ~top:0 (toolbarNameMiroir#coerce));;
+ignore (tableMirSecondView#attach ~left:1 ~top:1 (bboxMiroirUpSecondView#coerce));;
+ignore (tableMirSecondView#attach ~left:2 ~top:2 (bboxMiroirRightSecondView#coerce));;
+ignore (tableMirSecondView#attach ~left:1 ~top:3 (bboxMiroirDownSecondView#coerce));;
+ignore (tableMirSecondView#attach ~left:0 ~top:2 (bboxMiroirLeftSecondView#coerce));;
+ignore (tableRightToolbarSecondView#attach ~left:0 ~top:2 (alignTableInversionSecondView#coerce));
+ignore (tableInvSecondView#attach ~left:0 ~top:0 (bboxInversionSecondView#coerce));;
+ignore (tableRightToolbarSecondView#attach ~left:0 ~top:3 (alignTableCompressionSecondView#coerce));
+ignore (tableCompressionSecondView#attach ~left:0 ~top:0  (bboxCompressionSecondView#coerce));;
+ignore (tableRightToolbarSecondView#attach ~left:0 ~top:4 (alignTableSegmentationSecondView#coerce));
+ignore (tableSegmentationSecondView#attach ~left:0 ~top:0  (bboxSegmentationSecondView#coerce));;
+ignore (tableRightToolbarSecondView#attach ~left:0 ~top:5 (alignTableSaveSecondView#coerce));
+ignore (tableSaveSecondView#attach ~left:0 ~top:0  (savebboxSecondView#coerce));
 
 ignore (confirmButtonConfirmer#connect#clicked (fun () -> ignore (alignConfirmation#misc#hide ()); ignore (thirdPageHBoxView1#misc#show ()); ignore (thridPageButtonBox#misc#show ());ignore (notebook#goto_page 0);ignore (topToolbarViewsItem#misc#show ())));;
 ignore (thridPageButtonReturn#connect#clicked (fun () -> ignore (thirdPageHBoxView1#misc#hide ());ignore (thirdPageHBoxView2#misc#hide ()); ignore (thridPageButtonBox#misc#hide ());ignore (topToolbarViewsItem#misc#hide ()); ignore (firstPageTitle#misc#show ());ignore (firstPageButtonBox#misc#show ());));;
