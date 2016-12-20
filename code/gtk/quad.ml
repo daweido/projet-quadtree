@@ -22,36 +22,12 @@ let miroirButtonFirstViewImageUpDown = GMisc.image ~file:"24V.png" ()
 let miroirButtonFirstViewImageRightLeft = GMisc.image ~file:"24V.png" ()
 *)
 
-
 (*FONCTIONS DE BASES*)
 let viewImageAfficheFirst = GMisc.image ();;
 let viewImageAfficheSecond = GMisc.image ();;
 let notebookInfoName = GMisc.label ();;
 let nomFichInfo = GMisc.label ();;
-
-module Aux =
-struct
-	let load file =
-		let ich = open_in file in
-		let len = in_channel_length ich in
-		let buf = Buffer.create len in
-		Buffer.add_channel buf ich len;
-		Sys.chdir (Filename.dirname file);
-		viewImageAfficheFirst#set_file file;
-		viewImageAfficheSecond#set_file file;
-		notebookInfoName#set_label (Filename.basename file); (*FileName*)
-		nomFichInfo#set_label (Filename.basename file); (*FileName*)
-		Pro.superlecture (Buffer.contents buf);
-		close_in ich;
-		print_endline (Buffer.contents buf)
-
-		(*Fonction de chargement*)
-
-	let save file =
-		let och = open_out file in
-		output_string och ("lol"); (*Fonction de Sauvegarde*)
-		close_out och
-end
+let confNomFichier = GMisc.label ();;
 
 let ignore_apply f obj = ignore (f obj)
 (*MAIN CONTAINERS*)
@@ -98,7 +74,11 @@ let alignConfirmation = GBin.alignment
 let confirmVerticalBox = GPack.vbox
 	~spacing:100 ~packing: alignConfirmation#add ()
 
-let titreConf = GMisc.label ~markup: "<span font_desc=\"Tahoma 20\">Veuillez confirmer le choix de votre fichier : test.ppm ?</span>" ~packing:confirmVerticalBox#add ()
+
+let titreConf = GMisc.label  ~packing:confirmVerticalBox#add ()
+
+let string_titre_Conf nom_fichier =
+	"Veuillez confirmer le choix de votre fichier : "^nom_fichier^"?";;
 
 let confirmButtonBox = GPack.button_box `HORIZONTAL
 	~spacing:150
@@ -109,6 +89,30 @@ let confirmButtonBox = GPack.button_box `HORIZONTAL
 	~packing:(confirmVerticalBox#add) ()
 (*End of Second Page*)
 
+module Aux =
+struct
+	let load file =
+		let ich = open_in file in
+		let len = in_channel_length ich in
+		let buf = Buffer.create len in
+		Buffer.add_channel buf ich len;
+		Sys.chdir (Filename.dirname file);
+		viewImageAfficheFirst#set_file file;
+		viewImageAfficheSecond#set_file file;
+		titreConf#set_label (string_titre_Conf (Filename.basename file));
+		notebookInfoName#set_label (Filename.basename file); (*FileName*)
+		nomFichInfo#set_label (Filename.basename file); (*FileName*)
+		confNomFichier#set_label (Filename.basename file);
+		close_in ich;
+		print_endline (Buffer.contents buf)
+
+		(*Fonction de chargement*)
+
+	let save file =
+		let och = open_out file in
+		output_string och ("lol"); (*Fonction de Sauvegarde*)
+		close_out och
+end
 (************************Troisième Page****************************************)
 let thirdPageHBoxView1 = GPack.hbox
 	~spacing:10
