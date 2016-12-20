@@ -9,14 +9,25 @@ open GdkKeysyms
 
 let _ = GMain.init ()
 
+
+let go_find_image =
+	let path_to_exec = Sys.executable_name in
+	(String.sub path_to_exec 0 (String.length(path_to_exec)-7))^"images/" ;;
+
+(*Image bouton Miroir
+Sys.chdir (go_find_image^"mirror/");;
+let miroirButtonSecondViewImageUpDown = GMisc.image ~file:"32V.png" ()
+let miroirButtonSecondViewImageRightLeft = GMisc.image ~file:"24H.png" ()
+let miroirButtonFirstViewImageUpDown = GMisc.image ~file:"24V.png" ()
+let miroirButtonFirstViewImageRightLeft = GMisc.image ~file:"24V.png" ()
+*)
+
+
 (*FONCTIONS DE BASES*)
 let viewImageAfficheFirst = GMisc.image ();;
 let viewImageAfficheSecond = GMisc.image ();;
 let notebookInfoName = GMisc.label ();;
 let nomFichInfo = GMisc.label ();;
-
-
-
 
 module Aux =
 struct
@@ -30,6 +41,7 @@ struct
 		viewImageAfficheSecond#set_file file;
 		notebookInfoName#set_label (Filename.basename file); (*FileName*)
 		nomFichInfo#set_label (Filename.basename file); (*FileName*)
+		Pro.superlecture (Buffer.contents buf);
 		close_in ich;
 		print_endline (Buffer.contents buf)
 
@@ -240,10 +252,10 @@ let notebookTableMiror = GPack.table
 
 let notebookButtonBoxMirorUpDown = GPack.button_box `HORIZONTAL
 	~child_width:25
-	~child_height:75 ();;
+	~child_height:65 ();;
 
 let notebookButtonBoxMirorRightLeft = GPack.button_box `HORIZONTAL
-	~child_width: 75
+	~child_width: 65
 	~child_height:25 ();;
 
 let notebookTableInversionAlign = GBin.alignment
@@ -448,8 +460,8 @@ let alignbboxMiroirUpDownSecondView = GBin.alignment
 	~yscale:0.0 ();;
 
 let bboxMiroirUpDownSecondView = GPack.button_box `HORIZONTAL
-	~child_width:25
-	~child_height:70
+	~child_width:10
+	~child_height:40
 	~packing:alignbboxMiroirUpDownSecondView#add ();;
 
 
@@ -460,8 +472,8 @@ let alignbboxMiroirRightLeftSecondView = GBin.alignment
 	~yscale:0.0 ();;
 
 let bboxMiroirRightLeftSecondView = GPack.button_box `HORIZONTAL
-	~child_width:90
-	~child_height:25
+	~child_width:40
+	~child_height:10
 	~packing:alignbboxMiroirRightLeftSecondView#add ();;
 
 
@@ -607,10 +619,46 @@ let create_arrow_button ~kind ~shadow ~packing () =
 let notebookArrowLeftRot = create_arrow_button ~kind:`LEFT ~shadow:`ETCHED_IN ~packing:notebookButtonBoxLeftRot#add ()
 let notebookArrowRightRot = create_arrow_button ~kind:`RIGHT ~shadow:`ETCHED_OUT ~packing:notebookButtonBoxRightRot#add ()
 let notebookArrowMirorUpDown = GButton.button ~packing:notebookButtonBoxMirorUpDown#add ()
+let upArrowFirstView = GMisc.arrow ~kind:`UP ~shadow:`IN ()
+let downArrowFirstView = GMisc.arrow ~kind:`DOWN ~shadow:`OUT ()
+
+let alignUpDownMirFirstView= GBin.alignment
+	~xalign:0.5
+	~yalign:0.5
+	~xscale:0.0
+	~yscale:0.0
+	~packing:notebookArrowMirorUpDown#add ();;
+
+let upDownMirFirstViewTable = GPack.table
+	~rows:2
+	~columns:1
+	~row_spacings:20
+	~packing:alignUpDownMirFirstView#add ();;
+
+
 let notebookArrowMirorRightLeft = GButton.button ~packing:notebookButtonBoxMirorRightLeft#add ()
+
+let leftArrowFirstView = GMisc.arrow ~kind:`LEFT ~shadow:`IN ()
+let rightArrowFirstView = GMisc.arrow ~kind:`RIGHT ~shadow:`OUT ()
+
+let alignRightLeftMirFirstView = GBin.alignment
+	~xalign:0.5
+	~yalign:0.5
+	~xscale:0.0
+	~yscale:0.0
+	~packing:notebookArrowMirorRightLeft#add ();;
+
+let rightLeftMirMirFirstViewTable = GPack.table
+	~rows:1
+	~columns:2
+	~col_spacings:20
+	~packing:alignRightLeftMirFirstView#add ();;
+
+
 let notebookButtonInversion = GButton.button ~label: "Inverser" ~packing:notebookButtonBoxInversion#add ();;
 let notebookButtonCompression = GButton.button ~label: "Compresser" ~packing:notebookButtonBoxCompression#add ();;
 let notebookButtonSegmentation = GButton.button ~label: "Segmenter"  ~packing:notebookButtonBoxSegmentation#add ();;
+
 (*View2*)
 let aboutLeftToolbarButton = GButton.button
 	~label: "About"
@@ -619,8 +667,44 @@ let aboutLeftToolbarButton = GButton.button
 
 let leftRot = create_arrow_button ~kind:`LEFT ~shadow:`ETCHED_IN ~packing:bboxLeftRotSecondView#add ()
 let rightRot = create_arrow_button ~kind:`RIGHT ~shadow:`ETCHED_OUT ~packing:bboxRightRotSecondView#add ()
+
 let upDownMir = GButton.button ~packing:bboxMiroirUpDownSecondView#add ();;
-let righLefttMir = GButton.button ~packing:bboxMiroirRightLeftSecondView#add ();;
+
+let upArrowSecondView = GMisc.arrow ~kind:`UP ~shadow:`IN ()
+let downArrowSecondView = GMisc.arrow ~kind:`DOWN ~shadow:`OUT ()
+
+let alignUpDownMirSecondView = GBin.alignment
+	~xalign:0.5
+	~yalign:0.5
+	~xscale:0.0
+	~yscale:0.0
+	~packing:upDownMir#add ();;
+
+let upDownMirSecondViewTable = GPack.table
+	~rows:2
+	~columns:1
+	~row_spacings:15
+	~packing:alignUpDownMirSecondView#add ();;
+
+let rightLeftMir = GButton.button ~packing:bboxMiroirRightLeftSecondView#add ();;
+let leftArrowSecondView = GMisc.arrow ~kind:`LEFT ~shadow:`IN ()
+let rightArrowSecondView = GMisc.arrow ~kind:`RIGHT ~shadow:`OUT ()
+
+let alignRightLeftMirSecondView = GBin.alignment
+	~xalign:0.5
+	~yalign:0.5
+	~xscale:0.0
+	~yscale:0.0
+	~packing:rightLeftMir#add ();;
+
+let rightLeftMirMirSecondViewTable = GPack.table
+	~rows:1
+	~columns:2
+	~col_spacings:15
+	~packing:alignRightLeftMirSecondView#add ();;
+
+
+
 let invBUT = GButton.button ~label: "Inverser" ~packing:bboxInversionSecondView#add ();;
 let advancedCompressionButton = GButton.button ~label: "Compresser" ~packing:bboxCompressionSecondView#add ();;
 let advancedSegmentationButton = GButton.button ~label: "Segmenter"  ~packing:bboxSegmentationSecondView#add ();;
@@ -793,8 +877,17 @@ ignore (notebookTableSimple#attach ~left:1 ~top:1 (notebookTableRotAlign#coerce)
 ignore (notebookTableRot#attach ~left:0 ~top:0 (notebookButtonBoxLeftRot#coerce));
 ignore (notebookTableRot#attach ~left:1 ~top:0 (notebookButtonBoxRightRot#coerce));
 ignore (notebookTableSimple#attach ~left:1 ~top:2 (notebookTableMirorAlign#coerce));
+
 ignore (notebookTableMiror#attach ~left:0 ~top:0 (notebookButtonBoxMirorUpDown#coerce));
 ignore (notebookTableMiror#attach ~left:1 ~top:0 (notebookButtonBoxMirorRightLeft#coerce));
+
+ignore (upDownMirFirstViewTable#attach ~left:0 ~top:0 (upArrowFirstView#coerce));;
+ignore (upDownMirFirstViewTable#attach ~left:0 ~top:1 (downArrowFirstView#coerce));;
+
+ignore (rightLeftMirMirFirstViewTable#attach ~left:0 ~top:0 (leftArrowFirstView#coerce));;
+ignore (rightLeftMirMirFirstViewTable#attach ~left:1 ~top:0 (rightArrowFirstView#coerce));;
+
+
 ignore (notebookTableSimple#attach ~left:1 ~top:3 (notebookTableInversionAlign#coerce));
 ignore (notebookTableInversion#attach ~left:0 ~top:0 (notebookButtonBoxInversion#coerce));
 (*Ajout dans tableAdvanced des noms d'oréprations*)
@@ -808,6 +901,7 @@ ignore (notebookAdvancedTable#attach ~left:1 ~top:2 (notebookAlignTableSegmentat
 ignore (notebookTableSegmentation#attach ~left:0 ~top:0  (notebookButtonBoxSegmentation#coerce));;
 ignore (notebookTableSave#attach ~left:0  ~top:0 (notebookSaveTitle#coerce));
 ignore (notebookTableSave#attach ~left:0 ~top:1 (notebookTableAlignSave#coerce));
+ignore (notebookTabTableSave#attach ~left:0 ~top:0 (notebookSaveButtonBox#coerce));
 ignore (firstPageQuitButton#connect#clicked ~callback:GMain.quit);;
 
 (*View2*)
@@ -832,6 +926,13 @@ ignore (tableRightToolbarSecondView#attach ~left:0 ~top:1 (alignTableMiroirSecon
 ignore (tableMirSecondView#attach ~left:0 ~right:2 ~top:0 (toolbarNameMiroir#coerce));;
 ignore (tableMirSecondView#attach ~left:0 ~top:1 (alignbboxMiroirUpDownSecondView#coerce));;
 ignore (tableMirSecondView#attach ~left:0 ~top:2 (alignbboxMiroirRightLeftSecondView#coerce));;
+
+ignore (upDownMirSecondViewTable#attach ~left:0 ~top:0 (upArrowSecondView#coerce));;
+ignore (upDownMirSecondViewTable#attach ~left:0 ~top:1 (downArrowSecondView#coerce));;
+
+ignore (rightLeftMirMirSecondViewTable#attach ~left:0 ~top:0 (leftArrowSecondView#coerce));;
+ignore (rightLeftMirMirSecondViewTable#attach ~left:1 ~top:0 (rightArrowSecondView#coerce));;
+
 ignore (tableRightToolbarSecondView#attach ~left:0 ~top:2 (alignTableInversionSecondView#coerce));
 ignore (tableInvSecondView#attach ~left:0 ~top:0 (bboxInversionSecondView#coerce));;
 ignore (tableRightToolbarSecondView#attach ~left:0 ~top:3 (alignTableCompressionSecondView#coerce));
