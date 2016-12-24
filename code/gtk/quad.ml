@@ -28,6 +28,12 @@ let viewImageAfficheSecond = GMisc.image ();;
 let notebookInfoName = GMisc.label ();;
 let nomFichInfo = GMisc.label ();;
 let confNomFichier = GMisc.label ();;
+let dimFichInfoViewSecond = GMisc.label ();;
+let notebookInfoDimensionsValue = GMisc.label ();;
+
+let string_dimensions_info dimX dimY =
+	dimX^" x "^dimY;;
+
 
 let ignore_apply f obj = ignore (f obj)
 (*MAIN CONTAINERS*)
@@ -92,21 +98,19 @@ let confirmButtonBox = GPack.button_box `HORIZONTAL
 module Aux =
 struct
 	let load file =
-		let ich = open_in file in
-		let len = in_channel_length ich in
-		let buf = Buffer.create len in
-		Buffer.add_channel buf ich len;
+		let lecture_fichier = Fonctions.lec file in
+		let dimXFichier (_,x,_,_,_) = x in
+		let dimYFichier (_,_,y,_,_) = y in
+		let nom_fichier = Filename.basename file in
 		Sys.chdir (Filename.dirname file);
 		viewImageAfficheFirst#set_file file;
 		viewImageAfficheSecond#set_file file;
-		titreConf#set_label (string_titre_Conf (Filename.basename file));
-		notebookInfoName#set_label (Filename.basename file); (*FileName*)
-		nomFichInfo#set_label (Filename.basename file); (*FileName*)
-		confNomFichier#set_label (Filename.basename file);
-		close_in ich;
-		print_endline (Buffer.contents buf)
-
-		(*Fonction de chargement*)
+		titreConf#set_label (string_titre_Conf nom_fichier);
+		notebookInfoName#set_label nom_fichier; (*FileName*)
+		nomFichInfo#set_label nom_fichier; (*FileName*)
+		confNomFichier#set_label nom_fichier;
+		dimFichInfoViewSecond#set_label (string_dimensions_info (dimXFichier lecture_fichier) (dimYFichier lecture_fichier));
+		notebookInfoDimensionsValue#set_label (string_dimensions_info (dimXFichier lecture_fichier) (dimYFichier lecture_fichier))
 
 	let save file =
 		let och = open_out file in
@@ -794,7 +798,6 @@ let notebookInfoDimensions = GMisc.label ~markup: "<b>Dimensions de l'image :</b
 let notebookInfoMean = GMisc.label ~markup: "<b>Moyenne des couleurs :</b>" ();;
 
 (*Info Fichier*)
-let notebookInfoDimensionsTest = GMisc.label ~markup:"800*800" ();;
 let notebookInfoMeanTest = GMisc.label ~markup:"175" ();;
 
 (*Creation du widget à mettre dans le TAB Simple du notebook*)
@@ -817,7 +820,6 @@ let nomInfo = GMisc.label ~markup: "<b>Nom :</b>" ();;
 let dimInfo = GMisc.label ~markup: "<b>Dimensions :</b>" ();;
 let moyInfo = GMisc.label ~markup: "<b>Moyenne :</b>" ();;
 let nomFichInfo = GMisc.label ~markup:"test.ppm" ();;
-let dimFichInfo = GMisc.label ~markup:"800*800" ();;
 let moyFichInfo = GMisc.label ~markup:"175" ();;
 let toolbarNameRotation = GMisc.label ~markup: "<b>Rotation</b>" ();;
 let toolbarNameMiroir = GMisc.label ~markup: "<b>Miroir</b>" ();;
@@ -866,7 +868,7 @@ ignore (notebookTableInfo#attach ~left:0 ~top:2 (notebookInfoDimensions#coerce))
 ignore (notebookTableInfo#attach ~left:0 ~top:3 (notebookInfoMean#coerce));
 (*Ajout infos dans tableau*)
 ignore (notebookTableInfo#attach ~left:1 ~top:1 (notebookInfoName#coerce));
-ignore (notebookTableInfo#attach ~left:1 ~top:2 (notebookInfoDimensionsTest#coerce));
+ignore (notebookTableInfo#attach ~left:1 ~top:2 (notebookInfoDimensionsValue#coerce));
 ignore (notebookTableInfo#attach ~left:1 ~top:3 (notebookInfoMeanTest#coerce));;
 
 (*4th TAB - IMAGE VIEW*)
@@ -919,7 +921,7 @@ ignore (tableInfoSecondView#attach ~left:0 ~top:1 (nomInfo#coerce));
 ignore (tableInfoSecondView#attach ~left:0 ~top:2 (dimInfo#coerce));
 ignore (tableInfoSecondView#attach ~left:0 ~top:3 (moyInfo#coerce));
 ignore (tableInfoSecondView#attach ~left:1 ~top:1 (nomFichInfo#coerce));
-ignore (tableInfoSecondView#attach ~left:1 ~top:2 (dimFichInfo#coerce));
+ignore (tableInfoSecondView#attach ~left:1 ~top:2 (dimFichInfoViewSecond#coerce));
 ignore (tableInfoSecondView#attach ~left:1 ~top:3 (moyFichInfo#coerce));;
 ignore (rightToolbarSecondView#insert_widget ~tooltip:"Right Toolbar" (tableRightToolbarSecondView#coerce));
 ignore (tableRightToolbarSecondView#attach ~left:0 ~top:0 (alignTableRotToolbarSecondView#coerce));;

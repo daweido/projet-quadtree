@@ -11,7 +11,7 @@ let readfile filename=
 		with
 		    End_of_file->[]
 		in
-		readline(open_in filename);;
+	readline(open_in filename);;
 
 
 
@@ -33,6 +33,7 @@ let rec regroupe l=match l with
 
 (*-----------------------Lecture finale-------------------------*)
 let flat l=List.flatten l;;
+
 let superlecture f=filtre(flat(List.map split (filtre (readfile f))));;
 
 
