@@ -1,7 +1,3 @@
-(*Compilation interface toute seule*)
-(*ocamlfind ocamlc -g -package lablgtk2 -linkpkg quad.ml -o quadtree*)
-
-
 (*Compilation Interface+Fichier externe*)
 (*ocamlfind ocamlc -g -package lablgtk2 -linkpkg str.cma v2.ml quad.ml -o quadtree*)
 open GMain
@@ -9,6 +5,8 @@ open GdkKeysyms
 
 let _ = GMain.init ()
 
+let filenameGlobal = ref ""
+let tmpFilenameGlobal = ref ""
 
 let go_find_image =
 	let path_to_exec = Sys.executable_name in
@@ -86,23 +84,38 @@ let titreConf = GMisc.label  ~packing:confirmVerticalBox#add ()
 let string_titre_Conf nom_fichier =
 	"Veuillez confirmer le choix de votre fichier : "^nom_fichier^"?";;
 
-let confirmButtonBox = GPack.button_box `HORIZONTAL
-	~spacing:150
-	~layout:`SPREAD
-	~border_width:5
-	~child_width: 250
-	~child_height: 50
-	~packing:(confirmVerticalBox#add) ()
-(*End of Second Page*)
+let tmpNameFile filename=
+	let fileNameNoExtension = String.sub filename 0 ((String.length filename)-4) in
+	fileNameNoExtension^"_tmp.ppm"
 
+(*GENERAL I/O*)
 module Aux =
 struct
-	let load file =
+	let buffer_size = 8192
+
+	let buffer = String.create buffer_size
+
+	let file_copy input_name output_name =
+		let file_in = open_in input_name in
+		let file_out = open_out output_name in
+		let channel_length = in_channel_length file_in in
+		let buf = Buffer.create channel_length in
+		Buffer.add_channel buf file_in channel_length;
+		close_in file_in;
+		output_string file_out (Buffer.contents buf);
+		close_out file_out;;
+
+	let loadGeneral file =
 		let lecture_fichier = Fonctions.lec file in
 		let dimXFichier (_,x,_,_,_) = x in
 		let dimYFichier (_,_,y,_,_) = y in
 		let nom_fichier = Filename.basename file in
+		filenameGlobal := nom_fichier;
+		tmpFilenameGlobal := tmpNameFile !filenameGlobal;
+		print_endline (!filenameGlobal);
+		print_endline (!tmpFilenameGlobal);
 		Sys.chdir (Filename.dirname file);
+		file_copy (!filenameGlobal) (!tmpFilenameGlobal);
 		viewImageAfficheFirst#set_file file;
 		viewImageAfficheSecond#set_file file;
 		titreConf#set_label (string_titre_Conf nom_fichier);
@@ -112,11 +125,31 @@ struct
 		dimFichInfoViewSecond#set_label (string_dimensions_info (dimXFichier lecture_fichier) (dimYFichier lecture_fichier));
 		notebookInfoDimensionsValue#set_label (string_dimensions_info (dimXFichier lecture_fichier) (dimYFichier lecture_fichier))
 
-	let save file =
+	let saveGeneral file =
 		let och = open_out file in
-		output_string och ("lol"); (*Fonction de Sauvegarde*)
+		print_endline (file);
+		output_string och ("TEST VERIFICATION OUTPUT V.2"); (*OVERWRITE*)
 		close_out och
+
+	(*let loadManipulationUse file =
+		Fonctions.arbre(Fonctions.lec file)
+
+
+	let saveManipulationUse file =
+		let och = open_out file in
+		output_string och ("TEST VERIFICATION OUTPUT"); (*OVERWRITE*)
+		close_out och*)
 end
+
+
+let confirmButtonBox = GPack.button_box `HORIZONTAL
+	~spacing:150
+	~layout:`SPREAD
+	~border_width:5
+	~child_width: 250
+	~child_height: 50
+	~packing:(confirmVerticalBox#add) ()
+(*End of Second Page*)
 (************************Troisième Page****************************************)
 let thirdPageHBoxView1 = GPack.hbox
 	~spacing:10
@@ -552,13 +585,21 @@ let savebboxSecondView = GPack.button_box `VERTICAL
 
 (*BUTTONS AND WIDNOWS*)
 (*Top Toolbar*)
+let topToolbarRadioView1 = GButton.radio_button ~label:"View 1"
+	~active:true ()
+
+let topToolbarRadioView2 = GButton.radio_button
+	~label:"View 2"
+	~group:topToolbarRadioView1#group ()
+
 let topToolbarAbout = GButton.tool_button ~label: "À Propos" ~stock: `ABOUT ~packing:topToolbar#insert ();;
+let topToolbarFirstSep = GButton.separator_tool_item ~show:false ~packing:topToolbar#insert ();;
+let topToolbarViewsItem = GButton.tool_item ~show:false ~packing:topToolbar#insert ();;
 ignore (GButton.separator_tool_item ~packing:topToolbar#insert ());;
 let topToolbarQuit = GButton.tool_button ~label: "Quitter" ~stock: `QUIT ~packing:topToolbar#insert ();;
 
-let topToolbarViewsItem = GButton.tool_item
-	~show:false
-	~packing:topToolbar#insert ()
+
+
 let topToolbarAlign = GBin.alignment
 	~xalign:0.5
 	~yalign:0.5
@@ -573,13 +614,8 @@ let topToolbarTable = GPack.table
 	~packing:topToolbarAlign#add();;
 
 
-let topToolbarRadioView1 = GButton.radio_button
-	~label:"View 1"
-	~active:true ()
 
-let topToolbarRadioView2 = GButton.radio_button
-	~label:"View 2"
-	~group:topToolbarRadioView1#group ()
+
 (*About Dialog*)
 let about_button = GWindow.about_dialog
 	~comments: "PPMShop est une application permettant de manipuler des images en formats .ppm\n
@@ -730,7 +766,7 @@ let action_buttonLoad =
 	dlgLoad#add_select_button_stock `OPEN `OPEN;
 	let btn = GButton.button ~stock:`OPEN ~packing:firstPageButtonBox#add () in
 	 GMisc.image ~stock:`OPEN ~packing:btn#set_image ();
-	btn#connect#clicked (fun () -> if dlgLoad#run () = `OPEN then Gaux.may (Aux.load) dlgLoad#filename;
+	btn#connect#clicked (fun () -> if dlgLoad#run () = `OPEN then Gaux.may (Aux.loadGeneral) dlgLoad#filename;
 	dlgLoad#misc#hide ();firstPageButtonBox#misc#hide ();firstPageTitle#misc#hide ();alignConfirmation#misc#show ());
 	btn
 
@@ -948,23 +984,28 @@ ignore (tableSegmentationSecondView#attach ~left:0 ~top:0  (bboxSegmentationSeco
 ignore (tableRightToolbarSecondView#attach ~left:0 ~top:5 (alignTableSaveSecondView#coerce));
 ignore (tableSaveSecondView#attach ~left:0 ~top:0  (savebboxSecondView#coerce));
 
-ignore (confirmButtonConfirmer#connect#clicked (fun () -> ignore (alignConfirmation#misc#hide ()); ignore (thirdPageHBoxView1#misc#show ()); ignore (thridPageButtonBox#misc#show ());ignore (notebook#goto_page 0);ignore (topToolbarViewsItem#misc#show ())));;
-ignore (thridPageButtonReturn#connect#clicked (fun () -> ignore (thirdPageHBoxView1#misc#hide ());ignore (thirdPageHBoxView2#misc#hide ()); ignore (thridPageButtonBox#misc#hide ());ignore (topToolbarViewsItem#misc#hide ()); ignore (firstPageTitle#misc#show ());ignore (firstPageButtonBox#misc#show ());));;
+ignore (confirmButtonConfirmer#connect#clicked (fun () -> ignore (alignConfirmation#misc#hide ()); ignore (thirdPageHBoxView1#misc#show ()); ignore (thridPageButtonBox#misc#show ());ignore (notebook#goto_page 0);ignore (topToolbarViewsItem#misc#show ());ignore (topToolbarFirstSep#misc#show)));;
+ignore (thridPageButtonReturn#connect#clicked (fun () -> ignore (thirdPageHBoxView1#misc#hide ());ignore (thirdPageHBoxView2#misc#hide ()); ignore (thridPageButtonBox#misc#hide ());ignore (topToolbarViewsItem#misc#hide ());ignore (topToolbarFirstSep#misc#hide); ignore (firstPageTitle#misc#show ());ignore (firstPageButtonBox#misc#show ());));;
 
 ignore (topToolbarRadioView1#connect#toggled (fun () -> ignore (thirdPageHBoxView1#misc#show ());ignore (thirdPageHBoxView2#misc#hide ())));;
 ignore (topToolbarRadioView2#connect#toggled (fun () -> ignore (thirdPageHBoxView1#misc#hide ());ignore (thirdPageHBoxView2#misc#show ())));;
 
 let action_buttonSave =
 	let dlgSave = GWindow.file_chooser_dialog
-		~action:`OPEN
+		~action:`SAVE
+		~title:"SAUVEGARDE DIALOG"
 		~parent:window
 		~position:`CENTER_ON_PARENT
+		~width:450
+		~height:350
 		~destroy_with_parent:true () in
 	dlgSave#add_button_stock `CANCEL `CANCEL;
-	dlgSave#add_select_button_stock `SAVE `SAVE;
-	let btn = GButton.button ~stock:`SAVE ~packing:notebookSaveButtonBox#add () in
-	 GMisc.image ~stock:`SAVE ~packing:btn#set_image ();
-	btn#connect#clicked (fun () -> if dlgSave#run () = `OPEN then Gaux.may (Aux.save) dlgSave#filename;
+	dlgSave#add_select_button_stock `SAVE_AS `SAVE_AS;
+	dlgSave#do_overwrite_confirmation;
+
+	let btn = GButton.button ~stock:`SAVE_AS ~packing:notebookSaveButtonBox#add () in
+	 GMisc.image ~stock:`SAVE_AS ~packing:btn#set_image ();
+	btn#connect#clicked (fun () -> if dlgSave#run () = `SAVE_AS then Gaux.may (Aux.saveGeneral) dlgSave#filename;
 	dlgSave#misc#hide ());
 	btn
 

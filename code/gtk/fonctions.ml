@@ -1,3 +1,5 @@
+open Unix;;
+
 type 'a quad = Nul | Noeud of 'a * 'a quad * 'a quad * 'a quad * 'a quad;;
 
 let creerArbre r fgg fgd fdg fdd = Noeud(r,fgg,fgd,fdg,fdd)
@@ -13,6 +15,7 @@ let rec sommez l res = match l with
 	|(x,y,z)::r -> sommez r (res + z);;
 
 let moy l = [sommex l 0 / (List.length l), sommey l 0 / (List.length l) , sommez l 0 /(List.length l )];;
+
 
 let separe l = List.map (fun x -> Str.split (Str.regexp " ") x) l;;
 
