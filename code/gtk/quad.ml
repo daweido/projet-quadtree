@@ -766,8 +766,9 @@ let action_buttonLoad =
 	dlgLoad#add_select_button_stock `OPEN `OPEN;
 	let btn = GButton.button ~stock:`OPEN ~packing:firstPageButtonBox#add () in
 	 GMisc.image ~stock:`OPEN ~packing:btn#set_image ();
-	btn#connect#clicked (fun () -> if dlgLoad#run () = `OPEN then Gaux.may (Aux.loadGeneral) dlgLoad#filename;
-	dlgLoad#misc#hide ();firstPageButtonBox#misc#hide ();firstPageTitle#misc#hide ();alignConfirmation#misc#show ());
+	btn#connect#clicked (fun () -> if dlgLoad#run () = `OPEN then (Gaux.may (Aux.loadGeneral) dlgLoad#filename;
+	dlgLoad#misc#hide ();firstPageButtonBox#misc#hide ();firstPageTitle#misc#hide ();alignConfirmation#misc#show ())
+	else dlgLoad#misc#hide ());
 	btn
 
 let firstPageQuitButton = GButton.button
