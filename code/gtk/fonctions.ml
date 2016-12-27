@@ -2,6 +2,7 @@ open Unix;;
 
 type 'a quad = Nul | Noeud of 'a * 'a quad * 'a quad * 'a quad * 'a quad;;
 
+
 let creerArbre r fgg fgd fdg fdd = Noeud(r,fgg,fgd,fdg,fdd)
 
 let rec sommex l res = match l with

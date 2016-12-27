@@ -4,9 +4,8 @@ open GMain
 open GdkKeysyms
 
 let _ = GMain.init ()
-
-let filenameGlobal = ref ""
-let tmpFilenameGlobal = ref ""
+let fileGlobalPath = ref ""
+let tmpFileGlobalPath = ref ""
 
 let go_find_image =
 	let path_to_exec = Sys.executable_name in
@@ -31,6 +30,7 @@ let notebookInfoDimensionsValue = GMisc.label ();;
 
 let string_dimensions_info dimX dimY =
 	dimX^" x "^dimY;;
+
 
 
 let ignore_apply f obj = ignore (f obj)
@@ -84,9 +84,9 @@ let titreConf = GMisc.label  ~packing:confirmVerticalBox#add ()
 let string_titre_Conf nom_fichier =
 	"Veuillez confirmer le choix de votre fichier : "^nom_fichier^"?";;
 
-let tmpNameFile filename=
-	let fileNameNoExtension = String.sub filename 0 ((String.length filename)-4) in
-	fileNameNoExtension^"_tmp.ppm"
+let tmpNameFile filePath =
+	let filePathNoExtension = String.sub filePath 0 ((String.length filePath)-4) in
+	filePathNoExtension^"_tmp.ppm"
 
 (*GENERAL I/O*)
 module Aux =
@@ -105,19 +105,23 @@ struct
 		output_string file_out (Buffer.contents buf);
 		close_out file_out;;
 
-	let loadGeneral file =
-		let lecture_fichier = Fonctions.lec file in
+	let renameTMP_File newFilePAth =
+		file_copy (!tmpFileGlobalPath) newFilePAth;
+		Sys.remove (!tmpFileGlobalPath)
+
+	let loadGeneral filePath =
+		let lecture_fichier = Fonctions.lec filePath in
 		let dimXFichier (_,x,_,_,_) = x in
 		let dimYFichier (_,_,y,_,_) = y in
-		let nom_fichier = Filename.basename file in
-		filenameGlobal := nom_fichier;
-		tmpFilenameGlobal := tmpNameFile !filenameGlobal;
-		print_endline (!filenameGlobal);
-		print_endline (!tmpFilenameGlobal);
-		Sys.chdir (Filename.dirname file);
-		file_copy (!filenameGlobal) (!tmpFilenameGlobal);
-		viewImageAfficheFirst#set_file file;
-		viewImageAfficheSecond#set_file file;
+		let nom_fichier = Filename.basename filePath in
+		fileGlobalPath := filePath;
+		tmpFileGlobalPath := tmpNameFile !fileGlobalPath;
+		print_endline (!fileGlobalPath);
+		print_endline (!tmpFileGlobalPath);
+		Sys.chdir (Filename.dirname filePath);
+		file_copy (!fileGlobalPath) (!tmpFileGlobalPath);
+		viewImageAfficheFirst#set_file filePath;
+		viewImageAfficheSecond#set_file filePath;
 		titreConf#set_label (string_titre_Conf nom_fichier);
 		notebookInfoName#set_label nom_fichier; (*FileName*)
 		nomFichInfo#set_label nom_fichier; (*FileName*)
@@ -125,11 +129,9 @@ struct
 		dimFichInfoViewSecond#set_label (string_dimensions_info (dimXFichier lecture_fichier) (dimYFichier lecture_fichier));
 		notebookInfoDimensionsValue#set_label (string_dimensions_info (dimXFichier lecture_fichier) (dimYFichier lecture_fichier))
 
-	let saveGeneral file =
-		let och = open_out file in
-		print_endline (file);
-		output_string och ("TEST VERIFICATION OUTPUT V.2"); (*OVERWRITE*)
-		close_out och
+	let saveGeneral newFilePath =
+		renameTMP_File newFilePath
+
 
 	(*let loadManipulationUse file =
 		Fonctions.arbre(Fonctions.lec file)
@@ -397,12 +399,17 @@ let notebookTableAlignSave = GBin.alignment
 	~yscale:0.0 ();;
 
 let notebookTabTableSave = GPack.table
-	~rows:1
+	~rows:2
 	~columns:1
 	~homogeneous:true
+	~row_spacings: 25
 	~packing:notebookTableAlignSave#add ()
 
-let notebookSaveButtonBox = GPack.button_box `VERTICAL
+let notebookSaveButtonBoxSave = GPack.button_box `VERTICAL
+	~child_width: 250
+	~child_height:50 ();;
+
+let notebookSaveButtonBoxSaveAs = GPack.button_box `VERTICAL
 	~child_width: 250
 	~child_height:50 ();;
 
@@ -595,6 +602,8 @@ let topToolbarRadioView2 = GButton.radio_button
 let topToolbarAbout = GButton.tool_button ~label: "À Propos" ~stock: `ABOUT ~packing:topToolbar#insert ();;
 let topToolbarFirstSep = GButton.separator_tool_item ~show:false ~packing:topToolbar#insert ();;
 let topToolbarViewsItem = GButton.tool_item ~show:false ~packing:topToolbar#insert ();;
+let topToolbarSave = GButton.tool_button ~stock: `SAVE ~packing:topToolbar#insert ();;
+let topToolbarSaveAs = GButton.tool_button ~stock: `SAVE_AS ~packing:topToolbar#insert ();;
 ignore (GButton.separator_tool_item ~packing:topToolbar#insert ());;
 let topToolbarQuit = GButton.tool_button ~label: "Quitter" ~stock: `QUIT ~packing:topToolbar#insert ();;
 
@@ -944,7 +953,8 @@ ignore (notebookAdvancedTable#attach ~left:1 ~top:2 (notebookAlignTableSegmentat
 ignore (notebookTableSegmentation#attach ~left:0 ~top:0  (notebookButtonBoxSegmentation#coerce));;
 ignore (notebookTableSave#attach ~left:0  ~top:0 (notebookSaveTitle#coerce));
 ignore (notebookTableSave#attach ~left:0 ~top:1 (notebookTableAlignSave#coerce));
-ignore (notebookTabTableSave#attach ~left:0 ~top:0 (notebookSaveButtonBox#coerce));
+ignore (notebookTabTableSave#attach ~left:0 ~top:0 (notebookSaveButtonBoxSave#coerce));
+ignore (notebookTabTableSave#attach ~left:0 ~top:1 (notebookSaveButtonBoxSaveAs#coerce));
 ignore (firstPageQuitButton#connect#clicked ~callback:GMain.quit);;
 
 (*View2*)
@@ -991,7 +1001,7 @@ ignore (thridPageButtonReturn#connect#clicked (fun () -> ignore (thirdPageHBoxVi
 ignore (topToolbarRadioView1#connect#toggled (fun () -> ignore (thirdPageHBoxView1#misc#show ());ignore (thirdPageHBoxView2#misc#hide ())));;
 ignore (topToolbarRadioView2#connect#toggled (fun () -> ignore (thirdPageHBoxView1#misc#hide ());ignore (thirdPageHBoxView2#misc#show ())));;
 
-let action_buttonSave =
+let saveAsButton =
 	let dlgSave = GWindow.file_chooser_dialog
 		~action:`SAVE
 		~title:"SAUVEGARDE DIALOG"
@@ -1004,11 +1014,17 @@ let action_buttonSave =
 	dlgSave#add_select_button_stock `SAVE_AS `SAVE_AS;
 	dlgSave#do_overwrite_confirmation;
 
-	let btn = GButton.button ~stock:`SAVE_AS ~packing:notebookSaveButtonBox#add () in
+	let btn = GButton.button ~stock:`SAVE_AS ~packing:notebookSaveButtonBoxSaveAs#add () in
 	 GMisc.image ~stock:`SAVE_AS ~packing:btn#set_image ();
 	btn#connect#clicked (fun () -> if dlgSave#run () = `SAVE_AS then Gaux.may (Aux.saveGeneral) dlgSave#filename;
 	dlgSave#misc#hide ());
 	btn
+
+
+let saveButton = GButton.button ~stock:`SAVE ~packing:notebookSaveButtonBoxSave#add ()
+let saveImageButton = GMisc.image ~stock:`SAVE ~packing:saveButton#set_image ();;
+
+ignore (saveButton#connect#clicked ~callback: (fun _ -> Aux.saveGeneral (!fileGlobalPath)));;
 
 (*Affichage de fenetre*)
 let _ =
