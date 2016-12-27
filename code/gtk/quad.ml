@@ -24,7 +24,6 @@ let viewImageAfficheFirst = GMisc.image ();;
 let viewImageAfficheSecond = GMisc.image ();;
 let notebookInfoName = GMisc.label ();;
 let nomFichInfo = GMisc.label ();;
-let confNomFichier = GMisc.label ();;
 let dimFichInfoViewSecond = GMisc.label ();;
 let notebookInfoDimensionsValue = GMisc.label ();;
 
@@ -91,6 +90,8 @@ let tmpNameFile filePath =
 (*GENERAL I/O*)
 module Aux =
 struct
+	let file_name filePath = Filename.basename filePath
+
 	let buffer_size = 8192
 
 	let buffer = String.create buffer_size
@@ -105,15 +106,10 @@ struct
 		output_string file_out (Buffer.contents buf);
 		close_out file_out;;
 
-	let renameTMP_File newFilePAth =
-		file_copy (!tmpFileGlobalPath) newFilePAth;
-		Sys.remove (!tmpFileGlobalPath)
-
 	let loadGeneral filePath =
 		let lecture_fichier = Fonctions.lec filePath in
 		let dimXFichier (_,x,_,_,_) = x in
 		let dimYFichier (_,_,y,_,_) = y in
-		let nom_fichier = Filename.basename filePath in
 		fileGlobalPath := filePath;
 		tmpFileGlobalPath := tmpNameFile !fileGlobalPath;
 		print_endline (!fileGlobalPath);
@@ -122,16 +118,32 @@ struct
 		file_copy (!fileGlobalPath) (!tmpFileGlobalPath);
 		viewImageAfficheFirst#set_file filePath;
 		viewImageAfficheSecond#set_file filePath;
-		titreConf#set_label (string_titre_Conf nom_fichier);
-		notebookInfoName#set_label nom_fichier; (*FileName*)
-		nomFichInfo#set_label nom_fichier; (*FileName*)
-		confNomFichier#set_label nom_fichier;
+		titreConf#set_label (string_titre_Conf (file_name filePath));
+		notebookInfoName#set_label (file_name filePath); (*FileName*)
+		nomFichInfo#set_label (file_name filePath); (*FileName*)
 		dimFichInfoViewSecond#set_label (string_dimensions_info (dimXFichier lecture_fichier) (dimYFichier lecture_fichier));
-		notebookInfoDimensionsValue#set_label (string_dimensions_info (dimXFichier lecture_fichier) (dimYFichier lecture_fichier))
+		notebookInfoDimensionsValue#set_label (string_dimensions_info (dimXFichier lecture_fichier) (dimYFichier lecture_fichier));
+		at_exit (fun _ -> (Sys.remove (!tmpFileGlobalPath)))
 
-	let saveGeneral newFilePath =
-		renameTMP_File newFilePath
+	let saveAsGeneral newFilePath =
+		file_copy (!tmpFileGlobalPath) newFilePath;
+		Sys.remove (!tmpFileGlobalPath);
+		fileGlobalPath := newFilePath;
+		tmpFileGlobalPath := (tmpNameFile !fileGlobalPath);
+		Sys.chdir (Filename.dirname newFilePath);
+		file_copy (!fileGlobalPath) (!tmpFileGlobalPath);
+		viewImageAfficheFirst#set_file (!fileGlobalPath);
+		viewImageAfficheSecond#set_file (!fileGlobalPath);
+		notebookInfoName#set_label (file_name (!fileGlobalPath));
+		nomFichInfo#set_label (file_name (!fileGlobalPath));
+		at_exit (fun _ -> (Sys.remove (!tmpFileGlobalPath)))
 
+	let saveGeneral filePath tmpFilePath =
+		Sys.remove (filePath);
+		Sys.rename (tmpFilePath) (file_name filePath);
+		file_copy (filePath) (tmpFilePath);
+		viewImageAfficheFirst#set_file filePath;
+		viewImageAfficheSecond#set_file filePath
 
 	(*let loadManipulationUse file =
 		Fonctions.arbre(Fonctions.lec file)
@@ -540,14 +552,14 @@ let topToolbarRadioView2 = GButton.radio_button
 	~label:"View 2"
 	~group:topToolbarRadioView1#group ()
 
-let topToolbarAbout = GButton.tool_button ~label: "À Propos" ~stock: `ABOUT ~packing:topToolbar#insert ()
+let topToolbarAbout = GButton.tool_button ~stock: `ABOUT ~packing:topToolbar#insert ()
 let topToolbarFirstSeparator = GButton.separator_tool_item ~show:false ~packing:topToolbar#insert ()
 let topToolbarSave = GButton.tool_button ~stock:`SAVE ~show:false ~packing:topToolbar#insert ()
 let topToolbarSaveAs = GButton.tool_button ~stock:`SAVE_AS ~show:false ~packing:topToolbar#insert ()
 let topToolbarSecondSeparator = GButton.separator_tool_item ~show:false ~packing:topToolbar#insert ()
 let topToolbarViewsItem = GButton.tool_item ~show:false ~packing:topToolbar#insert ()
 let topToolbarLastSeparator = GButton.separator_tool_item ~packing:topToolbar#insert ()
-let topToolbarQuit = GButton.tool_button ~label: "Quitter" ~stock: `QUIT ~packing:topToolbar#insert ()
+let topToolbarQuit = GButton.tool_button ~stock: `QUIT ~packing:topToolbar#insert ()
 
 
 
@@ -725,18 +737,6 @@ let firstPageQuitButton = GButton.button
 				~stock:`QUIT
 				~packing:firstPageButtonBox#add ();;
 
-let quitConfirmationPopup _ =
-	let quitConfirmationPopupWindow = GWindow.message_dialog
-		~message:"<b><big>Voulez-vous vraiment quitter ?</big></b>\n\n"
-		~parent:window
-		~destroy_with_parent:true
-		~use_markup:true
-		~message_type:`QUESTION
-		~position:`CENTER_ON_PARENT
-		~buttons:GWindow.Buttons.yes_no () in
-	let quitConfirmationPopupAnswer = quitConfirmationPopupWindow#run () = `NO in
-	quitConfirmationPopupWindow#destroy ();
-	quitConfirmationPopupAnswer
 (*LABELS*)
 (*Table Texts*)
 let notebookHomeIntro = GMisc.label
@@ -804,7 +804,6 @@ let titreFichierInfo = GMisc.label ~markup: "<b>Image</b>" ();;
 let nomInfo = GMisc.label ~markup: "<b>Nom :</b>" ();;
 let dimInfo = GMisc.label ~markup: "<b>Dimensions :</b>" ();;
 let moyInfo = GMisc.label ~markup: "<b>Moyenne :</b>" ();;
-let nomFichInfo = GMisc.label ~markup:"test.ppm" ();;
 let moyFichInfo = GMisc.label ~markup:"175" ();;
 let toolbarNameRotation = GMisc.label ~markup: "<b>Rotation</b>" ();;
 let toolbarNameMiroir = GMisc.label ~markup: "<b>Miroir</b>" ();;
@@ -950,14 +949,15 @@ let saveAsButton =
 	dlgSave#add_button_stock `CANCEL `CANCEL;
 	dlgSave#add_select_button_stock `SAVE_AS `SAVE_AS;
 	dlgSave#do_overwrite_confirmation;
-	topToolbarSaveAs#connect#clicked (fun () -> if dlgSave#run () = `SAVE_AS then Gaux.may (Aux.saveGeneral) dlgSave#filename;
+	topToolbarSaveAs#connect#clicked (fun () -> if dlgSave#run () = `SAVE_AS then Gaux.may (Aux.saveAsGeneral) dlgSave#filename;
 	dlgSave#misc#hide ());
 
 
-ignore (topToolbarSave#connect#clicked ~callback: (fun _ -> Aux.saveGeneral (!fileGlobalPath)));;
+ignore (topToolbarSave#connect#clicked ~callback: (fun _ -> Aux.saveGeneral (!fileGlobalPath) (!tmpFileGlobalPath)));;
+
 
 (*Affichage de fenetre*)
 let _ =
-	ignore (window#event#connect#delete quitConfirmationPopup);
+	ignore (window#event#connect#delete (Main.quit));
 	window#show ();
 	GMain.main ()
