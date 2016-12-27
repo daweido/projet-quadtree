@@ -371,49 +371,6 @@ let notebookButtonBoxSegmentation = GPack.button_box `HORIZONTAL
 	~child_width:250
 	~child_height:50 ();;
 
-(*6th Tab*)
-let notebookTabSaveLabel = GMisc.label ~text:("Sauvegarde") ()
-
-let notebookHBoxSave = GPack.hbox
-	~spacing:10
-	~packing:(ignore_apply (notebook#append_page ~tab_label:notebookTabSaveLabel#coerce)) ()
-
-let notebookAlignSave = GBin.alignment
-	~xalign:0.5
-	~yalign:0.1
-	~xscale:0.0
-	~yscale:0.0
-	~packing:notebookHBoxSave#add ()
-
-let notebookTableSave = GPack.table
-	~rows:2
-	~columns:1
-	~row_spacings:50
-	~homogeneous:true
-	~packing:notebookAlignSave#add ()
-
-let notebookTableAlignSave = GBin.alignment
-	~xalign:0.5
-	~yalign:0.5
-	~xscale:0.0
-	~yscale:0.0 ();;
-
-let notebookTabTableSave = GPack.table
-	~rows:2
-	~columns:1
-	~homogeneous:true
-	~row_spacings: 25
-	~packing:notebookTableAlignSave#add ()
-
-let notebookSaveButtonBoxSave = GPack.button_box `VERTICAL
-	~child_width: 250
-	~child_height:50 ();;
-
-let notebookSaveButtonBoxSaveAs = GPack.button_box `VERTICAL
-	~child_width: 250
-	~child_height:50 ();;
-
-
 (*View2*)
 let leftToolbarSecondView = GButton.toolbar
 	~orientation: `VERTICAL
@@ -461,7 +418,7 @@ let rightToolbarSecondView = GButton.toolbar
 	~packing:(thirdPageHBoxView2#pack ~expand:false) ()
 
 let tableRightToolbarSecondView = GPack.table
-	~rows:6
+	~rows:5
 	~columns:1
 	~row_spacings:50
 	~border_width:5 ();;
@@ -574,22 +531,6 @@ let bboxSegmentationSecondView = GPack.button_box `HORIZONTAL
 		~child_width:90
 		~child_height:25 ();;
 
-let alignTableSaveSecondView = GBin.alignment
-	~xalign:0.5
-	~yalign:0.5
-	~xscale:0.0
-	~yscale:0.0 ();;
-
-let tableSaveSecondView = GPack.table
-	~rows:1
-	~columns:1
-	~homogeneous:true
-	~packing:alignTableSaveSecondView#add ()
-
-let savebboxSecondView = GPack.button_box `VERTICAL
-	~child_width: 90
-	~child_height:25 ();;
-
 (*BUTTONS AND WIDNOWS*)
 (*Top Toolbar*)
 let topToolbarRadioView1 = GButton.radio_button ~label:"View 1"
@@ -599,13 +540,14 @@ let topToolbarRadioView2 = GButton.radio_button
 	~label:"View 2"
 	~group:topToolbarRadioView1#group ()
 
-let topToolbarAbout = GButton.tool_button ~label: "À Propos" ~stock: `ABOUT ~packing:topToolbar#insert ();;
-let topToolbarFirstSep = GButton.separator_tool_item ~show:false ~packing:topToolbar#insert ();;
-let topToolbarViewsItem = GButton.tool_item ~show:false ~packing:topToolbar#insert ();;
-let topToolbarSave = GButton.tool_button ~stock: `SAVE ~packing:topToolbar#insert ();;
-let topToolbarSaveAs = GButton.tool_button ~stock: `SAVE_AS ~packing:topToolbar#insert ();;
-ignore (GButton.separator_tool_item ~packing:topToolbar#insert ());;
-let topToolbarQuit = GButton.tool_button ~label: "Quitter" ~stock: `QUIT ~packing:topToolbar#insert ();;
+let topToolbarAbout = GButton.tool_button ~label: "À Propos" ~stock: `ABOUT ~packing:topToolbar#insert ()
+let topToolbarFirstSeparator = GButton.separator_tool_item ~show:false ~packing:topToolbar#insert ()
+let topToolbarSave = GButton.tool_button ~stock:`SAVE ~show:false ~packing:topToolbar#insert ()
+let topToolbarSaveAs = GButton.tool_button ~stock:`SAVE_AS ~show:false ~packing:topToolbar#insert ()
+let topToolbarSecondSeparator = GButton.separator_tool_item ~show:false ~packing:topToolbar#insert ()
+let topToolbarViewsItem = GButton.tool_item ~show:false ~packing:topToolbar#insert ()
+let topToolbarLastSeparator = GButton.separator_tool_item ~packing:topToolbar#insert ()
+let topToolbarQuit = GButton.tool_button ~label: "Quitter" ~stock: `QUIT ~packing:topToolbar#insert ()
 
 
 
@@ -761,7 +703,6 @@ let rightLeftMirMirSecondViewTable = GPack.table
 let invBUT = GButton.button ~label: "Inverser" ~packing:bboxInversionSecondView#add ();;
 let advancedCompressionButton = GButton.button ~label: "Compresser" ~packing:bboxCompressionSecondView#add ();;
 let advancedSegmentationButton = GButton.button ~label: "Segmenter"  ~packing:bboxSegmentationSecondView#add ();;
-let saveBut= GButton.button ~label: "Sauvegarder" ~packing:savebboxSecondView#add ();;
 
 
 (*LOAD*)
@@ -835,7 +776,6 @@ let notebookHomeTitleMirorLeftRight = GMisc.label ~markup:"<big>Miroir Gauche/Dr
 let notebookHomeTitleInversion = GMisc.label ~markup:"<big>Inversion</big>" ~justify:`LEFT ();;
 let notebookHomeTitleCompression = GMisc.label ~markup:"<big>Compression</big>" ~justify:`LEFT ();;
 let notebookHomeTitleSegmentation = GMisc.label ~markup:"<big>Segmentation</big>" ~justify:`LEFT ();;
-let notebookHomeTitleSave = GMisc.label ~markup:"<big>Sauvegarde</big>" ~justify:`LEFT ();;
 
 (*Label du tableau Info*)
 let notebookInfoTitle = GMisc.label ~markup: "<span font_desc=\"Tahoma 25\"><b>Informations du fichier</b></span>" ();;
@@ -857,7 +797,6 @@ let notebookSimpleInversion = GMisc.label ~markup:"<span font_desc=\"Tahoma 20\"
 let notebookAdvancedTitle = GMisc.label ~markup: "<span font_desc=\"Tahoma 25\"><b>Opérations Avancées</b></span>" ()
 let notebookAdvancedCompression = GMisc.label ~markup:"<span font_desc=\"Tahoma 20\">Compression</span>" ()
 let notebookAdvancedSegmentation = GMisc.label ~markup:"<span font_desc=\"Tahoma 20\">Segmentation</span>" ();;
-let notebookSaveTitle = GMisc.label ~markup:"<span font_desc=\"Tahoma 25\"><b>Enregistrement</b></span>" ();;
 
 (*View2*)
 let titreInfo = GMisc.label ~markup: "<b>Informations</b>" ();;
@@ -905,7 +844,6 @@ ignore (notebookTableHome#attach ~left:0 ~top:9 (notebookHomeTitleCompression#co
 ignore (notebookTableHome#attach ~left:1 ~top:9 (notebookHomeTextCompression#coerce));
 ignore (notebookTableHome#attach ~left:0 ~top:10 (notebookHomeTitleSegmentation#coerce));
 ignore (notebookTableHome#attach ~left:1 ~top:10 (notebookHomeTextSegmentation#coerce));
-ignore (notebookTableHome#attach ~left:0 ~top:11 (notebookHomeTitleSave#coerce));
 ignore (notebookTableHome#attach ~left:1 ~top:11 (notebookHomeTextSave#coerce));
 (*Ajout dans noms dans tableau info*)
 ignore (notebookTableInfo#attach ~left:0 ~right:2 ~top:0 (notebookInfoTitle#coerce));
@@ -951,10 +889,6 @@ ignore (notebookAdvancedTable#attach ~left:1 ~top:1 (notebookAlignTableCompressi
 ignore (notebookTableCompression#attach ~left:0 ~top:0  (notebookButtonBoxCompression#coerce));;
 ignore (notebookAdvancedTable#attach ~left:1 ~top:2 (notebookAlignTableSegmentation#coerce));
 ignore (notebookTableSegmentation#attach ~left:0 ~top:0  (notebookButtonBoxSegmentation#coerce));;
-ignore (notebookTableSave#attach ~left:0  ~top:0 (notebookSaveTitle#coerce));
-ignore (notebookTableSave#attach ~left:0 ~top:1 (notebookTableAlignSave#coerce));
-ignore (notebookTabTableSave#attach ~left:0 ~top:0 (notebookSaveButtonBoxSave#coerce));
-ignore (notebookTabTableSave#attach ~left:0 ~top:1 (notebookSaveButtonBoxSaveAs#coerce));
 ignore (firstPageQuitButton#connect#clicked ~callback:GMain.quit);;
 
 (*View2*)
@@ -992,11 +926,14 @@ ignore (tableRightToolbarSecondView#attach ~left:0 ~top:3 (alignTableCompression
 ignore (tableCompressionSecondView#attach ~left:0 ~top:0  (bboxCompressionSecondView#coerce));;
 ignore (tableRightToolbarSecondView#attach ~left:0 ~top:4 (alignTableSegmentationSecondView#coerce));
 ignore (tableSegmentationSecondView#attach ~left:0 ~top:0  (bboxSegmentationSecondView#coerce));;
-ignore (tableRightToolbarSecondView#attach ~left:0 ~top:5 (alignTableSaveSecondView#coerce));
-ignore (tableSaveSecondView#attach ~left:0 ~top:0  (savebboxSecondView#coerce));
 
-ignore (confirmButtonConfirmer#connect#clicked (fun () -> ignore (alignConfirmation#misc#hide ()); ignore (thirdPageHBoxView1#misc#show ()); ignore (thridPageButtonBox#misc#show ());ignore (notebook#goto_page 0);ignore (topToolbarViewsItem#misc#show ());ignore (topToolbarFirstSep#misc#show)));;
-ignore (thridPageButtonReturn#connect#clicked (fun () -> ignore (thirdPageHBoxView1#misc#hide ());ignore (thirdPageHBoxView2#misc#hide ()); ignore (thridPageButtonBox#misc#hide ());ignore (topToolbarViewsItem#misc#hide ());ignore (topToolbarFirstSep#misc#hide); ignore (firstPageTitle#misc#show ());ignore (firstPageButtonBox#misc#show ());));;
+ignore (confirmButtonConfirmer#connect#clicked (fun () -> ignore (alignConfirmation#misc#hide ()); ignore (thirdPageHBoxView1#misc#show ()); ignore (thridPageButtonBox#misc#show ());
+ignore (notebook#goto_page 0);ignore (topToolbarViewsItem#misc#show ());ignore (topToolbarSaveAs#misc#show ());ignore (topToolbarSave#misc#show ());ignore (topToolbarFirstSeparator#misc#show ());
+ignore (topToolbarSecondSeparator#misc#show ())));;
+
+ignore (thridPageButtonReturn#connect#clicked (fun () -> ignore (thirdPageHBoxView1#misc#hide ());ignore (thirdPageHBoxView2#misc#hide ()); ignore (thridPageButtonBox#misc#hide ());
+ignore (topToolbarViewsItem#misc#hide ());ignore (topToolbarSaveAs#misc#hide ());ignore (topToolbarSave#misc#hide ());ignore (topToolbarSecondSeparator#misc#hide ());
+ignore (topToolbarFirstSeparator#misc#hide ()); ignore (firstPageTitle#misc#show ()); ignore (firstPageButtonBox#misc#show ())));;
 
 ignore (topToolbarRadioView1#connect#toggled (fun () -> ignore (thirdPageHBoxView1#misc#show ());ignore (thirdPageHBoxView2#misc#hide ())));;
 ignore (topToolbarRadioView2#connect#toggled (fun () -> ignore (thirdPageHBoxView1#misc#hide ());ignore (thirdPageHBoxView2#misc#show ())));;
@@ -1013,18 +950,11 @@ let saveAsButton =
 	dlgSave#add_button_stock `CANCEL `CANCEL;
 	dlgSave#add_select_button_stock `SAVE_AS `SAVE_AS;
 	dlgSave#do_overwrite_confirmation;
-
-	let btn = GButton.button ~stock:`SAVE_AS ~packing:notebookSaveButtonBoxSaveAs#add () in
-	 GMisc.image ~stock:`SAVE_AS ~packing:btn#set_image ();
-	btn#connect#clicked (fun () -> if dlgSave#run () = `SAVE_AS then Gaux.may (Aux.saveGeneral) dlgSave#filename;
+	topToolbarSaveAs#connect#clicked (fun () -> if dlgSave#run () = `SAVE_AS then Gaux.may (Aux.saveGeneral) dlgSave#filename;
 	dlgSave#misc#hide ());
-	btn
 
 
-let saveButton = GButton.button ~stock:`SAVE ~packing:notebookSaveButtonBoxSave#add ()
-let saveImageButton = GMisc.image ~stock:`SAVE ~packing:saveButton#set_image ();;
-
-ignore (saveButton#connect#clicked ~callback: (fun _ -> Aux.saveGeneral (!fileGlobalPath)));;
+ignore (topToolbarSave#connect#clicked ~callback: (fun _ -> Aux.saveGeneral (!fileGlobalPath)));;
 
 (*Affichage de fenetre*)
 let _ =
