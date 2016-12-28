@@ -40,7 +40,10 @@ let window = GWindow.window
 	~height:700
 	~position:`CENTER
 	~resizable:false
-	~title:"PPMShop" ()
+	~title:"PPMShop" ();;
+
+window#connect#destroy GMain.quit;;
+
 
 (*Biggest Window Container*)
 let firstVbox = GPack.vbox
@@ -816,7 +819,7 @@ let toolbarNameMiroir = GMisc.label ~markup: "<b>Miroir</b>" ();;
 (*ABOUT WINDOW*)
 ignore (topToolbarAbout#connect#clicked (fun () -> ignore (about_button#run ()); ignore (about_button#misc#hide ())));;
 
-topToolbarQuit#connect#clicked Main.quit;;
+topToolbarQuit#connect#clicked GMain.quit;;
 
 ignore (topToolbarTable#attach ~left:0 ~top:0 (topToolbarRadioView1#coerce));
 ignore (topToolbarTable#attach ~left:1 ~top:0 (topToolbarRadioView2#coerce));
@@ -958,6 +961,5 @@ ignore (topToolbarSave#connect#clicked ~callback: (fun _ -> Aux.saveGeneral (!fi
 
 (*Affichage de fenetre*)
 let _ =
-	ignore (window#event#connect#delete (Main.quit));
 	window#show ();
 	GMain.main ()
