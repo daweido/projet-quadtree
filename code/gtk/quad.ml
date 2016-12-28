@@ -128,12 +128,20 @@ struct
 		notebookInfoDimensionsValue#set_label (string_dimensions_info (dimXFichier lecture_fichier) (dimYFichier lecture_fichier));
 		at_exit (fun _ -> (Sys.remove (!tmpFileGlobalPath)))
 
+
+
+	let ajoutExt filepath =
+		let length = String.length filepath in
+		let threeLast nfilepath = String.sub nfilepath (length-4) 4 in
+		if (threeLast filepath) = ".ppm" then filepath else filepath^".ppm"
+
 	let saveAsGeneral newFilePath =
-		file_copy (!tmpFileGlobalPath) newFilePath;
+		let newFilePathAfterVerif = ajoutExt newFilePath in
+		file_copy (!tmpFileGlobalPath) newFilePathAfterVerif;
 		Sys.remove (!tmpFileGlobalPath);
-		fileGlobalPath := newFilePath;
+		fileGlobalPath := newFilePathAfterVerif;
 		tmpFileGlobalPath := (tmpNameFile !fileGlobalPath);
-		Sys.chdir (Filename.dirname newFilePath);
+		Sys.chdir (Filename.dirname newFilePathAfterVerif);
 		file_copy (!fileGlobalPath) (!tmpFileGlobalPath);
 		viewImageAfficheFirst#set_file (!fileGlobalPath);
 		viewImageAfficheSecond#set_file (!fileGlobalPath);
@@ -581,6 +589,23 @@ let topToolbarTable = GPack.table
 
 
 
+let openImageFilter () = GFile.filter
+    ~name:"PPM Files"
+    ~patterns:[ "*.ppm" ] ()
+
+let saveImageFilter () = GFile.filter
+	~name:"PPM Files"
+	~patterns:[ "*.ppm" ] ()
+
+let openAll_files () =
+	let filt = GFile.filter ~name:"All Files" () in
+	filt#add_pattern "*" ;
+	filt
+
+let saveAll_files () =
+	let filt = GFile.filter ~name:"All Files" () in
+	filt#add_pattern "*" ;
+	filt
 
 (*About Dialog*)
 let about_button = GWindow.about_dialog
@@ -671,7 +696,7 @@ let notebookButtonSegmentation = GButton.button ~label: "Segmenter"  ~packing:no
 
 (*View2*)
 let aboutLeftToolbarButton = GButton.button
-	~label: "About"
+	~label: "Instructions"
 	~packing:buttonBoxLeftToolbarSecondView#add ()
 
 
@@ -729,6 +754,8 @@ let action_buttonLoad =
 		~destroy_with_parent:true () in
 	dlgLoad#add_button_stock `CANCEL `CANCEL;
 	dlgLoad#add_select_button_stock `OPEN `OPEN;
+	dlgLoad#add_filter (openImageFilter ());
+	dlgLoad#add_filter (openAll_files ());
 	let btn = GButton.button ~stock:`OPEN ~packing:firstPageButtonBox#add () in
 	 GMisc.image ~stock:`OPEN ~packing:btn#set_image ();
 	btn#connect#clicked (fun () -> if dlgLoad#run () = `OPEN then (Gaux.may (Aux.loadGeneral) dlgLoad#filename;
@@ -952,6 +979,8 @@ let saveAsButton =
 	dlgSave#add_button_stock `CANCEL `CANCEL;
 	dlgSave#add_select_button_stock `SAVE_AS `SAVE_AS;
 	dlgSave#do_overwrite_confirmation;
+	dlgSave#add_filter (saveImageFilter ());
+	dlgSave#add_filter (saveAll_files ());
 	topToolbarSaveAs#connect#clicked (fun () -> if dlgSave#run () = `SAVE_AS then Gaux.may (Aux.saveAsGeneral) dlgSave#filename;
 	dlgSave#misc#hide ());
 
