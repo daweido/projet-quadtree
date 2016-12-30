@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.1.16)  2 DEC 2016 14:09
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.1.16)  29 DEC 2016 15:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -175,9 +175,30 @@ Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 \Gin@req@height=\dimen115
 \Gin@req@width=\dimen116
 )
+(/usr/local/texlive/2015/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2015/09/17 v3.3-111 Customizing captions (AR)
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2015/09/20 v1.7-115 caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 57.
+\captionmargin=\dimen117
+\captionmargin@=\dimen118
+\captionwidth=\dimen119
+\caption@tempdima=\dimen120
+\caption@indent=\dimen121
+\caption@parindent=\dimen122
+\caption@hangindent=\dimen123
+)
+\c@ContinuedFloat=\count107
+)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/caption/subcaption.sty
+Package: subcaption 2015/09/15 v1.1-100 Sub-captions (AR)
+\c@subfigure=\count108
+\c@subtable=\count109
+)
 (/usr/local/texlive/2015/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count107
+\c@float@type=\count110
 \float@exts=\toks26
 \float@box=\box28
 \@float@everytoks=\toks27
@@ -223,31 +244,31 @@ L3 Module: l3tl 2015/09/29 v6121 L3 Token lists
 L3 Module: l3str 2016/01/03 v6357 L3 Strings
 L3 Module: l3seq 2015/08/05 v5777 L3 Sequences and stacks
 L3 Module: l3int 2015/09/25 v6089 L3 Integers
-\c_max_int=\count108
-\l_tmpa_int=\count109
-\l_tmpb_int=\count110
-\g_tmpa_int=\count111
-\g_tmpb_int=\count112
+\c_max_int=\count111
+\l_tmpa_int=\count112
+\l_tmpb_int=\count113
+\g_tmpa_int=\count114
+\g_tmpb_int=\count115
 L3 Module: l3quark 2015/08/17 v5855 L3 Quarks
 L3 Module: l3prg 2015/11/01 v6216 L3 Control structures
-\g__prg_map_int=\count113
+\g__prg_map_int=\count116
 L3 Module: l3clist 2015/09/02 v5901 L3 Comma separated lists
 L3 Module: l3token 2015/11/11 v6249 L3 Experimental token manipulation
 L3 Module: l3prop 2015/08/05 v5777 L3 Property lists
 L3 Module: l3msg 2015/09/28 v6113 L3 Messages
 L3 Module: l3file 2015/12/03 v6317 L3 File and I/O operations
-\l_iow_line_count_int=\count114
-\l__iow_target_count_int=\count115
-\l__iow_current_line_int=\count116
-\l__iow_current_word_int=\count117
-\l__iow_current_indentation_int=\count118
+\l_iow_line_count_int=\count117
+\l__iow_target_count_int=\count118
+\l__iow_current_line_int=\count119
+\l__iow_current_word_int=\count120
+\l__iow_current_indentation_int=\count121
 L3 Module: l3skip 2015/09/25 v6089 L3 Dimensions and skips
-\c_zero_dim=\dimen117
-\c_max_dim=\dimen118
-\l_tmpa_dim=\dimen119
-\l_tmpb_dim=\dimen120
-\g_tmpa_dim=\dimen121
-\g_tmpb_dim=\dimen122
+\c_zero_dim=\dimen124
+\c_max_dim=\dimen125
+\l_tmpa_dim=\dimen126
+\l_tmpb_dim=\dimen127
+\g_tmpa_dim=\dimen128
+\g_tmpb_dim=\dimen129
 \c_zero_skip=\skip66
 \c_max_skip=\skip67
 \l_tmpa_skip=\skip68
@@ -261,18 +282,18 @@ L3 Module: l3skip 2015/09/25 v6089 L3 Dimensions and skips
 \g_tmpa_muskip=\muskip16
 \g_tmpb_muskip=\muskip17
 L3 Module: l3keys 2015/11/17 v6284 L3 Key-value interfaces
-\g__keyval_level_int=\count119
-\l_keys_choice_int=\count120
+\g__keyval_level_int=\count122
+\l_keys_choice_int=\count123
 L3 Module: l3fp 2015/08/25 v5890 L3 Floating points
-\c__fp_leading_shift_int=\count121
-\c__fp_middle_shift_int=\count122
-\c__fp_trailing_shift_int=\count123
-\c__fp_big_leading_shift_int=\count124
-\c__fp_big_middle_shift_int=\count125
-\c__fp_big_trailing_shift_int=\count126
-\c__fp_Bigg_leading_shift_int=\count127
-\c__fp_Bigg_middle_shift_int=\count128
-\c__fp_Bigg_trailing_shift_int=\count129
+\c__fp_leading_shift_int=\count124
+\c__fp_middle_shift_int=\count125
+\c__fp_trailing_shift_int=\count126
+\c__fp_big_leading_shift_int=\count127
+\c__fp_big_middle_shift_int=\count128
+\c__fp_big_trailing_shift_int=\count129
+\c__fp_Bigg_leading_shift_int=\count130
+\c__fp_Bigg_middle_shift_int=\count131
+\c__fp_Bigg_trailing_shift_int=\count132
 L3 Module: l3box 2015/08/09 v5822 L3 Experimental boxes
 \c_empty_box=\box30
 \l_tmpa_box=\box31
@@ -281,13 +302,13 @@ L3 Module: l3box 2015/08/09 v5822 L3 Experimental boxes
 \g_tmpb_box=\box34
 L3 Module: l3coffins 2015/08/06 v5789 L3 Coffin code layer
 \l__coffin_internal_box=\box35
-\l__coffin_internal_dim=\dimen123
-\l__coffin_offset_x_dim=\dimen124
-\l__coffin_offset_y_dim=\dimen125
-\l__coffin_x_dim=\dimen126
-\l__coffin_y_dim=\dimen127
-\l__coffin_x_prime_dim=\dimen128
-\l__coffin_y_prime_dim=\dimen129
+\l__coffin_internal_dim=\dimen130
+\l__coffin_offset_x_dim=\dimen131
+\l__coffin_offset_y_dim=\dimen132
+\l__coffin_x_dim=\dimen133
+\l__coffin_y_dim=\dimen134
+\l__coffin_x_prime_dim=\dimen135
+\l__coffin_y_prime_dim=\dimen136
 \c_empty_coffin=\box36
 \l__coffin_aligned_coffin=\box37
 \l__coffin_aligned_internal_coffin=\box38
@@ -296,33 +317,33 @@ L3 Module: l3coffins 2015/08/06 v5789 L3 Coffin code layer
 \l__coffin_display_coffin=\box41
 \l__coffin_display_coord_coffin=\box42
 \l__coffin_display_pole_coffin=\box43
-\l__coffin_display_offset_dim=\dimen130
-\l__coffin_display_x_dim=\dimen131
-\l__coffin_display_y_dim=\dimen132
+\l__coffin_display_offset_dim=\dimen137
+\l__coffin_display_x_dim=\dimen138
+\l__coffin_display_y_dim=\dimen139
 L3 Module: l3color 2014/08/23 v5354 L3 Experimental color support
 L3 Module: l3candidates 2015/12/20 v6325 L3 Experimental additions to l3kernel
-\l__box_top_dim=\dimen133
-\l__box_bottom_dim=\dimen134
-\l__box_left_dim=\dimen135
-\l__box_right_dim=\dimen136
-\l__box_top_new_dim=\dimen137
-\l__box_bottom_new_dim=\dimen138
-\l__box_left_new_dim=\dimen139
-\l__box_right_new_dim=\dimen140
+\l__box_top_dim=\dimen140
+\l__box_bottom_dim=\dimen141
+\l__box_left_dim=\dimen142
+\l__box_right_dim=\dimen143
+\l__box_top_new_dim=\dimen144
+\l__box_bottom_new_dim=\dimen145
+\l__box_left_new_dim=\dimen146
+\l__box_right_new_dim=\dimen147
 \l__box_internal_box=\box44
-\l__coffin_bounding_shift_dim=\dimen141
-\l__coffin_left_corner_dim=\dimen142
-\l__coffin_right_corner_dim=\dimen143
-\l__coffin_bottom_corner_dim=\dimen144
-\l__coffin_top_corner_dim=\dimen145
-\l__coffin_scaled_total_height_dim=\dimen146
-\l__coffin_scaled_width_dim=\dimen147
+\l__coffin_bounding_shift_dim=\dimen148
+\l__coffin_left_corner_dim=\dimen149
+\l__coffin_right_corner_dim=\dimen150
+\l__coffin_bottom_corner_dim=\dimen151
+\l__coffin_top_corner_dim=\dimen152
+\l__coffin_scaled_total_height_dim=\dimen153
+\l__coffin_scaled_width_dim=\dimen154
 L3 Module: l3sys 2015/09/25 v6087 L3 Experimental system/runtime functions
 L3 Module: l3luatex 2015/11/11 v6250 L3 Experimental LuaTeX-specific functions
 )
 (/usr/local/texlive/2015/texmf-dist/tex/latex/l3kernel/l3pdfmode.def
 File: l3pdfmode.def 2015/11/11 v6250 L3 Experimental driver: PDF mode
-\l__driver_color_stack_int=\count130
+\l__driver_color_stack_int=\count133
 ))
 (/usr/local/texlive/2015/texmf-dist/tex/latex/l3packages/l3keys2e/l3keys2e.sty
 Package: l3keys2e 2015/12/20 v6326 LaTeX2e option processing using LaTeX3 keys
@@ -410,29 +431,29 @@ Package textcomp Info: Setting ptmj sub-encoding to TS1/4 on input line 409.
 )
 (/usr/local/texlive/2015/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
 Package: xparse 2015/12/20 v6326 L3 Experimental document command parser
-\l__xparse_current_arg_int=\count131
-\l__xparse_m_args_int=\count132
-\l__xparse_mandatory_args_int=\count133
-\l__xparse_processor_int=\count134
-\l__xparse_v_nesting_int=\count135
+\l__xparse_current_arg_int=\count134
+\l__xparse_m_args_int=\count135
+\l__xparse_mandatory_args_int=\count136
+\l__xparse_processor_int=\count137
+\l__xparse_v_nesting_int=\count138
 )
 (/usr/local/texlive/2015/texmf-dist/tex/latex/l3packages/xtemplate/xtemplate.st
 y
 Package: xtemplate 2015/12/20 v6326 L3 Experimental prototype document function
 s
-\l__xtemplate_tmp_dim=\dimen148
-\l__xtemplate_tmp_int=\count136
+\l__xtemplate_tmp_dim=\dimen155
+\l__xtemplate_tmp_int=\count139
 \l__xtemplate_tmp_muskip=\muskip18
 \l__xtemplate_tmp_skip=\skip72
 )
 Package: xfrac 2015/12/20 v6326 L3 Experimental split-level fractions
 \l__xfrac_slash_box=\box45
 \l__xfrac_tmp_box=\box46
-\l__xfrac_denominator_bot_sep_dim=\dimen149
-\l__xfrac_numerator_bot_sep_dim=\dimen150
-\l__xfrac_numerator_top_sep_dim=\dimen151
-\l__xfrac_slash_left_sep_dim=\dimen152
-\l__xfrac_slash_right_sep_dim=\dimen153
+\l__xfrac_denominator_bot_sep_dim=\dimen156
+\l__xfrac_numerator_bot_sep_dim=\dimen157
+\l__xfrac_numerator_top_sep_dim=\dimen158
+\l__xfrac_slash_left_sep_dim=\dimen159
+\l__xfrac_slash_right_sep_dim=\dimen160
 \l__xfrac_slash_left_muskip=\muskip19
 \l__xfrac_slash_right_muskip=\muskip20
 .................................................
@@ -453,56 +474,56 @@ Package: esvect
 Package: vmargin 2004/07/15 V2.5 set document margins (VK)
 
 Package: vmargin 2004/07/15 V2.5 set document margins (VK)
-\PaperWidth=\dimen154
-\PaperHeight=\dimen155
+\PaperWidth=\dimen161
+\PaperHeight=\dimen162
 ) (/usr/local/texlive/2015/texmf-dist/tex/latex/was/gensymb.sty
 Package: gensymb 2003/07/02 v1.0 (WaS)
 ) (./main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 39.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 39.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 41.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 41.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Info: Redefining \degres on input line 39.
-LaTeX Info: Redefining \dots on input line 39.
-LaTeX Info: Redefining \up on input line 39.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Info: Redefining \degres on input line 41.
+LaTeX Info: Redefining \dots on input line 41.
+LaTeX Info: Redefining \up on input line 41.
 
 
 Package frenchb.ldf Warning: OT1 encoding should not be used for French.
 (frenchb.ldf)                Add \usepackage[T1]{fontenc} to the preamble
-(frenchb.ldf)                of your document, on input line 39.
+(frenchb.ldf)                of your document, on input line 41.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/ucs/ucsencs.def
 File: ucsencs.def 2011/01/21 Fixes to fontencodings LGR, T3
 )
 (/usr/local/texlive/2015/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count137
-\scratchdimen=\dimen156
+\scratchcounter=\count140
+\scratchdimen=\dimen163
 \scratchbox=\box47
-\nofMPsegments=\count138
-\nofMParguments=\count139
+\nofMPsegments=\count141
+\nofMParguments=\count142
 \everyMPshowfont=\toks34
-\MPscratchCnt=\count140
-\MPscratchDim=\dimen157
-\MPnumerator=\count141
-\makeMPintoPDFobject=\count142
+\MPscratchCnt=\count143
+\MPscratchDim=\dimen164
+\MPnumerator=\count144
+\makeMPintoPDFobject=\count145
 \everyMPtoPDFconversion=\toks35
 ) (/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
 Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
@@ -552,24 +573,27 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: float package is loaded.
+Package caption Info: End \AtBeginDocument code.
 \symgns@font=\mathgroup5
 LaTeX Font Info:    Overwriting symbol font `gns@font' in version `bold'
-(Font)                  TS1/cmr/m/n --> TS1/cmr/bx/n on input line 39.
-Package gensymb Info: Math companion symbols declared on input line 39.
-LaTeX Info: Redefining \degree on input line 39.
-LaTeX Info: Redefining \celsius on input line 39.
+(Font)                  TS1/cmr/m/n --> TS1/cmr/bx/n on input line 41.
+Package gensymb Info: Math companion symbols declared on input line 41.
+LaTeX Info: Redefining \degree on input line 41.
+LaTeX Info: Redefining \celsius on input line 41.
 Package gensymb Info: Using text companion symbols for \degree, \celsius and \p
-erthousand on input line 39.
-LaTeX Info: Redefining \ohm on input line 39.
-Package gensymb Info: Using \textohm for \ohm on input line 39.
-Package gensymb Info: Using \textmu for \micro on input line 39.
+erthousand on input line 41.
+LaTeX Info: Redefining \ohm on input line 41.
+Package gensymb Info: Using \textohm for \ohm on input line 41.
+Package gensymb Info: Using \textmu for \micro on input line 41.
 
 <images/logo1.png, id=1, 169.63374pt x 256.96pt>
 File: images/logo1.png Graphic file (type png)
  <use images/logo1.png>
-Package pdftex.def Info: images/logo1.png used on input line 46.
+Package pdftex.def Info: images/logo1.png used on input line 48.
 (pdftex.def)             Requested size: 127.22498pt x 192.71951pt.
-LaTeX Font Info:    Try loading font information for U+esvect on input line 61.
+LaTeX Font Info:    Try loading font information for U+esvect on input line 63.
 
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/esvect/uesvect.fd
@@ -584,25 +608,116 @@ s/logo1.png>] (./main.toc)
  [1]
 (/usr/local/texlive/2015/texmf-dist/tex/latex/ucs/data/uni-0.def
 File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
+)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/ucs/data/uni-1.def
+File: uni-1.def 2013/05/13 UCS: Unicode data U+0100..U+01FF
 ) [2] [3]
-(./main.aux) ) 
+Overfull \hbox (6.17084pt too wide) in paragraph at lines 150--153
+[]\OT1/cmr/m/n/12 Pour ce qui est du char-ge-ment, nous avons cr^^Se^^Se deux f
+onc-tions qui font deux op^^Serations
+ []
+
+[4]
+Underfull \hbox (badness 10000) in paragraph at lines 166--167
+
+ []
+
+[5] <images/firstScreen.png, id=32, 1015.795pt x 837.1275pt>
+File: images/firstScreen.png Graphic file (type png)
+
+<use images/firstScreen.png>
+Package pdftex.def Info: images/firstScreen.png used on input line 169.
+(pdftex.def)             Requested size: 406.3108pt x 334.84506pt.
+ [6]
+<images/aboutScreen.png, id=37, 987.69pt x 809.0225pt>
+File: images/aboutScreen.png Graphic file (type png)
+
+<use images/aboutScreen.png>
+Package pdftex.def Info: images/aboutScreen.png used on input line 176.
+(pdftex.def)             Requested size: 395.069pt x 323.60327pt.
+ [7 <./images/firstScreen.png>]
+<images/loadScreen.png, id=42, 987.69pt x 809.0225pt>
+File: images/loadScreen.png Graphic file (type png)
+
+<use images/loadScreen.png>
+Package pdftex.def Info: images/loadScreen.png used on input line 182.
+(pdftex.def)             Requested size: 395.069pt x 323.60327pt.
+ [8 <./images/aboutScreen.png>]
+<images/confirmationScreen.png, id=47, 1015.795pt x 837.1275pt>
+File: images/confirmationScreen.png Graphic file (type png)
+
+<use images/confirmationScreen.png>
+Package pdftex.def Info: images/confirmationScreen.png used on input line 189.
+(pdftex.def)             Requested size: 406.3108pt x 334.84506pt.
+ [9 <./images/loadScreen.png>]
+<images/homeView1.png, id=52, 1015.795pt x 837.1275pt>
+File: images/homeView1.png Graphic file (type png)
+
+<use images/homeView1.png>
+Package pdftex.def Info: images/homeView1.png used on input line 195.
+(pdftex.def)             Requested size: 406.3108pt x 334.84506pt.
+ [10 <./images/confirmationScreen.png>]
+<images/infosView1.png, id=57, 1015.795pt x 837.1275pt>
+File: images/infosView1.png Graphic file (type png)
+
+<use images/infosView1.png>
+Package pdftex.def Info: images/infosView1.png used on input line 201.
+(pdftex.def)             Requested size: 304.74084pt x 251.14018pt.
+ [11 <./images/homeView1.png>]
+<images/imageView1.png, id=62, 1015.795pt x 837.1275pt>
+File: images/imageView1.png Graphic file (type png)
+
+<use images/imageView1.png>
+Package pdftex.def Info: images/imageView1.png used on input line 204.
+(pdftex.def)             Requested size: 304.74084pt x 251.14018pt.
+
+<images/opeSimpleView1.png, id=63, 1015.795pt x 837.1275pt>
+File: images/opeSimpleView1.png Graphic file (type png)
+
+<use images/opeSimpleView1.png>
+Package pdftex.def Info: images/opeSimpleView1.png used on input line 207.
+(pdftex.def)             Requested size: 304.74084pt x 251.14018pt.
+ [12 <./images/infosView1.png> <./images/imageView1.png>] <images/opeAdvView1.p
+ng, id=70, 1015.795pt x 837.1275pt>
+File: images/opeAdvView1.png Graphic file (type png)
+
+<use images/opeAdvView1.png>
+Package pdftex.def Info: images/opeAdvView1.png used on input line 210.
+(pdftex.def)             Requested size: 304.74084pt x 251.14018pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 212--213
+
+ []
+
+<images/view2.png, id=71, 1015.795pt x 837.1275pt>
+File: images/view2.png Graphic file (type png)
+ <use images/view2.png>
+Package pdftex.def Info: images/view2.png used on input line 214.
+(pdftex.def)             Requested size: 304.74084pt x 251.14018pt.
+
+[13 <./images/opeSimpleView1.png> <./images/opeAdvView1.png>] [14 <./images/vie
+w2.png>] (./main.aux) ) 
 Here is how much of TeX's memory you used:
- 12520 strings out of 493054
- 220429 string characters out of 6134760
- 265202 words of memory out of 5000000
- 15911 multiletter control sequences out of 15000+600000
- 11647 words of font info for 43 fonts, out of 8000000 for 9000
+ 14266 strings out of 493054
+ 247533 string characters out of 6134760
+ 289986 words of memory out of 5000000
+ 17634 multiletter control sequences out of 15000+600000
+ 12353 words of font info for 45 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 38i,10n,43p,10374b,535s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/c
-m/cmbx12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmcsc10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmr12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/c
-msy8.pfb>
-Output written on main.pdf (4 pages, 69310 bytes).
+ 38i,10n,43p,10374b,486s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2015/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmbx12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmbxti10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmcsc10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmmi8.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmr12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmsy10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmsy8.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmti12.pfb>
+Output written on main.pdf (15 pages, 5162200 bytes).
 PDF statistics:
- 36 PDF objects out of 1000 (max. 8388607)
- 23 compressed objects within 1 object stream
+ 108 PDF objects out of 1000 (max. 8388607)
+ 60 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 56 words of extra memory for PDF output out of 10000 (max. 10000000)
 
