@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.1.16)  29 DEC 2016 15:41
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.1.16)  3 JAN 2017 09:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -611,14 +611,19 @@ File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
 )
 (/usr/local/texlive/2015/texmf-dist/tex/latex/ucs/data/uni-1.def
 File: uni-1.def 2013/05/13 UCS: Unicode data U+0100..U+01FF
-) [2] [3]
-Overfull \hbox (6.17084pt too wide) in paragraph at lines 150--153
+)
+Underfull \hbox (badness 10000) in paragraph at lines 93--104
+
+ []
+
+[2] [3]
+Overfull \hbox (6.17084pt too wide) in paragraph at lines 116--119
 []\OT1/cmr/m/n/12 Pour ce qui est du char-ge-ment, nous avons cr^^Se^^Se deux f
 onc-tions qui font deux op^^Serations
  []
 
 [4]
-Underfull \hbox (badness 10000) in paragraph at lines 166--167
+Underfull \hbox (badness 10000) in paragraph at lines 157--158
 
  []
 
@@ -626,81 +631,81 @@ Underfull \hbox (badness 10000) in paragraph at lines 166--167
 File: images/firstScreen.png Graphic file (type png)
 
 <use images/firstScreen.png>
-Package pdftex.def Info: images/firstScreen.png used on input line 169.
+Package pdftex.def Info: images/firstScreen.png used on input line 160.
 (pdftex.def)             Requested size: 406.3108pt x 334.84506pt.
- [6]
-<images/aboutScreen.png, id=37, 987.69pt x 809.0225pt>
+
+<images/aboutScreen.png, id=33, 987.69pt x 809.0225pt>
 File: images/aboutScreen.png Graphic file (type png)
 
 <use images/aboutScreen.png>
-Package pdftex.def Info: images/aboutScreen.png used on input line 176.
+Package pdftex.def Info: images/aboutScreen.png used on input line 167.
 (pdftex.def)             Requested size: 395.069pt x 323.60327pt.
- [7 <./images/firstScreen.png>]
-<images/loadScreen.png, id=42, 987.69pt x 809.0225pt>
+ [6 <./images/firstScreen.png>]
+<images/loadScreen.png, id=39, 987.69pt x 809.0225pt>
 File: images/loadScreen.png Graphic file (type png)
 
 <use images/loadScreen.png>
-Package pdftex.def Info: images/loadScreen.png used on input line 182.
+Package pdftex.def Info: images/loadScreen.png used on input line 173.
 (pdftex.def)             Requested size: 395.069pt x 323.60327pt.
- [8 <./images/aboutScreen.png>]
-<images/confirmationScreen.png, id=47, 1015.795pt x 837.1275pt>
+ [7 <./images/aboutScreen.png>]
+<images/confirmationScreen.png, id=44, 1015.795pt x 837.1275pt>
 File: images/confirmationScreen.png Graphic file (type png)
 
 <use images/confirmationScreen.png>
-Package pdftex.def Info: images/confirmationScreen.png used on input line 189.
+Package pdftex.def Info: images/confirmationScreen.png used on input line 180.
 (pdftex.def)             Requested size: 406.3108pt x 334.84506pt.
- [9 <./images/loadScreen.png>]
-<images/homeView1.png, id=52, 1015.795pt x 837.1275pt>
+ [8 <./images/loadScreen.png>]
+<images/homeView1.png, id=49, 1015.795pt x 837.1275pt>
 File: images/homeView1.png Graphic file (type png)
 
 <use images/homeView1.png>
-Package pdftex.def Info: images/homeView1.png used on input line 195.
+Package pdftex.def Info: images/homeView1.png used on input line 186.
 (pdftex.def)             Requested size: 406.3108pt x 334.84506pt.
- [10 <./images/confirmationScreen.png>]
-<images/infosView1.png, id=57, 1015.795pt x 837.1275pt>
+ [9 <./images/confirmationScreen.png>]
+<images/infosView1.png, id=54, 1015.795pt x 837.1275pt>
 File: images/infosView1.png Graphic file (type png)
 
 <use images/infosView1.png>
-Package pdftex.def Info: images/infosView1.png used on input line 201.
+Package pdftex.def Info: images/infosView1.png used on input line 192.
 (pdftex.def)             Requested size: 304.74084pt x 251.14018pt.
- [11 <./images/homeView1.png>]
-<images/imageView1.png, id=62, 1015.795pt x 837.1275pt>
+ [10 <./images/homeView1.png>]
+<images/imageView1.png, id=59, 1015.795pt x 837.1275pt>
 File: images/imageView1.png Graphic file (type png)
 
 <use images/imageView1.png>
-Package pdftex.def Info: images/imageView1.png used on input line 204.
+Package pdftex.def Info: images/imageView1.png used on input line 195.
 (pdftex.def)             Requested size: 304.74084pt x 251.14018pt.
 
-<images/opeSimpleView1.png, id=63, 1015.795pt x 837.1275pt>
+<images/opeSimpleView1.png, id=60, 1015.795pt x 837.1275pt>
 File: images/opeSimpleView1.png Graphic file (type png)
 
 <use images/opeSimpleView1.png>
-Package pdftex.def Info: images/opeSimpleView1.png used on input line 207.
+Package pdftex.def Info: images/opeSimpleView1.png used on input line 198.
 (pdftex.def)             Requested size: 304.74084pt x 251.14018pt.
- [12 <./images/infosView1.png> <./images/imageView1.png>] <images/opeAdvView1.p
-ng, id=70, 1015.795pt x 837.1275pt>
+ [11 <./images/infosView1.png> <./images/imageView1.png>] <images/opeAdvView1.p
+ng, id=66, 1015.795pt x 837.1275pt>
 File: images/opeAdvView1.png Graphic file (type png)
 
 <use images/opeAdvView1.png>
-Package pdftex.def Info: images/opeAdvView1.png used on input line 210.
+Package pdftex.def Info: images/opeAdvView1.png used on input line 201.
 (pdftex.def)             Requested size: 304.74084pt x 251.14018pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 212--213
+Underfull \hbox (badness 10000) in paragraph at lines 203--204
 
  []
 
-<images/view2.png, id=71, 1015.795pt x 837.1275pt>
+<images/view2.png, id=67, 1015.795pt x 837.1275pt>
 File: images/view2.png Graphic file (type png)
  <use images/view2.png>
-Package pdftex.def Info: images/view2.png used on input line 214.
+Package pdftex.def Info: images/view2.png used on input line 205.
 (pdftex.def)             Requested size: 304.74084pt x 251.14018pt.
 
-[13 <./images/opeSimpleView1.png> <./images/opeAdvView1.png>] [14 <./images/vie
+[12 <./images/opeSimpleView1.png> <./images/opeAdvView1.png>] [13 <./images/vie
 w2.png>] (./main.aux) ) 
 Here is how much of TeX's memory you used:
  14266 strings out of 493054
  247533 string characters out of 6134760
- 289986 words of memory out of 5000000
+ 290986 words of memory out of 5000000
  17634 multiletter control sequences out of 15000+600000
  12353 words of font info for 45 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -714,10 +719,10 @@ fonts/cm/cmr12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfo
 nts/cm/cmsy10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfon
 ts/cm/cmsy8.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts
 /cm/cmti12.pfb>
-Output written on main.pdf (15 pages, 5162200 bytes).
+Output written on main.pdf (14 pages, 5161857 bytes).
 PDF statistics:
- 108 PDF objects out of 1000 (max. 8388607)
- 60 compressed objects within 1 object stream
+ 105 PDF objects out of 1000 (max. 8388607)
+ 58 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  56 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -2,20 +2,20 @@
 ~\hfill \textbf {Page}\par 
 \contentsline {section}{\numberline {}Introduction}{2}
 \contentsline {section}{\numberline {1}\IeC {\'E}tude du projet}{2}
-\contentsline {section}{\numberline {2}LablGTK}{4}
-\contentsline {subsection}{\numberline {2.1}GTK+}{4}
-\contentsline {section}{\numberline {3}Arbre Quadtree}{4}
+\contentsline {section}{\numberline {2}LablGTK}{3}
+\contentsline {subsection}{\numberline {2.1}GTK+}{3}
+\contentsline {section}{\numberline {3}Arbre Quadtree}{3}
 \contentsline {section}{\numberline {4}Fonction I/O}{4}
 \contentsline {subsection}{\numberline {4.1}Chargement}{4}
-\contentsline {subsection}{\numberline {4.2}Enregistrement}{5}
-\contentsline {section}{\numberline {5}Fonctions de manipulation}{6}
-\contentsline {subsection}{\numberline {5.1}Op\IeC {\'e}rations Simples}{6}
-\contentsline {subsubsection}{\numberline {5.1.1}Rotation de 90$^{\circ }$}{6}
-\contentsline {subsubsection}{\numberline {5.1.2}Miroir}{6}
-\contentsline {subsubsection}{\numberline {5.1.3}Inversion}{6}
+\contentsline {subsection}{\numberline {4.2}Enregistrement}{4}
+\contentsline {section}{\numberline {5}Fonctions de manipulation}{5}
+\contentsline {subsection}{\numberline {5.1}Op\IeC {\'e}rations Simples}{5}
+\contentsline {subsubsection}{\numberline {5.1.1}Rotation de 90$^{\circ }$}{5}
+\contentsline {subsubsection}{\numberline {5.1.2}Miroir}{5}
+\contentsline {subsubsection}{\numberline {5.1.3}Inversion}{5}
 \contentsline {subsection}{\numberline {5.2}Op\IeC {\'e}rations Avanc\IeC {\'e}es}{6}
 \contentsline {subsubsection}{\numberline {5.2.1}Compression}{6}
 \contentsline {subsubsection}{\numberline {5.2.2}Segmentation}{6}
 \contentsline {section}{\numberline {6}Graphiques}{6}
-\contentsline {subsection}{\numberline {6.1}View 1}{11}
-\contentsline {section}{\numberline {}Conclusion}{14}
+\contentsline {subsection}{\numberline {6.1}View 1}{10}
+\contentsline {section}{\numberline {}Conclusion}{13}

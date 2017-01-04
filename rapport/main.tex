@@ -101,42 +101,8 @@ Après cela, nous avons également fait des fonctions supplémentaires comme \te
 qui prend en paramètre le fichier initiale et qui renvoie directement la moyenne de pixels.\
 La deuxième partie du projet consistait à créer le type \textit{quadtree} et biensûr créer l'arbre \textit{quadtree} en utilisant la fonction \textit{creerArbre}.Tous cela, pour pouvoir 
 faire différentes manipulations et opérations sur l'image. Parmi ces opérations on trouve les simples et les complexes. \\
-Commençons par les opérations simples qui sont:
-\begin{enumerate}
-\item Rotation de 90 degrés :
-\begin{enumerate}
-\item Rotation vers la droite : cette opération consiste à effectuer une rotation de l'image vers la droite. Pour cela, on a utilisé la fonction \textit{rotated} qui décale les fils d'une place vers la droite	
-\item Rotation vers la gauche : cette opération consiste à effectuer une rotation de l'image vers la gauche. Pour cela, on a utilisé la fonction \textit{rotateg} qui décale les fils d'une place vers la gauche   
-\end{enumerate}
-\item Miroir
-\begin{enumerate}
-\item Miroir haut-bas : cette opération consiste à créer un arbre de façon à ce que les feuilles soient interverties de haut en bas. Par exemple : \\
-		   $\begin{matrix}
-		   1 & 2 \\
-		   4 & 3
-		   \end{matrix} \quad $\ devient\
-		   $\quad \begin{matrix}
-		   4 & 3 \\
-		   1 & 2
-		   \end{matrix}$
-\item Miroir gauche-droite : cette opération consiste à créer un arbre de façon à ce que les feuilles soient interverties de haut en bas. Par exemple :  \\
-		   $\begin{matrix}
-		   1 & 2 \\
-		   4 & 3
-		   \end{matrix} \quad$ devient
-		   $\quad  \begin{matrix}
-		   2 & 1 \\
-		   3 & 4
-		   \end{matrix}$
-\end{enumerate}
-\item Inversion de couleurs : cette opération consiste à inverser les couleurs de l'image. Ce que fait la fonction inverse qui prend en paramètre le triplet représentant la moyenne des couleurs et qui renvoie le triplet dont les composantes sont la différence avec 255 qui est le maximum des pixels. 
-\end{enumerate}
-Passant aux opérations avancées :
-\begin{enumerate}
-\item Compression : 
-\item Segmentation : 
-\end{enumerate}
-De plus, pour faciliter l'utilisation du programme codé, nous avons créé une interface graphique fait à l'aide de la libraire graphique \textit{LablGTK2}.
+
+De plus, pour faciliter l'utilisation du programme codé, nous avons créé une interface graphique faite à l'aide de la libraire graphique \textit{LablGTK2}.
 \section{LablGTK}
 LablGTK est une interface OCaml du projet GTK+ 1.2 et 2.x. Cette librairie nous permet de créer des interfaces graphiques orienté-objets.
 \subsection{GTK+}
@@ -157,8 +123,33 @@ La deuxième fonction, n'entre en jeu dès que l'on veut sauvegarder l'image et 
 \section{Fonctions de manipulation}
 \subsection{Opérations Simples}
 \subsubsection{Rotation de 90$^{\circ}$}
+\begin{enumerate}
+\item Rotation vers la droite : cette opération consiste à effectuer une rotation de l'image vers la droite. Pour cela, on a utilisé la fonction \textit{rotated} qui décale les fils d'une place vers la droite	
+\item Rotation vers la gauche : cette opération consiste à effectuer une rotation de l'image vers la gauche. Pour cela, on a utilisé la fonction \textit{rotateg} qui décale les fils d'une place vers la gauche   
+\end{enumerate}
 \subsubsection{Miroir}
+\begin{enumerate}
+\item Miroir haut-bas : cette opération consiste à créer un arbre de façon à ce que les feuilles soient interverties de haut en bas. Par exemple : \\
+		   $\begin{matrix}
+		   1 & 2 \\
+		   4 & 3
+		   \end{matrix} \quad $\ devient\
+		   $\quad \begin{matrix}
+		   4 & 3 \\
+		   1 & 2
+		   \end{matrix}$
+\item Miroir gauche-droite : cette opération consiste à créer un arbre de façon à ce que les feuilles soient interverties de haut en bas. Par exemple :  \\
+		   $\begin{matrix}
+		   1 & 2 \\
+		   4 & 3
+		   \end{matrix} \quad$ devient
+		   $\quad  \begin{matrix}
+		   2 & 1 \\
+		   3 & 4
+		   \end{matrix}$
+\end{enumerate}
 \subsubsection{Inversion}
+Cette opération consiste à inverser les couleurs de l'image. Ce que fait la fonction inverse qui prend en paramètre le triplet représentant la moyenne des couleurs et qui renvoie le triplet dont les composantes sont la différence avec 255 qui est le maximum des pixels. 
 \subsection{Opérations Avancées}
 \subsubsection{Compression}
 \subsubsection{Segmentation}

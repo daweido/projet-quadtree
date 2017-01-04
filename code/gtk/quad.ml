@@ -1,5 +1,6 @@
 (*Compilation Interface+Fichier externe*)
 (*ocamlfind ocamlc -g -package lablgtk2 -linkpkg str.cma v2.ml quad.ml -o quadtree*)
+
 open GMain
 open GdkKeysyms
 
@@ -11,14 +12,6 @@ let go_find_image =
 	let path_to_exec = Sys.executable_name in
 	(String.sub path_to_exec 0 (String.length(path_to_exec)-7))^"images/" ;;
 
-(*Image bouton Miroir
-Sys.chdir (go_find_image^"mirror/");;
-let miroirButtonSecondViewImageUpDown = GMisc.image ~file:"32V.png" ()
-let miroirButtonSecondViewImageRightLeft = GMisc.image ~file:"24H.png" ()
-let miroirButtonFirstViewImageUpDown = GMisc.image ~file:"24V.png" ()
-let miroirButtonFirstViewImageRightLeft = GMisc.image ~file:"24V.png" ()
-*)
-
 (*FONCTIONS DE BASES*)
 let viewImageAfficheFirst = GMisc.image ();;
 let viewImageAfficheSecond = GMisc.image ();;
@@ -26,6 +19,13 @@ let notebookInfoName = GMisc.label ();;
 let nomFichInfo = GMisc.label ();;
 let dimFichInfoViewSecond = GMisc.label ();;
 let notebookInfoDimensionsValue = GMisc.label ();;
+let moyRouge = GMisc.label ();;
+let moyVert = GMisc.label ();;
+let moyBleu = GMisc.label ();;
+let notebookInfoMeanRouge = GMisc.label ();;
+let notebookInfoMeanVert = GMisc.label ();;
+let notebookInfoMeanBleu = GMisc.label ();;
+
 
 let string_dimensions_info dimX dimY =
 	dimX^" x "^dimY;;
@@ -39,7 +39,7 @@ let window = GWindow.window
 	~width:900
 	~height:700
 	~position:`CENTER
-	~resizable:false
+	(*~resizable:false*)
 	~title:"PPMShop" ();;
 
 window#connect#destroy GMain.quit;;
@@ -68,27 +68,9 @@ let firstPageButtonBox = GPack.button_box `VERTICAL
 (*End First Page*)
 
 (*Second Page - Confirmation*)
-
-let alignConfirmation = GBin.alignment
-	~xalign:0.5
-	~yalign:0.5
-	~xscale:0.0
-	~yscale:0.0
-	~show: false
-	~packing:firstVbox#add()
-
-let confirmVerticalBox = GPack.vbox
-	~spacing:100 ~packing: alignConfirmation#add ()
-
-
-let titreConf = GMisc.label  ~packing:confirmVerticalBox#add ()
-
-let string_titre_Conf nom_fichier =
-	"Veuillez confirmer le choix de votre fichier : "^nom_fichier^"?";;
-
 let tmpNameFile filePath =
 	let filePathNoExtension = String.sub filePath 0 ((String.length filePath)-4) in
-	filePathNoExtension^"_tmp.ppm"
+	filePathNoExtension^"_tmp.ppm";;
 
 (*GENERAL I/O*)
 module Aux =
@@ -109,19 +91,45 @@ struct
 		output_string file_out (Buffer.contents buf);
 		close_out file_out;;
 
+	let moyRVB (_,_,_,_,l) =
+		let moyenne l = (Fonctions.moy l) in
+		let moyRed = string_of_int ((Fonctions.sommex l 0)/(List.length l)) in
+		let moyGreen = string_of_int ((Fonctions.sommey l 0)/(List.length l)) in
+		let moyBlue = string_of_int ((Fonctions.sommez l 0)/(List.length l)) in
+		moyRouge#set_label (moyRed);
+		moyVert#set_label (moyGreen);
+		moyBleu#set_label (moyBlue);
+		notebookInfoMeanRouge#set_label (moyRed);
+		notebookInfoMeanVert#set_label (moyGreen);
+		notebookInfoMeanBleu#set_label (moyBlue);;
+
+	let verifppm filePath =
+		let fileString path = match path with
+			None -> ""
+			|Some s -> s in
+		let lecture_fichier sPath = Fonctions.lec sPath in
+		let dimXFichier (_,x,_,_,_) = x in
+		let dimYFichier (_,_,y,_,_) = y in
+		let typePPM (type_image,_,_,_,_) = type_image in
+		let maxValCouleurs (_,_,_,maxVal,_) = maxVal in
+		if ((dimXFichier (lecture_fichier (fileString filePath))) = (dimYFichier (lecture_fichier (fileString filePath)))) &&
+			(typePPM (lecture_fichier (fileString filePath)) = "P3") && ((int_of_string (maxValCouleurs (lecture_fichier (fileString filePath)))) <= 255)
+			&& ((int_of_string (maxValCouleurs (lecture_fichier (fileString filePath)))) >= 1)
+			then true else false;;
+
 	let loadGeneral filePath =
 		let lecture_fichier = Fonctions.lec filePath in
 		let dimXFichier (_,x,_,_,_) = x in
 		let dimYFichier (_,_,y,_,_) = y in
 		fileGlobalPath := filePath;
 		tmpFileGlobalPath := tmpNameFile !fileGlobalPath;
-		print_endline (!fileGlobalPath);
-		print_endline (!tmpFileGlobalPath);
+		print_endline (!fileGlobalPath); (*A Enlever*)
+		print_endline (!tmpFileGlobalPath); (*A Enlever*)
 		Sys.chdir (Filename.dirname filePath);
 		file_copy (!fileGlobalPath) (!tmpFileGlobalPath);
 		viewImageAfficheFirst#set_file filePath;
 		viewImageAfficheSecond#set_file filePath;
-		titreConf#set_label (string_titre_Conf (file_name filePath));
+		moyRVB lecture_fichier;
 		notebookInfoName#set_label (file_name filePath); (*FileName*)
 		nomFichInfo#set_label (file_name filePath); (*FileName*)
 		dimFichInfoViewSecond#set_label (string_dimensions_info (dimXFichier lecture_fichier) (dimYFichier lecture_fichier));
@@ -136,6 +144,7 @@ struct
 		if (threeLast filepath) = ".ppm" then filepath else filepath^".ppm"
 
 	let saveAsGeneral newFilePath =
+		let lecture_fichier = Fonctions.lec newFilePath in
 		let newFilePathAfterVerif = ajoutExt newFilePath in
 		file_copy (!tmpFileGlobalPath) newFilePathAfterVerif;
 		Sys.remove (!tmpFileGlobalPath);
@@ -144,15 +153,18 @@ struct
 		Sys.chdir (Filename.dirname newFilePathAfterVerif);
 		file_copy (!fileGlobalPath) (!tmpFileGlobalPath);
 		viewImageAfficheFirst#set_file (!fileGlobalPath);
+		moyRVB lecture_fichier;
 		viewImageAfficheSecond#set_file (!fileGlobalPath);
 		notebookInfoName#set_label (file_name (!fileGlobalPath));
 		nomFichInfo#set_label (file_name (!fileGlobalPath));
 		at_exit (fun _ -> (Sys.remove (!tmpFileGlobalPath)))
 
 	let saveGeneral filePath tmpFilePath =
+		let lecture_fichier = Fonctions.lec filePath in
 		Sys.remove (filePath);
 		Sys.rename (tmpFilePath) (file_name filePath);
 		file_copy (filePath) (tmpFilePath);
+		moyRVB lecture_fichier;
 		viewImageAfficheFirst#set_file filePath;
 		viewImageAfficheSecond#set_file filePath
 
@@ -166,14 +178,6 @@ struct
 		close_out och*)
 end
 
-
-let confirmButtonBox = GPack.button_box `HORIZONTAL
-	~spacing:150
-	~layout:`SPREAD
-	~border_width:5
-	~child_width: 250
-	~child_height: 50
-	~packing:(confirmVerticalBox#add) ()
 (*End of Second Page*)
 (************************Troisième Page****************************************)
 let thirdPageHBoxView1 = GPack.hbox
@@ -186,14 +190,6 @@ let thirdPageHBoxView2 = GPack.hbox
 	~show: false
 	~packing: firstVbox#add ()
 
-
-let thridPageButtonBox = GPack.button_box `HORIZONTAL
-	~layout:`START
-	~border_width:5
-	~child_width: 250
-	~child_height: 50
-	~show:false
-	~packing:(firstVbox#pack ~expand:false) ();;
 (*View 1*)
 let notebook = GPack.notebook
  	~border_width:5
@@ -235,7 +231,7 @@ let notebookAlignInfo = GBin.alignment
 	~packing:notebookHBoxInfo#add ()
 
 let notebookTableInfo = GPack.table
-	~rows:4
+	~rows:7
 	~columns:2
 	~row_spacings:20
 	~col_spacings:15
@@ -403,18 +399,13 @@ let leftToolbarSecondView = GButton.toolbar
 let tableLeftToolbarSecondView = GPack.table
 	~rows:2
 	~columns:1
-	~row_spacings:20 ();;
-
-let buttonBoxLeftToolbarSecondView = GPack.button_box `VERTICAL
-	~layout:`SPREAD
-	~border_width:3
-	~child_width: 90
-	~child_height: 25 ();;
+	~border_width:5
+	~row_spacings:10 ();;
 
 let tableInfoSecondView = GPack.table
-	~rows:4
+	~rows:5
 	~columns:2
-	~row_spacings:5
+	~row_spacings:10
 	~col_spacings:1
 	~border_width:2
 	~homogeneous:true ();;
@@ -556,7 +547,8 @@ let bboxSegmentationSecondView = GPack.button_box `HORIZONTAL
 
 (*BUTTONS AND WIDNOWS*)
 (*Top Toolbar*)
-let topToolbarRadioView1 = GButton.radio_button ~label:"View 1"
+let topToolbarRadioView1 = GButton.radio_button
+	~label:"View 1"
 	~active:true ()
 
 let topToolbarRadioView2 = GButton.radio_button
@@ -565,9 +557,11 @@ let topToolbarRadioView2 = GButton.radio_button
 
 let topToolbarAbout = GButton.tool_button ~stock: `ABOUT ~packing:topToolbar#insert ()
 let topToolbarFirstSeparator = GButton.separator_tool_item ~show:false ~packing:topToolbar#insert ()
+let topToolbarReturnButton = GButton.tool_button ~stock:`GO_BACK ~show:false ~packing:topToolbar#insert ()
+let topToolbarSecondSeparator = GButton.separator_tool_item ~show:false ~packing:topToolbar#insert ()
 let topToolbarSave = GButton.tool_button ~stock:`SAVE ~show:false ~packing:topToolbar#insert ()
 let topToolbarSaveAs = GButton.tool_button ~stock:`SAVE_AS ~show:false ~packing:topToolbar#insert ()
-let topToolbarSecondSeparator = GButton.separator_tool_item ~show:false ~packing:topToolbar#insert ()
+let topToolbarThirdSeparator = GButton.separator_tool_item ~show:false ~packing:topToolbar#insert ()
 let topToolbarViewsItem = GButton.tool_item ~show:false ~packing:topToolbar#insert ()
 let topToolbarLastSeparator = GButton.separator_tool_item ~packing:topToolbar#insert ()
 let topToolbarQuit = GButton.tool_button ~stock: `QUIT ~packing:topToolbar#insert ()
@@ -583,7 +577,7 @@ let topToolbarAlign = GBin.alignment
 
 let topToolbarTable = GPack.table
 	~rows:1
-	~columns:2
+	~columns:3
 	~col_spacings:20
 	~packing:topToolbarAlign#add();;
 
@@ -634,17 +628,6 @@ this program.  If not, see <http://www.gnu.org/licenses/>."
 	~parent:window
 	~destroy_with_parent:true ()
 
-let confirmButtonConfirmer = GButton.button
-		~label: "Confirmer"
-		~packing:confirmButtonBox#add ()
-
-let confirmButtonAnnuler = GButton.button
-		~label: "Annuler"
-		~packing:confirmButtonBox#add ();;
-
-let thridPageButtonReturn = GButton.button
-	~label: "Retour"
-	~packing:thridPageButtonBox#add ();;
 (*View 1*)
 let create_arrow_button ~kind ~shadow ~packing () =
 	let button = GButton.button ~packing () in
@@ -695,10 +678,6 @@ let notebookButtonCompression = GButton.button ~label: "Compresser" ~packing:not
 let notebookButtonSegmentation = GButton.button ~label: "Segmenter"  ~packing:notebookButtonBoxSegmentation#add ();;
 
 (*View2*)
-let aboutLeftToolbarButton = GButton.button
-	~label: "Instructions"
-	~packing:buttonBoxLeftToolbarSecondView#add ()
-
 
 let leftRot = create_arrow_button ~kind:`LEFT ~shadow:`ETCHED_IN ~packing:bboxLeftRotSecondView#add ()
 let rightRot = create_arrow_button ~kind:`RIGHT ~shadow:`ETCHED_OUT ~packing:bboxRightRotSecondView#add ()
@@ -744,7 +723,6 @@ let invBUT = GButton.button ~label: "Inverser" ~packing:bboxInversionSecondView#
 let advancedCompressionButton = GButton.button ~label: "Compresser" ~packing:bboxCompressionSecondView#add ();;
 let advancedSegmentationButton = GButton.button ~label: "Segmenter"  ~packing:bboxSegmentationSecondView#add ();;
 
-
 (*LOAD*)
 let action_buttonLoad =
 	let dlgLoad = GWindow.file_chooser_dialog
@@ -752,15 +730,31 @@ let action_buttonLoad =
 		~parent:window
 		~position:`CENTER_ON_PARENT
 		~destroy_with_parent:true () in
+	let dialog = GWindow.message_dialog
+		~title:"Erreur"
+		~message_type:`ERROR
+		~parent:dlgLoad
+		~width:300
+		~position:`CENTER_ON_PARENT
+		~destroy_with_parent:true
+		~message:"<b>Image non supportée</b>\nNous vous rappelons que l'image doit être carré et de format P3.\nVeuillez bien vouloir réessayer"
+		~use_markup:true
+		~buttons:GWindow.Buttons.ok () in
+
 	dlgLoad#add_button_stock `CANCEL `CANCEL;
 	dlgLoad#add_select_button_stock `OPEN `OPEN;
 	dlgLoad#add_filter (openImageFilter ());
 	dlgLoad#add_filter (openAll_files ());
 	let btn = GButton.button ~stock:`OPEN ~packing:firstPageButtonBox#add () in
-	 GMisc.image ~stock:`OPEN ~packing:btn#set_image ();
-	btn#connect#clicked (fun () -> if dlgLoad#run () = `OPEN then (Gaux.may (Aux.loadGeneral) dlgLoad#filename;
-	dlgLoad#misc#hide ();firstPageButtonBox#misc#hide ();firstPageTitle#misc#hide ();alignConfirmation#misc#show ())
-	else dlgLoad#misc#hide ());
+	GMisc.image ~stock:`OPEN ~packing:btn#set_image ();
+	btn#connect#clicked (fun () -> if dlgLoad#run () = `OPEN then (if (Aux.verifppm (dlgLoad#filename)) then (Gaux.may (Aux.loadGeneral) dlgLoad#filename;
+	dlgLoad#misc#hide ();firstPageButtonBox#misc#hide ();firstPageTitle#misc#hide ();ignore (thirdPageHBoxView1#misc#show ());
+	ignore (notebook#goto_page 0);ignore (topToolbarViewsItem#misc#show ());ignore (topToolbarSaveAs#misc#show ());ignore (topToolbarSave#misc#show ());ignore (topToolbarFirstSeparator#misc#show ());
+	ignore (topToolbarSecondSeparator#misc#show ());ignore (topToolbarReturnButton#misc#show ()))
+	else
+		let d = dialog#run () in
+		if (d = `DELETE_EVENT) || (d =  `OK ) then dialog#misc#hide (); dlgLoad#misc#hide ())
+ 	else dlgLoad#misc#hide ());
 	btn
 
 let firstPageQuitButton = GButton.button
@@ -811,10 +805,10 @@ let notebookHomeTitleSegmentation = GMisc.label ~markup:"<big>Segmentation</big>
 let notebookInfoTitle = GMisc.label ~markup: "<span font_desc=\"Tahoma 25\"><b>Informations du fichier</b></span>" ();;
 let notebookInfoNameLabel = GMisc.label ~markup: "<b><big>Nom de l'image :</big></b>" ();;
 let notebookInfoDimensions = GMisc.label ~markup: "<b>Dimensions de l'image :</b>" ();;
-let notebookInfoMean = GMisc.label ~markup: "<b>Moyenne des couleurs :</b>" ();;
-
-(*Info Fichier*)
-let notebookInfoMeanTest = GMisc.label ~markup:"175" ();;
+let notebookInfoMean = GMisc.label ~markup: "<b>Moyenne des couleurs</b>" ();;
+let notebookInfoRougeTitre = GMisc.label ~markup: "<b>Moyenne des rouges : </b>" ();;
+let notebookInfoVertTitre = GMisc.label ~markup: "<b>Moyenne des verts :</b>" ();;
+let notebookInfoBlueuTitre = GMisc.label ~markup: "<b>Moyenne des blueus :</b>" ();;
 
 (*Creation du widget à mettre dans le TAB Simple du notebook*)
 
@@ -830,11 +824,12 @@ let notebookAdvancedSegmentation = GMisc.label ~markup:"<span font_desc=\"Tahoma
 
 (*View2*)
 let titreInfo = GMisc.label ~markup: "<b>Informations</b>" ();;
-let titreFichierInfo = GMisc.label ~markup: "<b>Image</b>" ();;
 let nomInfo = GMisc.label ~markup: "<b>Nom :</b>" ();;
 let dimInfo = GMisc.label ~markup: "<b>Dimensions :</b>" ();;
-let moyInfo = GMisc.label ~markup: "<b>Moyenne :</b>" ();;
-let moyFichInfo = GMisc.label ~markup:"175" ();;
+let moyInfo = GMisc.label ~markup: "<b>Moyenne</b>" ();;
+let moyRougeTitre = GMisc.label ~markup: "<b>Rouge :</b>" ();;
+let moyVertTitre = GMisc.label ~markup: "<b>Vert :</b>" ();;
+let moyBleuTitre = GMisc.label ~markup: "<b>Blueu :</b>" ();;
 let toolbarNameRotation = GMisc.label ~markup: "<b>Rotation</b>" ();;
 let toolbarNameMiroir = GMisc.label ~markup: "<b>Miroir</b>" ();;
 
@@ -854,7 +849,6 @@ ignore (topToolbarTable#attach ~left:1 ~top:0 (topToolbarRadioView2#coerce));
 ignore (firstPageQuitButton#connect#clicked ~callback:GMain.quit);
 
 
-ignore (confirmButtonAnnuler#connect#clicked (fun () -> ignore (alignConfirmation#misc#hide ()); ignore (firstPageTitle#misc#show ()); ignore (firstPageButtonBox#misc#show ())));;
 ignore (notebookTableHome#attach ~left:0 ~right:2 ~top:0 (notebookHomeTitle#coerce));
 ignore (notebookTableHome#attach ~left:0 ~right:2 ~top:1 (notebookHomeIntro#coerce));
 ignore (notebookTableHome#attach ~left:0 ~top:2 (notebookHomeTitleRot#coerce));
@@ -878,11 +872,17 @@ ignore (notebookTableHome#attach ~left:1 ~top:11 (notebookHomeTextSave#coerce));
 ignore (notebookTableInfo#attach ~left:0 ~right:2 ~top:0 (notebookInfoTitle#coerce));
 ignore (notebookTableInfo#attach ~left:0 ~top:1 (notebookInfoNameLabel#coerce));
 ignore (notebookTableInfo#attach ~left:0 ~top:2 (notebookInfoDimensions#coerce));
-ignore (notebookTableInfo#attach ~left:0 ~top:3 (notebookInfoMean#coerce));
+ignore (notebookTableInfo#attach ~left:0 ~right:2 ~top:3 (notebookInfoMean#coerce));
+ignore (notebookTableInfo#attach ~left:0 ~top:4 (notebookInfoRougeTitre#coerce));
+ignore (notebookTableInfo#attach ~left:0 ~top:5 (notebookInfoVertTitre#coerce));
+ignore (notebookTableInfo#attach ~left:0 ~top:6 (notebookInfoBlueuTitre#coerce));
+
 (*Ajout infos dans tableau*)
 ignore (notebookTableInfo#attach ~left:1 ~top:1 (notebookInfoName#coerce));
 ignore (notebookTableInfo#attach ~left:1 ~top:2 (notebookInfoDimensionsValue#coerce));
-ignore (notebookTableInfo#attach ~left:1 ~top:3 (notebookInfoMeanTest#coerce));;
+ignore (notebookTableInfo#attach ~left:1 ~top:4 (notebookInfoMeanRouge#coerce));;
+ignore (notebookTableInfo#attach ~left:1 ~top:5 (notebookInfoMeanVert#coerce));;
+ignore (notebookTableInfo#attach ~left:1 ~top:6 (notebookInfoMeanBleu#coerce));;
 
 (*4th TAB - IMAGE VIEW*)
 ignore (notebookTableImageView#attach ~left:0 ~top:0 (viewImageAfficheFirst#coerce));;
@@ -924,15 +924,20 @@ ignore (firstPageQuitButton#connect#clicked ~callback:GMain.quit);;
 ignore (tableImageViewSecondView#attach ~left:0  ~top:0 (viewImageAfficheSecond#coerce));;
 leftToolbarSecondView#insert_widget ~tooltip:"Info" tableLeftToolbarSecondView#coerce;;
 ignore (tableLeftToolbarSecondView#attach ~left:0 ~top:0 (titreInfo#coerce));
-ignore (tableLeftToolbarSecondView#attach ~left:0  ~top:1 (buttonBoxLeftToolbarSecondView#coerce));;
-ignore (tableLeftToolbarSecondView#attach ~left:0  ~top:2 (tableInfoSecondView#coerce));;
-ignore (tableInfoSecondView#attach ~left:0 ~right:2 ~top:0 (titreFichierInfo#coerce));
-ignore (tableInfoSecondView#attach ~left:0 ~top:1 (nomInfo#coerce));
-ignore (tableInfoSecondView#attach ~left:0 ~top:2 (dimInfo#coerce));
-ignore (tableInfoSecondView#attach ~left:0 ~top:3 (moyInfo#coerce));
-ignore (tableInfoSecondView#attach ~left:1 ~top:1 (nomFichInfo#coerce));
-ignore (tableInfoSecondView#attach ~left:1 ~top:2 (dimFichInfoViewSecond#coerce));
-ignore (tableInfoSecondView#attach ~left:1 ~top:3 (moyFichInfo#coerce));;
+ignore (tableLeftToolbarSecondView#attach ~left:0  ~top:1 (tableInfoSecondView#coerce));;
+ignore (tableInfoSecondView#attach ~left:0 ~top:0 (nomInfo#coerce));
+ignore (tableInfoSecondView#attach ~left:0 ~top:1 (dimInfo#coerce));
+ignore (tableInfoSecondView#attach ~left:0 ~right:2 ~top:2 (moyInfo#coerce));
+ignore (tableInfoSecondView#attach ~left:0 ~top:3 (moyRougeTitre#coerce));
+ignore (tableInfoSecondView#attach ~left:0 ~top:4 (moyVertTitre#coerce));
+ignore (tableInfoSecondView#attach ~left:0 ~top:5 (moyBleuTitre#coerce));
+
+ignore (tableInfoSecondView#attach ~left:1 ~top:0 (nomFichInfo#coerce));
+ignore (tableInfoSecondView#attach ~left:1 ~top:1 (dimFichInfoViewSecond#coerce));
+ignore (tableInfoSecondView#attach ~left:1 ~top:3 (moyRouge#coerce));
+ignore (tableInfoSecondView#attach ~left:1 ~top:4 (moyVert#coerce));
+ignore (tableInfoSecondView#attach ~left:1 ~top:5 (moyBleu#coerce));;
+
 ignore (rightToolbarSecondView#insert_widget ~tooltip:"Right Toolbar" (tableRightToolbarSecondView#coerce));
 ignore (tableRightToolbarSecondView#attach ~left:0 ~top:0 (alignTableRotToolbarSecondView#coerce));;
 ignore (tableRotSecondView#attach ~left:0 ~right:2 ~top:0 (toolbarNameRotation#coerce));;
@@ -956,16 +961,13 @@ ignore (tableCompressionSecondView#attach ~left:0 ~top:0  (bboxCompressionSecond
 ignore (tableRightToolbarSecondView#attach ~left:0 ~top:4 (alignTableSegmentationSecondView#coerce));
 ignore (tableSegmentationSecondView#attach ~left:0 ~top:0  (bboxSegmentationSecondView#coerce));;
 
-ignore (confirmButtonConfirmer#connect#clicked (fun () -> ignore (alignConfirmation#misc#hide ()); ignore (thirdPageHBoxView1#misc#show ()); ignore (thridPageButtonBox#misc#show ());
-ignore (notebook#goto_page 0);ignore (topToolbarViewsItem#misc#show ());ignore (topToolbarSaveAs#misc#show ());ignore (topToolbarSave#misc#show ());ignore (topToolbarFirstSeparator#misc#show ());
-ignore (topToolbarSecondSeparator#misc#show ())));;
-
-ignore (thridPageButtonReturn#connect#clicked (fun () -> ignore (thirdPageHBoxView1#misc#hide ());ignore (thirdPageHBoxView2#misc#hide ()); ignore (thridPageButtonBox#misc#hide ());
-ignore (topToolbarViewsItem#misc#hide ());ignore (topToolbarSaveAs#misc#hide ());ignore (topToolbarSave#misc#hide ());ignore (topToolbarSecondSeparator#misc#hide ());
-ignore (topToolbarFirstSeparator#misc#hide ()); ignore (firstPageTitle#misc#show ()); ignore (firstPageButtonBox#misc#show ())));;
+ignore (topToolbarReturnButton#connect#clicked (fun () -> ignore (thirdPageHBoxView1#misc#hide ());ignore (thirdPageHBoxView2#misc#hide ());Sys.remove (!tmpFileGlobalPath);
+ignore (topToolbarViewsItem#misc#hide ());ignore (topToolbarSaveAs#misc#hide ());ignore (topToolbarSave#misc#hide ());ignore (topToolbarSecondSeparator#misc#hide ());ignore (topToolbarThirdSeparator#misc#hide ());
+ignore (topToolbarFirstSeparator#misc#hide ()); ignore (firstPageTitle#misc#show ()); ignore (firstPageButtonBox#misc#show ());ignore (topToolbarReturnButton#misc#hide ())));;
 
 ignore (topToolbarRadioView1#connect#toggled (fun () -> ignore (thirdPageHBoxView1#misc#show ());ignore (thirdPageHBoxView2#misc#hide ())));;
 ignore (topToolbarRadioView2#connect#toggled (fun () -> ignore (thirdPageHBoxView1#misc#hide ());ignore (thirdPageHBoxView2#misc#show ())));;
+
 
 let saveAsButton =
 	let dlgSave = GWindow.file_chooser_dialog
