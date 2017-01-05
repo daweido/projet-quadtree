@@ -91,7 +91,7 @@ struct
 		output_string file_out (Buffer.contents buf);
 		close_out file_out;;
 
-	let moyRVB (_,_,_,_,l) =
+	let moyRVB l =
 		let moyenne l = (Fonctions.moy l) in
 		let moyRed = string_of_int ((Fonctions.sommex l 0)/(List.length l)) in
 		let moyGreen = string_of_int ((Fonctions.sommey l 0)/(List.length l)) in
@@ -103,24 +103,28 @@ struct
 		notebookInfoMeanVert#set_label (moyGreen);
 		notebookInfoMeanBleu#set_label (moyBlue);;
 
+	let lecture_fichier path = Fonctions.lec path
+
+	let arb (_,_,_,_,a) = a
+
 	let verifppm filePath =
 		let fileString path = match path with
 			None -> ""
 			|Some s -> s in
-		let lecture_fichier sPath = Fonctions.lec sPath in
-		let dimXFichier (_,x,_,_,_) = x in
-		let dimYFichier (_,_,y,_,_) = y in
-		let typePPM (type_image,_,_,_,_) = type_image in
-		let maxValCouleurs (_,_,_,maxVal,_) = maxVal in
-		if ((dimXFichier (lecture_fichier (fileString filePath))) = (dimYFichier (lecture_fichier (fileString filePath)))) &&
-			(typePPM (lecture_fichier (fileString filePath)) = "P3") && ((int_of_string (maxValCouleurs (lecture_fichier (fileString filePath)))) <= 255)
-			&& ((int_of_string (maxValCouleurs (lecture_fichier (fileString filePath)))) >= 1)
-			then true else false;;
+		let verifDim x y = if x = y then true else false in
+		let verifType p = if p = "P3" then true else false in
+		let verifMaxVal maxVal = if (maxVal >= 1) && (maxVal <= 255) then true else false in
+		let verifTotal (type_image,x,y,maxVal,_) =
+			if (verifDim x y) && (verifType type_image) && (verifMaxVal (int_of_string maxVal)) then true else false in
+		verifTotal (lecture_fichier (fileString filePath));;
 
 	let loadGeneral filePath =
-		let lecture_fichier = Fonctions.lec filePath in
 		let dimXFichier (_,x,_,_,_) = x in
 		let dimYFichier (_,_,y,_,_) = y in
+		let dimMoy (_,x,y,_,l) =
+			moyRVB l;
+			dimFichInfoViewSecond#set_label (string_dimensions_info x y);
+			notebookInfoDimensionsValue#set_label (string_dimensions_info x y) in
 		fileGlobalPath := filePath;
 		tmpFileGlobalPath := tmpNameFile !fileGlobalPath;
 		print_endline (!fileGlobalPath); (*A Enlever*)
@@ -129,11 +133,9 @@ struct
 		file_copy (!fileGlobalPath) (!tmpFileGlobalPath);
 		viewImageAfficheFirst#set_file filePath;
 		viewImageAfficheSecond#set_file filePath;
-		moyRVB lecture_fichier;
+		dimMoy (lecture_fichier filePath);
 		notebookInfoName#set_label (file_name filePath); (*FileName*)
 		nomFichInfo#set_label (file_name filePath); (*FileName*)
-		dimFichInfoViewSecond#set_label (string_dimensions_info (dimXFichier lecture_fichier) (dimYFichier lecture_fichier));
-		notebookInfoDimensionsValue#set_label (string_dimensions_info (dimXFichier lecture_fichier) (dimYFichier lecture_fichier));
 		at_exit (fun _ -> (Sys.remove (!tmpFileGlobalPath)))
 
 
@@ -144,7 +146,6 @@ struct
 		if (threeLast filepath) = ".ppm" then filepath else filepath^".ppm"
 
 	let saveAsGeneral newFilePath =
-		let lecture_fichier = Fonctions.lec newFilePath in
 		let newFilePathAfterVerif = ajoutExt newFilePath in
 		file_copy (!tmpFileGlobalPath) newFilePathAfterVerif;
 		Sys.remove (!tmpFileGlobalPath);
@@ -153,29 +154,23 @@ struct
 		Sys.chdir (Filename.dirname newFilePathAfterVerif);
 		file_copy (!fileGlobalPath) (!tmpFileGlobalPath);
 		viewImageAfficheFirst#set_file (!fileGlobalPath);
-		moyRVB lecture_fichier;
+		moyRVB (arb (lecture_fichier newFilePath));
 		viewImageAfficheSecond#set_file (!fileGlobalPath);
 		notebookInfoName#set_label (file_name (!fileGlobalPath));
 		nomFichInfo#set_label (file_name (!fileGlobalPath));
 		at_exit (fun _ -> (Sys.remove (!tmpFileGlobalPath)))
 
 	let saveGeneral filePath tmpFilePath =
-		let lecture_fichier = Fonctions.lec filePath in
 		Sys.remove (filePath);
 		Sys.rename (tmpFilePath) (file_name filePath);
 		file_copy (filePath) (tmpFilePath);
-		moyRVB lecture_fichier;
+		moyRVB (arb (lecture_fichier filePath));
 		viewImageAfficheFirst#set_file filePath;
 		viewImageAfficheSecond#set_file filePath
 
-	(*let loadManipulationUse file =
-		Fonctions.arbre(Fonctions.lec file)
-
-
-	let saveManipulationUse file =
-		let och = open_out file in
-		output_string och ("TEST VERIFICATION OUTPUT"); (*OVERWRITE*)
-		close_out och*)
+	(*let buttonsFonctionalit func =
+		let lectArbre (_,_,_,_,ar) = Fonctions.arbre ar in
+		sortie (func (lectArbre (lecture_fichier (!tmpFileGlobalPath))))*)
 end
 
 (*End of Second Page*)
@@ -728,8 +723,10 @@ let action_buttonLoad =
 	let dlgLoad = GWindow.file_chooser_dialog
 		~action:`OPEN
 		~parent:window
+		~title: "Ouvrir"
 		~position:`CENTER_ON_PARENT
 		~destroy_with_parent:true () in
+
 	let dialog = GWindow.message_dialog
 		~title:"Erreur"
 		~message_type:`ERROR
@@ -972,7 +969,7 @@ ignore (topToolbarRadioView2#connect#toggled (fun () -> ignore (thirdPageHBoxVie
 let saveAsButton =
 	let dlgSave = GWindow.file_chooser_dialog
 		~action:`SAVE
-		~title:"SAUVEGARDE DIALOG"
+		~title:"Enregistrement-sous..."
 		~parent:window
 		~position:`CENTER_ON_PARENT
 		~width:450
@@ -980,11 +977,11 @@ let saveAsButton =
 		~destroy_with_parent:true () in
 	dlgSave#add_button_stock `CANCEL `CANCEL;
 	dlgSave#add_select_button_stock `SAVE_AS `SAVE_AS;
-	dlgSave#do_overwrite_confirmation;
+	dlgSave#set_do_overwrite_confirmation true;
 	dlgSave#add_filter (saveImageFilter ());
 	dlgSave#add_filter (saveAll_files ());
-	topToolbarSaveAs#connect#clicked (fun () -> if dlgSave#run () = `SAVE_AS then Gaux.may (Aux.saveAsGeneral) dlgSave#filename;
-	dlgSave#misc#hide ());
+	topToolbarSaveAs#connect#clicked (fun () -> if dlgSave#run () = `SAVE_AS then (Gaux.may (Aux.saveAsGeneral) dlgSave#filename;
+	dlgSave#misc#hide ()) else dlgSave#misc#hide ());
 
 
 ignore (topToolbarSave#connect#clicked ~callback: (fun _ -> Aux.saveGeneral (!fileGlobalPath) (!tmpFileGlobalPath)));;
