@@ -77,45 +77,7 @@ let view a =
 let arbre = creerArbre 10 (creerArbre 3 Nul Nul Nul Nul) (creerArbre 9 Nul Nul Nul Nul) (creerArbre 7 Nul Nul Nul Nul) (creerArbre 6 Nul Nul Nul Nul) ;;
 let arbre1= creerArbre 10 (creerArbre 4 Nul Nul Nul Nul) (creerArbre 3 Nul Nul Nul Nul) (creerArbre 2 Nul Nul Nul Nul) (creerArbre 1 Nul Nul Nul Nul) ;;
 (**----------------------Opérations simples-----------------------------------**)
-
 (*-----------------------Rotation de 90 degrés-----------------*)
-
-let rotated a = match a with
-	 Nul -> raise Arbre_vide
-	|Noeud(v,fgg,fgd,fdg,fdd) -> Noeud(v,fgd,fdg,fdd,fgg)
-	|_ -> failwith "Error";;
-
-let rotateg a = match a with
-	 Nul -> raise Arbre_vide
-	|Noeud(v,fgg,fgd,fdg,fdd) -> Noeud(v,fdd,fgg,fgd,fdg)
-	|_ -> failwith "Error";;
-
-(*-----------------------Mirroir--------------------*)
-
-let mirroirgd a = match a with
-	 Nul-> raise Arbre_vide
-	|Noeud(v,fgg,fgd,fdg,fdd)->Noeud(v,fgd,fgg,fdd,fdg);;
-
-
-let mirroirhb a = match a with
-	 Nul-> raise Arbre_vide
-	|Noeud(v,fgg,fgd,fdg,fdd)->Noeud(v,fdd,fdg,fgd,fgg)
-	|_->failwith"Error";;
-
-(*---------------Inversion des couleurs--------------*)
-
-let rec inversion l= let triplet (x,y,z)=(255-x,255-y,255-z) in match l with
-	[]->failwith"Error"
-	|(x,y,z)::[]->triplet(x,y,z)::[]
-	|(x,y,z)::r->triplet(x,y,z)::(inversion r);;
-
 (**----------------------Opérations avancées-----------------------------------**)
-
-
-
 (*--------------------Compression--------------------*)
-
-
-
-
 (*--------------------Segmentation-------------------*)
