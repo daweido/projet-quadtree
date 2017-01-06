@@ -189,7 +189,9 @@ let rec change a res = match a with
 	[] -> res
 	|(x,y,z)::r -> change r (convert(x,y,z)::res);;
 
-let listfin a = List.rev (change (reorgafin a) []);;
+let listfin (t,x,y,v,a) =
+	let listPixels a = List.rev (change (reorgafin a) []) in
+	t::x::y::v::(listPixels (arbre a));;
 
 (*MANIPULATION*)
 let rotated a = match a with
@@ -215,8 +217,9 @@ let mirroirhb a = match a with
 	|_->failwith"Error";;
 
 (*---------------Inversion des couleurs--------------*)
-
-let rec inversion l= let triplet (x,y,z)=(255-x,255-y,255-z) in match l with
-	[]->failwith"Error"
-	|(x,y,z)::[]->triplet(x,y,z)::[]
-	|(x,y,z)::r->triplet(x,y,z)::(inversion r);;
+let rec inversion l res =
+	let triplet (x,y,z)=(255-x,255-y,255-z) in
+	match l with
+		[]-> res
+		|(x,y,z)::[]->triplet (x,y,z)::[]
+		|(x,y,z)::r->inversion r ((triplet (x,y,z))::res);;

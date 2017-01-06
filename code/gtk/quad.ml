@@ -141,14 +141,23 @@ struct
 		Sys.remove (!tmpFileGlobalPath);
 		fileGlobalPath := newFilePathAfterVerif;
 		tmpFileGlobalPath := (tmpNameFile !fileGlobalPath);
+		print_endline "1";
 		Sys.chdir (Filename.dirname newFilePathAfterVerif);
+		print_endline "2";
 		file_copy (!fileGlobalPath) (!tmpFileGlobalPath);
+		print_endline "3";
 		viewImageAfficheFirst#set_file (!fileGlobalPath);
-		moyRVB (arb (lecture_fichier newFilePath));
+		print_endline "15";
+		moyRVB (arb (lecture_fichier !fileGlobalPath));
+		print_endline "16";
 		viewImageAfficheSecond#set_file (!fileGlobalPath);
+		print_endline "17";
 		notebookInfoName#set_label (file_name (!fileGlobalPath));
+		print_endline "18";
 		nomFichInfo#set_label (file_name (!fileGlobalPath));
-		at_exit (fun _ -> (Sys.remove (!tmpFileGlobalPath)))
+		print_endline "19";
+		at_exit (fun _ -> (Sys.remove (!tmpFileGlobalPath)));
+		print_endline "20"
 
 	let saveGeneral filePath tmpFilePath =
 		Sys.remove (filePath);
@@ -164,15 +173,32 @@ struct
 			output_string och ("TEST VERIFICATION OUTPUT"); (*OVERWRITE*)
 			close_out och*)
 
-	let buttonsFonctionalit filePath =
+	(*let buttonsFonctionalit filePath func =
 		let lectArbre (_,_,_,_,ar) = Fonctions.arbre ar in
 		let type_image (t,_,_,_,_) = t in
 		let dimX (_,x,_,_,_) = x in
 		let dimY (_,_,y,_,_) = y in
 		let maxVal (_,_,_,max,_) = max in
-		Fonctions.write_file filePath (Fonctions.listfin (lectArbre (lecture_fichier filePath)));
+		Fonctions.write_file filePath (Fonctions.listfin (func (lectArbre (lecture_fichier filePath))));
+		viewImageAfficheFirst#set_file filePath;
+		viewImageAfficheSecond#set_file filePath*)
+
+
+	let buttonsFonctionalit filePath =
+		Fonctions.write_file filePath (Fonctions.listfin (lecture_fichier filePath));
 		viewImageAfficheFirst#set_file filePath;
 		viewImageAfficheSecond#set_file filePath
+
+	(*let buttonsFonctionalitInver filePath  =
+		let lectArbre (_,_,_,_,ar) = Fonctions.arbre ar in
+		let tupleInvModif (p,x,y,v,ar) = (p,x,y,v,(Fonctions.inversion ar [])) in
+		let type_image (t,_,_,_,_) = t in
+		let dimX (_,x,_,_,_) = x in
+		let dimY (_,_,y,_,_) = y in
+		let maxVal (_,_,_,max,_) = max in
+		Fonctions.write_file filePath (Fonctions.listfin (lectArbre (tupleInvModif (lecture_fichier filePath))));
+		viewImageAfficheFirst#set_file filePath;
+		viewImageAfficheSecond#set_file filePath*)
 end
 
 (*End of Second Page*)
@@ -618,16 +644,18 @@ this program.  If not, see <http://www.gnu.org/licenses/>."
 	~destroy_with_parent:true ()
 
 (*View 1*)
-let create_arrow_button ~kind ~shadow ~packing () =
-	let button = GButton.button ~packing () in
-	let arrow = GMisc.arrow ~kind ~shadow ~packing:button#add () in
-	button
+(*ROTATION BUTTONS*)
+let notebookArrowLeftRot = GButton.button ~packing:notebookButtonBoxLeftRot#add ()
+let notebookArrowLeftRotImage = GMisc.arrow ~kind:`LEFT ~shadow:`ETCHED_IN ~packing:notebookArrowLeftRot#add ()
 
-let notebookArrowLeftRot = create_arrow_button ~kind:`LEFT ~shadow:`ETCHED_IN ~packing:notebookButtonBoxLeftRot#add ()
-let notebookArrowRightRot = create_arrow_button ~kind:`RIGHT ~shadow:`ETCHED_OUT ~packing:notebookButtonBoxRightRot#add ()
+let notebookArrowRightRot = GButton.button ~packing:notebookButtonBoxRightRot#add ()
+let notebookArrowRightRotImage = GMisc.arrow ~kind:`RIGHT ~shadow:`ETCHED_OUT ~packing:notebookArrowRightRot#add ();;
 
+notebookArrowLeftRot#connect#clicked (fun () -> Aux.buttonsFonctionalit !tmpFileGlobalPath);;
+notebookArrowRightRot#connect#clicked (fun () -> Aux.buttonsFonctionalit !tmpFileGlobalPath);;
+(*MIRROR BUTTONS*)
+let notebookArrowMirorUpDown = GButton.button ~packing:notebookButtonBoxMirorUpDown#add ();;
 
-let notebookArrowMirorUpDown = GButton.button ~packing:notebookButtonBoxMirorUpDown#add ()
 let upArrowFirstView = GMisc.arrow ~kind:`UP ~shadow:`IN ()
 let downArrowFirstView = GMisc.arrow ~kind:`DOWN ~shadow:`OUT ()
 
@@ -644,7 +672,11 @@ let upDownMirFirstViewTable = GPack.table
 	~row_spacings:20
 	~packing:alignUpDownMirFirstView#add ();;
 
-let notebookArrowMirorRightLeft = GButton.button ~packing:notebookButtonBoxMirorRightLeft#add ()
+let notebookArrowMirorRightLeft = GButton.button ~packing:notebookButtonBoxMirorRightLeft#add ();;
+
+(*Miror Buttons Notebook Connects*)
+notebookArrowMirorUpDown#connect#clicked (fun () -> Aux.buttonsFonctionalit !tmpFileGlobalPath);;
+notebookArrowMirorRightLeft#connect#clicked (fun () -> Aux.buttonsFonctionalit !tmpFileGlobalPath);;
 
 let leftArrowFirstView = GMisc.arrow ~kind:`LEFT ~shadow:`IN ()
 let rightArrowFirstView = GMisc.arrow ~kind:`RIGHT ~shadow:`OUT ()
@@ -663,15 +695,25 @@ let rightLeftMirMirFirstViewTable = GPack.table
 	~packing:alignRightLeftMirFirstView#add ();;
 
 let notebookButtonInversion = GButton.button ~label: "Inverser" ~packing:notebookButtonBoxInversion#add ();;
-
-notebookButtonInversion#connect#clicked (fun () -> Aux.buttonsFonctionalit !tmpFileGlobalPath);;
-
 let notebookButtonCompression = GButton.button ~label: "Compresser" ~packing:notebookButtonBoxCompression#add ();;
 let notebookButtonSegmentation = GButton.button ~label: "Segmenter"  ~packing:notebookButtonBoxSegmentation#add ();;
+
+(*Inversion Button notebook connction*)
+notebookButtonInversion#connect#clicked (fun () -> Aux.buttonsFonctionalit !tmpFileGlobalPath );;
+(*Advanced Buttons Notebook Connection*)
+notebookButtonCompression#connect#clicked (fun () -> Aux.buttonsFonctionalit !tmpFileGlobalPath );;
+notebookButtonSegmentation#connect#clicked (fun () -> Aux.buttonsFonctionalit !tmpFileGlobalPath );;
 (*View2*)
 (*ROTATION*)
-let leftRot = create_arrow_button ~kind:`LEFT ~shadow:`ETCHED_IN ~packing:bboxLeftRotSecondView#add ()
-let rightRot = create_arrow_button ~kind:`RIGHT ~shadow:`ETCHED_OUT ~packing:bboxRightRotSecondView#add ()
+let leftRot = GButton.button ~packing:bboxLeftRotSecondView#add ()
+let leftRotImage = GMisc.arrow ~kind:`LEFT ~shadow:`ETCHED_IN ~packing:leftRot#add ()
+
+let rightRot = GButton.button ~packing:bboxRightRotSecondView#add ()
+let rightRotImage = GMisc.arrow ~kind:`RIGHT ~shadow:`ETCHED_OUT ~packing:rightRot#add ();;
+
+leftRot#connect#clicked (fun () -> Aux.buttonsFonctionalit !tmpFileGlobalPath);;
+rightRot#connect#clicked (fun () -> Aux.buttonsFonctionalit !tmpFileGlobalPath);;
+
 (*MIROR*)
 let upDownMir = GButton.button ~packing:bboxMiroirUpDownSecondView#add ();;
 let upArrowSecondView = GMisc.arrow ~kind:`UP ~shadow:`IN ()
@@ -707,15 +749,19 @@ let rightLeftMirMirSecondViewTable = GPack.table
 	~col_spacings:15
 	~packing:alignRightLeftMirSecondView#add ();;
 
+upDownMir#connect#clicked (fun () -> Aux.buttonsFonctionalit !tmpFileGlobalPath);;
+rightLeftMir#connect#clicked (fun () -> Aux.buttonsFonctionalit !tmpFileGlobalPath);;
+
+
 (*INVERSION*)
 let invBUT = GButton.button ~label: "Inverser" ~packing:bboxInversionSecondView#add ();;
-
+invBUT#connect#clicked (fun () -> Aux.buttonsFonctionalit !tmpFileGlobalPath);;
 (*COMPRESSION*)
 let advancedCompressionButton = GButton.button ~label: "Compresser" ~packing:bboxCompressionSecondView#add ();;
-
+advancedCompressionButton#connect#clicked (fun () -> Aux.buttonsFonctionalit !tmpFileGlobalPath);;
 (*Segmentation*)
 let advancedSegmentationButton = GButton.button ~label: "Segmenter"  ~packing:bboxSegmentationSecondView#add ();;
-
+advancedSegmentationButton#connect#clicked (fun () -> Aux.buttonsFonctionalit !tmpFileGlobalPath);;
 (*LOAD*)
 let action_buttonLoad =
 	let dlgLoad = GWindow.file_chooser_dialog
