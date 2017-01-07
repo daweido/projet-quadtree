@@ -17,5 +17,9 @@
 \contentsline {subsubsection}{\numberline {5.2.1}Compression}{6}
 \contentsline {subsubsection}{\numberline {5.2.2}Segmentation}{6}
 \contentsline {section}{\numberline {6}Graphiques}{6}
-\contentsline {subsection}{\numberline {6.1}View 1}{10}
+\contentsline {subsection}{\numberline {6.1}View 1}{9}
+\contentsline {section}{\numberline {7}Bilans Personnel}{12}
+\contentsline {subsection}{\numberline {7.1}David RIGAUX}{12}
+\contentsline {subsection}{\numberline {7.2}Amine TAGRHOUT}{13}
+\contentsline {subsection}{\numberline {7.3}Mehdi DALAA}{13}
 \contentsline {section}{\numberline {}Conclusion}{13}
